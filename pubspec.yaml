@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  http: ^1.2.0
   image_picker: ^1.0.7
   pocketbase: ^0.17.1
   riverpod: ^2.4.9

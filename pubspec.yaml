@@ -12,7 +12,8 @@ dependencies:
   http: ^1.2.0
   image_picker: ^1.0.7
   pocketbase: ^0.17.1
-  riverpod: ^2.4.9
+  flutter_riverpod: ^2.4.9
+  google_mobile_ads:
 
 dev_dependencies:
   flutter_test:

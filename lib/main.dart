@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mychatapp/home_screen.dart';
+import 'package:mychatapp/login_screen.dart';
+import 'package:mychatapp/provider.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:http/http.dart';
 
-void main() {
-  runApp(const MainApp());
-}
+void main() => runApp(const ProviderScope(child: MyApp()));
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +21,19 @@ class MainApp extends StatelessWidget {
         seedColor: Colors.yellow,
         brightness: Brightness.dark,
       )),
-      home: const App(),
+      home: const InitialScreen(),
     );
+  }
+}
+
+class InitialScreen extends ConsumerWidget {
+  const InitialScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ref.watch(pocketbaseProvider).authStore.isValid
+        ? const App()
+        : const LoginScreen();
   }
 }
 

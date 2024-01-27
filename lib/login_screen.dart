@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mychatapp/main.dart';
+import 'package:mychatapp/home_screen.dart';
 import 'package:mychatapp/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -96,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const App(),
+                            builder: (context) => const HomeScreen(),
                           ),
                           (route) => false,
                         );

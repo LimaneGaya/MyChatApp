@@ -28,8 +28,14 @@ class InitialScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(pocketbaseProvider).authStore.isValid
-        ? const HomeScreen()
-        : const LoginScreen();
+    return ref.watch(sharedPrefProvider).when(
+        data: (data) {
+          return ref.watch(authStateProvider.notifier).checkIfLogedIn()
+              ? const HomeScreen()
+              : const LoginScreen();
+        },
+        error: (error, stackTrace) => Text(error.toString()),
+        loading: () =>
+            const Scaffold(body: Center(child: CircularProgressIndicator())));
   }
 }

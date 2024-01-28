@@ -85,14 +85,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 builder: (BuildContext context, WidgetRef ref, Widget? child) {
                   return ElevatedButton(
                     onPressed: () async {
-                      final authData = await ref
-                          .read(pocketbaseProvider)
-                          .collection('users')
-                          .authWithPassword(
-                            userNameController.text,
-                            passwordController.text,
-                          );
-                      if (authData.record != null && mounted) {
+                      final isLoggedin =
+                          await ref.read(authStateProvider.notifier).login(
+                                userNameController.text,
+                                passwordController.text,
+                              );
+
+                      if (isLoggedin && mounted) {
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(

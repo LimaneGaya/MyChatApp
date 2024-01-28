@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mychatapp/provider.dart';
 import 'package:pocketbase/pocketbase.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  final pb = PocketBase('http://127.0.0.1:8090');
-
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  late final pb = ref.read(authStateProvider.notifier).pb;
   List<RecordModel> users = [];
 
   @override
@@ -22,11 +23,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void pocketBase() async {
-    await pb.collection('users').authWithPassword('gaya', 'azertyuiop');
+    print(pb.authStore.model.id);
     final result = await pb.collection('users').getList(
           page: 1,
           perPage: 20,
-          filter: 'id != ${pb.authStore.model.id}',
+          filter: 'id != "${pb.authStore.model.id}"',
         );
     users = result.items;
     if (mounted) {
@@ -52,24 +53,25 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
               onPressed: () async {
-                final file = await ImagePicker().pickImage(
-                  source: ImageSource.gallery,
-                );
-                final file2 = await file!.readAsBytes();
-                await pb.collection('posts').create(
-                  body: {
-                    'message': 'Hello there',
-                    'sender': 'yb80zoi843a1nkf',
-                    'reseiver': '8yi8b6cn6velm43',
-                  },
-                  files: [
-                    MultipartFile.fromBytes(
-                      'file',
-                      file2,
-                      filename: 'image.jpg',
-                    ),
-                  ],
-                );
+                ref.read(authStateProvider.notifier).logout();
+                // final file = await ImagePicker().pickImage(
+                //   source: ImageSource.gallery,
+                // );
+                // final file2 = await file!.readAsBytes();
+                // await pb.collection('posts').create(
+                //   body: {
+                //     'message': 'Hello there',
+                //     'sender': 'yb80zoi843a1nkf',
+                //     'reseiver': '8yi8b6cn6velm43',
+                //   },
+                //   files: [
+                //     MultipartFile.fromBytes(
+                //       'file',
+                //       file2,
+                //       filename: 'image.jpg',
+                //     ),
+                //   ],
+                // );
               },
               icon: const Icon(Icons.upload))
         ],

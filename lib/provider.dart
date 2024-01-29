@@ -10,6 +10,15 @@ final authStateProvider = StateNotifierProvider<AuthStateNotifier, bool>(
 final sharedPrefProvider = FutureProvider<SharedPreferences>(
   (ref) => SharedPreferences.getInstance(),
 );
+final messagesProvider =
+    FutureProvider.family((ref, String conversation) async {
+  final messages = await ref
+      .watch(authStateProvider.notifier)
+      .pb
+      .collection('messages')
+      .getList();
+  print(messages.items.map((e) => e.data['content']).toList());
+});
 
 class AuthStateNotifier extends StateNotifier<bool> {
   final SharedPreferences _sharedPref;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mychatapp/messages_screen.dart';
 import 'package:mychatapp/provider.dart';
 import 'package:pocketbase/pocketbase.dart';
 
@@ -15,6 +16,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   late final pb = ref.read(authStateProvider.notifier).pb;
   List<RecordModel> users = [];
+  List<RecordModel> conversations = [];
 
   @override
   void initState() {
@@ -42,8 +44,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         setState(() {});
       }
     });
+    final res = await pb.collection('converstion').getList(
+          page: 1,
+          perPage: 20,
+          filter: 'participants ~ "${pb.authStore.model.id}"',
+        );
+    conversations = res.items;
+    if (mounted) {
+      setState(() {});
+    }
   }
 
+  int index = 0;
   RecordModel? link;
 
   @override
@@ -76,27 +88,72 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               icon: const Icon(Icons.upload))
         ],
       ),
-      body: Column(
+      body: IndexedStack(
+        index: index,
         children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: users.length,
-              itemBuilder: (context, index) => ListTile(
-                onTap: () async {
-                  await pb.collection('converstion').create(
-                    body: {
-                      "isTrusted": false,
-                      "participants": [
-                        pb.authStore.model.id,
-                        users[index].id,
-                      ]
+          Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  itemCount: users.length,
+                  itemBuilder: (context, index) => ListTile(
+                    onTap: () async {
+                      final con = await pb.collection('converstion').create(
+                        body: {
+                          "isTrusted": false,
+                          "participants": [
+                            pb.authStore.model.id,
+                            users[index].id,
+                          ]
+                        },
+                      );
+                      if (mounted) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MessengerScreen(con.id),
+                          ),
+                        );
+                      }
                     },
-                  );
-                },
-                title: Text(users[index].data['username']),
+                    title: Text(users[index].data['username']),
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
+          //Conversation List
+          Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  itemCount: conversations.length,
+                  itemBuilder: (context, index) => ListTile(
+                    onTap: () async {
+                      if (mounted) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                MessengerScreen(conversations[index].id),
+                          ),
+                        );
+                      }
+                    },
+                    title: Text(
+                        conversations[index].data['participants'].toString()),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: (value) => setState(() => index = value),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'People'),
+          BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Chats'),
         ],
       ),
     );

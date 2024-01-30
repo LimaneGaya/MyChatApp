@@ -39,7 +39,7 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
       (e) {
         messages.insert(0, e.record!);
         print(e.record!.data);
-        setState(() {});
+        if (mounted) setState(() {});
       },
     );
   }
@@ -51,12 +51,51 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
       body: ListView.builder(
         reverse: true,
         itemCount: messages.length,
-        itemBuilder: (context, index) => ListTile(
-          title: Text(messages[index].data['content']),
-        ),
+        itemBuilder: (context, index) {
+          final isMe = messages[index].data['sender'] == pb.authStore.model.id;
+
+          return ListTile(
+            trailing:
+                isMe ? Text(pb.authStore.model.data['username'][0]) : null,
+            leading: isMe ? null : Text(messages[index].data['sender'][0]),
+            tileColor: isMe
+                ? Theme.of(context).colorScheme.onTertiary
+                : Theme.of(context).colorScheme.onSecondary,
+            title: Align(
+              alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+              child: Text(messages[index].data['content']),
+            ),
+            subtitle: messages[index].data['file'].length != 0
+                ? Container(
+                    margin: const EdgeInsets.all(10),
+                    clipBehavior: Clip.antiAlias,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: Image.network(
+                      pb.files
+                          .getUrl(messages[index],
+                              messages[index].data['file'][0].toString())
+                          .toString(),
+                      height: 250,
+                      filterQuality: FilterQuality.low,
+                      fit: BoxFit.fitWidth,
+                    ),
+                  )
+                : null,
+          );
+        },
       ),
       bottomNavigationBar: BottomAppBar(
         child: TextField(
+          autofocus: true,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(50),
+              borderSide: const BorderSide(width: 5),
+            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+          ),
           onSubmitted: (value) {
             final pb = ref.read(authStateProvider.notifier).pb;
             pb.collection('messages').create(

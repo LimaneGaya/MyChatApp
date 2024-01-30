@@ -151,9 +151,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (value) => setState(() => index = value),
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'People'),
-          BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Chats'),
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(index == 0 ? Icons.person : Icons.person_outline),
+            label: 'People',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(index == 1 ? Icons.message : Icons.message_outlined),
+            label: 'Chats',
+          ),
         ],
       ),
     );

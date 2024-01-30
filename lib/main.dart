@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.yellow,
+        seedColor: Colors.blue,
         brightness: Brightness.dark,
       )),
       home: const InitialScreen(),

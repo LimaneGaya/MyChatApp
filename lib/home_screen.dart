@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'
+    show ConsumerStatefulWidget, ConsumerState;
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mychatapp/messages_screen.dart';
-import 'package:mychatapp/provider.dart';
-import 'package:pocketbase/pocketbase.dart';
+import 'package:mychatapp/provider.dart' show authStateProvider;
+import 'package:pocketbase/pocketbase.dart' show RecordModel;
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -25,7 +26,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void pocketBase() async {
-    print(pb.authStore.model.id);
+    debugPrint(pb.authStore.model.id);
     final result = await pb.collection('users').getList(
           page: 1,
           perPage: 20,

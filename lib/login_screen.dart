@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'
+    show Consumer, WidgetRef;
 import 'package:mychatapp/home_screen.dart';
-import 'package:mychatapp/provider.dart';
+import 'package:mychatapp/provider.dart' show authStateProvider;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

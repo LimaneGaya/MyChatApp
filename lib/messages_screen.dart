@@ -3,8 +3,10 @@ import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter_riverpod/flutter_riverpod.dart'
     show ConsumerStatefulWidget, ConsumerState;
 import 'package:google_mobile_ads/google_mobile_ads.dart'
-    show BannerAd, AdRequest, AdSize, BannerAdListener, AdWidget;
+    show BannerAd, AdWidget;
+import 'package:mychatapp/messages/widgets/message_tile.dart';
 import 'package:mychatapp/provider.dart' show authStateProvider;
+import 'package:mychatapp/services/admob.dart';
 import 'package:pocketbase/pocketbase.dart' show PocketBase, RecordModel;
 
 class MessengerScreen extends ConsumerStatefulWidget {
@@ -20,34 +22,16 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
   late PocketBase pb;
   String googleAdAppId = 'ca-app-pub-3152914819070890~2075174973';
   BannerAd? _bannerAd;
-  bool _isLoaded = false;
   final bool isAndroid = defaultTargetPlatform == TargetPlatform.android;
   @override
   void initState() {
     super.initState();
     pb = ref.read(authStateProvider.notifier).pb;
     getMessages();
-    if (isAndroid) initializeAd();
-  }
-
-  void initializeAd() {
-    _bannerAd = BannerAd(
-      adUnitId: 'ca-app-pub-3940256099942544/6300978111',
-      request: const AdRequest(),
-      size: AdSize.banner,
-      listener: BannerAdListener(
-        onAdLoaded: (ad) {
-          debugPrint('$ad loaded.');
-          setState(() {
-            _isLoaded = true;
-          });
-        },
-        onAdFailedToLoad: (ad, err) {
-          debugPrint('BannerAd failed to load: $err');
-          ad.dispose();
-        },
-      ),
-    )..load();
+    if (isAndroid) {
+      _bannerAd = AdMob.initializeAd();
+      setState(() {});
+    }
   }
 
   Future<void> getMessages() async {
@@ -86,38 +70,18 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
                 final isMe =
                     messages[index].data['sender'] == pb.authStore.model.id;
 
-                return ListTile(
-                  trailing: isMe
-                      ? Text(pb.authStore.model.data['username'][0])
+                return MessageTile(
+                  isMe: isMe,
+                  content: messages[index].data['content'],
+                  fileUrl: messages[index].data['file'].length != 0
+                      ? pb.files
+                          .getUrl(messages[index],
+                              messages[index].data['file'][0].toString())
+                          .toString()
                       : null,
-                  leading:
-                      isMe ? null : Text(messages[index].data['sender'][0]),
-                  tileColor: isMe
-                      ? Theme.of(context).colorScheme.onTertiary
-                      : Theme.of(context).colorScheme.onSecondary,
-                  title: Align(
-                    alignment:
-                        isMe ? Alignment.centerRight : Alignment.centerLeft,
-                    child: Text(messages[index].data['content']),
-                  ),
-                  subtitle: messages[index].data['file'].length != 0
-                      ? Container(
-                          margin: const EdgeInsets.all(10),
-                          clipBehavior: Clip.antiAlias,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          child: Image.network(
-                            pb.files
-                                .getUrl(messages[index],
-                                    messages[index].data['file'][0].toString())
-                                .toString(),
-                            height: 250,
-                            filterQuality: FilterQuality.low,
-                            fit: BoxFit.fitWidth,
-                          ),
-                        )
-                      : null,
+                  leadingText: isMe ? null : messages[index].data['sender'][0],
+                  trailingText:
+                      isMe ? pb.authStore.model.data['username'][0] : null,
                 );
               },
             ),
@@ -126,12 +90,7 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              if (_isLoaded && isAndroid)
-                SizedBox(
-                  width: _bannerAd!.size.width.toDouble(),
-                  height: _bannerAd!.size.height.toDouble(),
-                  child: AdWidget(ad: _bannerAd!),
-                ),
+              if (isAndroid && _bannerAd != null) AdMob.getAdWidget(_bannerAd!),
               TextField(
                 autofocus: true,
                 decoration: InputDecoration(

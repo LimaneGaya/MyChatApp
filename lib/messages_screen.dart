@@ -60,60 +60,65 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              reverse: true,
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                final isMe =
-                    messages[index].data['sender'] == pb.authStore.model.id;
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                reverse: true,
+                itemCount: messages.length,
+                itemBuilder: (context, index) {
+                  final isMe =
+                      messages[index].data['sender'] == pb.authStore.model.id;
 
-                return MessageTile(
-                  isMe: isMe,
-                  content: messages[index].data['content'],
-                  fileUrl: messages[index].data['file'].length != 0
-                      ? pb.files
-                          .getUrl(messages[index],
-                              messages[index].data['file'][0].toString())
-                          .toString()
-                      : null,
-                  leadingText: isMe ? null : messages[index].data['sender'][0],
-                  trailingText:
-                      isMe ? pb.authStore.model.data['username'][0] : null,
-                );
-              },
-            ),
-          ),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              if (isAndroid && _bannerAd != null) AdMob.getAdWidget(_bannerAd!),
-              TextField(
-                autofocus: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
-                    borderSide: const BorderSide(width: 5),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-                ),
-                onSubmitted: (value) {
-                  final pb = ref.read(authStateProvider.notifier).pb;
-                  pb.collection('messages').create(
-                    body: {
-                      "conversation": widget._conversationID,
-                      "sender": pb.authStore.model.id,
-                      "content": value,
-                    },
+                  return MessageTile(
+                    isMe: isMe,
+                    content: messages[index].data['content'],
+                    fileUrl: messages[index].data['file'].length != 0
+                        ? pb.files
+                            .getUrl(messages[index],
+                                messages[index].data['file'][0].toString())
+                            .toString()
+                        : null,
+                    leadingText:
+                        isMe ? null : messages[index].data['sender'][0],
+                    trailingText:
+                        isMe ? pb.authStore.model.data['username'][0] : null,
                   );
                 },
               ),
-            ],
-          ),
-        ],
+            ),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (isAndroid && _bannerAd != null)
+                  AdMob.getAdWidget(_bannerAd!),
+                TextField(
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(50),
+                      borderSide: const BorderSide(width: 5),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+                  ),
+                  onSubmitted: (value) {
+                    final pb = ref.read(authStateProvider.notifier).pb;
+                    pb.collection('messages').create(
+                      body: {
+                        "conversation": widget._conversationID,
+                        "sender": pb.authStore.model.id,
+                        "content": value,
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

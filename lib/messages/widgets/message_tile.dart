@@ -17,31 +17,58 @@ class MessageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      trailing: trailingText != null ? Text(trailingText!) : null,
-      leading: leadingText == null ? null : Text(leadingText!),
-      tileColor: isMe
-          ? Theme.of(context).colorScheme.onTertiary
-          : Theme.of(context).colorScheme.onSecondary,
-      title: Align(
-        alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-        child: Text(content),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        mainAxisAlignment:
+            isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (leadingText != null)
+            CircleAvatar(radius: 15, child: Text(leadingText!)),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              crossAxisAlignment:
+                  isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  alignment:
+                      isMe ? Alignment.centerRight : Alignment.centerLeft,
+                  width: MediaQuery.of(context).size.width / 1.4,
+                  child: Card(
+                    margin: EdgeInsets.zero,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
+                      child: Text(content),
+                    ),
+                  ),
+                ),
+                if (fileUrl != null)
+                  Container(
+                    margin: const EdgeInsets.only(top: 5),
+                    clipBehavior: Clip.antiAlias,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: Image.network(
+                      fileUrl!,
+                      height: 250,
+                      filterQuality: FilterQuality.low,
+                      fit: BoxFit.fitWidth,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          if (trailingText != null)
+            CircleAvatar(radius: 15, child: Text(trailingText!)),
+        ],
       ),
-      subtitle: fileUrl != null
-          ? Container(
-              margin: const EdgeInsets.all(10),
-              clipBehavior: Clip.antiAlias,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              child: Image.network(
-                fileUrl!,
-                height: 250,
-                filterQuality: FilterQuality.low,
-                fit: BoxFit.fitWidth,
-              ),
-            )
-          : null,
     );
   }
 }

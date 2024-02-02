@@ -5,14 +5,14 @@ class MessageTile extends StatelessWidget {
   final String? trailingText;
   final String? leadingText;
   final String content;
-  final String? fileUrl;
+  final List<String> fileUrl;
   const MessageTile({
     super.key,
     required this.isMe,
     this.leadingText,
     this.trailingText,
     required this.content,
-    this.fileUrl,
+    required this.fileUrl,
   });
 
   @override
@@ -48,7 +48,7 @@ class MessageTile extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (fileUrl != null)
+                if (fileUrl.isNotEmpty)
                   Container(
                     margin: const EdgeInsets.only(top: 5),
                     clipBehavior: Clip.antiAlias,
@@ -56,7 +56,7 @@ class MessageTile extends StatelessWidget {
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
                     child: Image.network(
-                      fileUrl!,
+                      fileUrl[0],
                       height: 250,
                       filterQuality: FilterQuality.low,
                       fit: BoxFit.fitWidth,

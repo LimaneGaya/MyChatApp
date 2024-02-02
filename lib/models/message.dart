@@ -1,12 +1,10 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:mychatapp/services/pocketbase.dart';
 import 'package:pocketbase/pocketbase.dart';
 
 @immutable
 class Message {
+  final RecordModel rm;
   final String id;
   final DateTime created;
   final DateTime updated;
@@ -14,8 +12,9 @@ class Message {
   final String sender;
   final String content;
   final bool isEdited;
-  final List<String> files;
+  final List<String> file;
   const Message({
+    required this.rm,
     required this.id,
     required this.created,
     required this.updated,
@@ -23,10 +22,11 @@ class Message {
     required this.sender,
     required this.content,
     required this.isEdited,
-    required this.files,
+    required this.file,
   });
 
   Message copyWith({
+    RecordModel? rm,
     String? id,
     DateTime? created,
     DateTime? updated,
@@ -34,7 +34,7 @@ class Message {
     String? sender,
     String? content,
     bool? isEdited,
-    List<String>? files,
+    List<String>? file,
   }) {
     return Message(
       id: id ?? this.id,
@@ -44,7 +44,8 @@ class Message {
       sender: sender ?? this.sender,
       content: content ?? this.content,
       isEdited: isEdited ?? this.isEdited,
-      files: files ?? this.files,
+      file: file ?? this.file,
+      rm: rm ?? this.rm,
     );
   }
 
@@ -57,12 +58,13 @@ class Message {
       'sender': sender,
       'content': content,
       'isEdited': isEdited,
-      'files': files,
+      'files': file,
     };
   }
 
-  factory Message.fromMap(Map<String, dynamic> map) {
+  factory Message.fromMap(RecordModel rm, Map<String, dynamic> map) {
     return Message(
+      rm: rm,
       id: map['id'] as String,
       created: DateTime.parse(map['created']),
       updated: DateTime.parse(map['updated']),
@@ -70,18 +72,14 @@ class Message {
       sender: map['sender'] as String,
       content: map['content'] as String,
       isEdited: (map['isEdited'] as bool?) ?? false,
-      files: map['files'] != null ? List<String>.from(map['files']) : [],
+      file: map['file'] != null
+          ? List<String>.from(map['file']).map((e) => PB.getUrl(rm, e)).toList()
+          : [],
     );
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory Message.fromJson(String source) =>
-      Message.fromMap(json.decode(source) as Map<String, dynamic>);
-
   @override
   String toString() {
-    return 'Message(id: $id, created: $created, updated: $updated, conversation: $conversation, sender: $sender, content: $content, isEdited: $isEdited, files: $files)';
+    return 'Message(id: $id, created: $created, updated: $updated, conversation: $conversation, sender: $sender, content: $content, isEdited: $isEdited, file: $file)';
   }
 
   @override
@@ -95,7 +93,7 @@ class Message {
         other.sender == sender &&
         other.content == content &&
         other.isEdited == isEdited &&
-        listEquals(other.files, files);
+        listEquals(other.file, file);
   }
 
   @override
@@ -107,6 +105,6 @@ class Message {
         sender.hashCode ^
         content.hashCode ^
         isEdited.hashCode ^
-        files.hashCode;
+        file.hashCode;
   }
 }

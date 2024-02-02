@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter_riverpod/flutter_riverpod.dart'
     show ConsumerStatefulWidget, ConsumerState;
-import 'package:google_mobile_ads/google_mobile_ads.dart'
-    show BannerAd, AdWidget;
+import 'package:google_mobile_ads/google_mobile_ads.dart' show BannerAd;
 import 'package:mychatapp/messages/widgets/message_tile.dart';
 import 'package:mychatapp/models/message.dart';
 import 'package:mychatapp/provider.dart' show authStateProvider;
 import 'package:mychatapp/services/admob.dart';
-import 'package:mychatapp/services/pocketbase.dart';
 import 'package:pocketbase/pocketbase.dart' show PocketBase, RecordModel;
 
 class MessengerScreen extends ConsumerStatefulWidget {
@@ -71,16 +69,14 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
                 reverse: true,
                 itemCount: messages.length,
                 itemBuilder: (context, index) {
-                  final isMe =
-                      messages[index].data['sender'] == pb.authStore.model.id;
-                  final ms = Message.fromMap(messages[index].toJson());
+                  final ms = Message.fromMap(
+                      messages[index], messages[index].toJson());
+                  final isMe = ms.sender == pb.authStore.model.id;
 
                   return MessageTile(
                     isMe: isMe,
                     content: ms.content,
-                    fileUrl: ms.files.isNotEmpty
-                        ? PB.getUrl(messages[index], ms.files[0])
-                        : null,
+                    fileUrl: ms.file,
                     leadingText: isMe ? null : ms.sender[0],
                     trailingText:
                         isMe ? pb.authStore.model.data['username'][0] : null,

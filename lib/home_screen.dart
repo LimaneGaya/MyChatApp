@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'
     show ConsumerStatefulWidget, ConsumerState;
-import 'package:http/http.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:mychatapp/messages_screen.dart';
 import 'package:mychatapp/provider.dart' show authStateProvider;
 import 'package:pocketbase/pocketbase.dart' show RecordModel;
@@ -26,7 +24,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void pocketBase() async {
-    debugPrint(pb.authStore.model.id);
+    debugPrint('home initial id: ${pb.authStore.model.id}');
     final result = await pb.collection('users').getList(
           page: 1,
           perPage: 20,
@@ -67,26 +65,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           IconButton(
               onPressed: () async {
                 ref.read(authStateProvider.notifier).logout();
-                // final file = await ImagePicker().pickImage(
-                //   source: ImageSource.gallery,
-                // );
-                // final file2 = await file!.readAsBytes();
-                // await pb.collection('posts').create(
-                //   body: {
-                //     'message': 'Hello there',
-                //     'sender': 'yb80zoi843a1nkf',
-                //     'reseiver': '8yi8b6cn6velm43',
-                //   },
-                //   files: [
-                //     MultipartFile.fromBytes(
-                //       'file',
-                //       file2,
-                //       filename: 'image.jpg',
-                //     ),
-                //   ],
-                // );
               },
-              icon: const Icon(Icons.upload))
+              icon: const Icon(Icons.logout))
         ],
       ),
       body: IndexedStack(

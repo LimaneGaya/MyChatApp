@@ -1,8 +1,62 @@
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pocketbase/pocketbase.dart';
+import 'package:http_parser/http_parser.dart';
 
 class PB {
   static PocketBase pb = PocketBase('https://chatly-app.pockethost.io/');
   static String getUrl(RecordModel model, String filename) {
     return pb.files.getUrl(model, filename).toString();
+  }
+
+  static Future<RecordModel> createMessage({
+    required String conversationId,
+    required String content,
+    List<XFile> files = const [],
+  }) async {
+    final List<Uint8List> filesAsBytes = [];
+    for (XFile file in files) {
+      filesAsBytes.add(await file.readAsBytes());
+    }
+    return pb.collection('messages').create(
+      body: {
+        "conversation": conversationId,
+        "sender": pb.authStore.model.id,
+        "content": content,
+      },
+      files: filesAsBytes
+          .asMap()
+          .entries
+          .map(
+            (e) => MultipartFile.fromBytes(
+              'file',
+              e.value,
+              filename: files[e.key].name,
+              contentType: MediaType(
+                'image',
+                files[e.key].name.split('.').last,
+              ),
+            ),
+          )
+          .toList(),
+    );
+  }
+
+  static Future<List<RecordModel>> getMessages(String record) async {
+    final res = await pb.collection('messages').getList(
+          page: 1,
+          perPage: 50,
+          filter: 'conversation = "$record"',
+          sort: '-created',
+        );
+    return res.items;
+  }
+
+  static void subscribe(
+    String collection,
+    Function(RecordSubscriptionEvent) func,
+  ) {
+    pb.collection(collection).subscribe('*', func);
   }
 }

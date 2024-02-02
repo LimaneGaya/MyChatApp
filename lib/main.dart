@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+
+import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart' show MobileAds;
 import 'package:mychatapp/home_screen.dart';
 import 'package:mychatapp/login_screen.dart';
 import 'package:mychatapp/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  MobileAds.instance.initialize();
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    MobileAds.instance.initialize();
+  }
   runApp(const ProviderScope(child: MyApp()));
 }
 

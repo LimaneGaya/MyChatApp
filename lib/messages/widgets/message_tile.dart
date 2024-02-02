@@ -25,7 +25,7 @@ class MessageTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (leadingText != null)
-            CircleAvatar(radius: 15, child: Text(leadingText!)),
+            CircleAvatar(radius: 18, child: Text(leadingText!)),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
@@ -66,7 +66,7 @@ class MessageTile extends StatelessWidget {
             ),
           ),
           if (trailingText != null)
-            CircleAvatar(radius: 15, child: Text(trailingText!)),
+            CircleAvatar(radius: 18, child: Text(trailingText!)),
         ],
       ),
     );

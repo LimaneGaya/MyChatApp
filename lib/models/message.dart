@@ -58,11 +58,12 @@ class Message {
       'sender': sender,
       'content': content,
       'isEdited': isEdited,
-      'files': file,
+      'file': file,
     };
   }
 
-  factory Message.fromMap(RecordModel rm, Map<String, dynamic> map) {
+  factory Message.fromMap(RecordModel rm) {
+    final map = rm.toJson();
     return Message(
       rm: rm,
       id: map['id'] as String,

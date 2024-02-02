@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart'
     show StateNotifierProvider, FutureProvider, StateNotifier;
+import 'package:mychatapp/services/pocketbase.dart';
 import 'package:pocketbase/pocketbase.dart' show PocketBase, RecordModel;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,7 +26,7 @@ class AuthStateNotifier extends StateNotifier<bool> {
       : _sharedPref = sharedPrefs,
         super(false);
 
-  final _pocketbase = PocketBase('https://chatly-app.pockethost.io/');
+  final _pocketbase = PB.pb;
 
   PocketBase get pb => _pocketbase;
 

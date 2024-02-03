@@ -53,6 +53,42 @@ class PB {
     return res.items;
   }
 
+  static Future<List<RecordModel>> getUsers({int page = 1}) async {
+    debugPrint('home initial id: ${pb.authStore.model.id}');
+    final result = await pb.collection('users').getList(
+          page: page,
+          perPage: 20,
+          filter: 'id != "${pb.authStore.model.id}"',
+        );
+    return result.items;
+  }
+
+  static Future<RecordModel> getUser(String id) async {
+    final result = await pb.collection('users').getOne(id);
+
+    debugPrint('User id $id is: ${result.data['username']}');
+    return result;
+  }
+
+  static Future<List<RecordModel>> getUsersWithIds(List<String> ids) async {
+    List<RecordModel> out = [];
+
+    for (String i in ids) {
+      out.add(await pb.collection('users').getOne(i));
+    }
+    return out;
+  }
+
+  static Future<List<RecordModel>> getConversation({int page = 1}) async {
+    debugPrint('home initial id: ${pb.authStore.model.id}');
+    final res = await pb.collection('converstion').getList(
+          page: page,
+          perPage: 20,
+          filter: 'participants ~ "${pb.authStore.model.id}"',
+        );
+    return res.items;
+  }
+
   static void subscribe(
     String collection,
     Function(RecordSubscriptionEvent) func,

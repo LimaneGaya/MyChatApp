@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart'
     show ConsumerStatefulWidget, ConsumerState;
 import 'package:mychatapp/messages_screen.dart';
 import 'package:mychatapp/provider.dart' show authStateProvider;
+import 'package:mychatapp/services/pocketbase.dart';
 import 'package:pocketbase/pocketbase.dart' show RecordModel;
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -13,7 +14,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  late final pb = ref.read(authStateProvider.notifier).pb;
+  final pb = PB.pb;
   List<RecordModel> users = [];
   List<RecordModel> conversations = [];
 
@@ -24,34 +25,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void pocketBase() async {
-    debugPrint('home initial id: ${pb.authStore.model.id}');
-    final result = await pb.collection('users').getList(
-          page: 1,
-          perPage: 20,
-          filter: 'id != "${pb.authStore.model.id}"',
-        );
-    users = result.items;
-    if (mounted) {
-      setState(() {});
-    }
-
-    pb.collection('users').subscribe("*", (e) {
-      if (e.record != null && e.action == 'create') {
-        users.insert(0, e.record!);
-      }
-      if (mounted) {
-        setState(() {});
-      }
-    });
-    final res = await pb.collection('converstion').getList(
-          page: 1,
-          perPage: 20,
-          filter: 'participants ~ "${pb.authStore.model.id}"',
-        );
-    conversations = res.items;
-    if (mounted) {
-      setState(() {});
-    }
+    users = await PB.getUsers();
+    if (mounted) setState(() {});
+    conversations = await PB.getConversation();
+    if (mounted) setState(() {});
   }
 
   int index = 0;
@@ -121,8 +98,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         );
                       }
                     },
-                    title: Text(
-                        conversations[index].data['participants'].toString()),
+                    title: FutureBuilder(
+                      //TODO: fix this
+                      future: PB.getUsersWithIds(
+                        (conversations[index].data['participants']
+                            as List<String>),
+                      ),
+                      builder: (context, snapshot) {
+                        return Text(snapshot.data!
+                            .map((e) => e.data['username'])
+                            .toString());
+                      },
+                    ),
                   ),
                 ),
               ),

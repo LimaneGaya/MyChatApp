@@ -98,16 +98,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         );
                       }
                     },
-                    title: FutureBuilder(
-                      //TODO: fix this
-                      future: PB.getUsersWithIds(
-                        (conversations[index].data['participants']
-                            as List<String>),
-                      ),
-                      builder: (context, snapshot) {
-                        return Text(snapshot.data!
-                            .map((e) => e.data['username'])
-                            .toString());
+                    title: Builder(
+                      builder: (context) {
+                        final names = conversations[index]
+                            .expand['participants']!
+                            .map((e) {
+                          return e.data['username'];
+                        }).join(', ');
+                        return Text(names);
                       },
                     ),
                   ),

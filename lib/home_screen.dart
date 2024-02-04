@@ -18,21 +18,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   List<RecordModel> users = [];
   List<RecordModel> conversations = [];
 
+  int index = 0;
+  RecordModel? link;
+
   @override
   void initState() {
     super.initState();
     pocketBase();
   }
-
-  void pocketBase() async {
-    users = await PB.getUsers();
-    if (mounted) setState(() {});
-    conversations = await PB.getConversation();
-    if (mounted) setState(() {});
-  }
-
-  int index = 0;
-  RecordModel? link;
 
   @override
   Widget build(BuildContext context) {
@@ -52,29 +45,40 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           Column(
             children: [
               Expanded(
-                child: ListView.builder(
+                child: GridView.builder(
                   itemCount: users.length,
-                  itemBuilder: (context, index) => ListTile(
-                    onTap: () async {
-                      final con = await pb.collection('converstion').create(
-                        body: {
-                          "isTrusted": false,
-                          "participants": [
-                            pb.authStore.model.id,
-                            users[index].id,
-                          ]
-                        },
-                      );
-                      if (mounted) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MessengerScreen(con.id),
+                  itemBuilder: (context, index) {
+                    return GridTile(
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(15),
+                          onTap: () => checkConExistAndGoTo(index),
+                          child: Column(
+                            children: [
+                              Text(users[index].data['username']),
+                              Expanded(
+                                child: Image.network(
+                                  PB.getUrl(
+                                    users[index],
+                                    users[index].data['avatar'],
+                                  ),
+                                  fit: BoxFit.cover,
+                                  filterQuality: FilterQuality.medium,
+                                ),
+                              )
+                            ],
                           ),
-                        );
-                      }
-                    },
-                    title: Text(users[index].data['username']),
+                        ),
+                      ),
+                    );
+                  },
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 150,
                   ),
                 ),
               ),
@@ -86,29 +90,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               Expanded(
                 child: ListView.builder(
                   itemCount: conversations.length,
-                  itemBuilder: (context, index) => ListTile(
-                    onTap: () async {
-                      if (mounted) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                MessengerScreen(conversations[index].id),
-                          ),
-                        );
-                      }
-                    },
-                    title: Builder(
-                      builder: (context) {
-                        final names = conversations[index]
-                            .expand['participants']!
-                            .map((e) {
-                          return e.data['username'];
-                        }).join(', ');
-                        return Text(names);
+                  itemBuilder: (context, index) {
+                    final con = conversations[index];
+                    return ListTile(
+                      onTap: () {
+                        goToConversation(con.id);
                       },
-                    ),
-                  ),
+                      title: Builder(
+                        builder: (context) {
+                          final names = con.expand['participants']!
+                              .map((e) => e.data['username'])
+                              .join(', ');
+                          return Text(names);
+                        },
+                      ),
+                    );
+                  },
                 ),
               ),
             ],
@@ -129,5 +126,44 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
     );
+  }
+
+  void pocketBase() async {
+    users = await PB.getUsers();
+    if (mounted) setState(() {});
+    conversations = await PB.getConversation();
+    if (mounted) setState(() {});
+  }
+
+  void goToConversation(String id) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MessengerScreen(id),
+      ),
+    );
+  }
+
+  void checkConExistAndGoTo(int index) async {
+    final int idx = conversations.indexWhere(
+      (e) => e.data['participants'].contains(
+        users[index].id,
+      ),
+    );
+    if (idx == -1) {
+      final con = await pb.collection('converstion').create(
+        body: {
+          "isTrusted": false,
+          "participants": [
+            pb.authStore.model.id,
+            users[index].id,
+          ]
+        },
+      );
+      if (mounted) goToConversation(con.id);
+    } else {
+      final String id = conversations[idx].id;
+      goToConversation(id);
+    }
   }
 }

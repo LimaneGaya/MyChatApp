@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pocketbase/pocketbase.dart';
-import 'package:http_parser/http_parser.dart';
+import 'package:http_parser/http_parser.dart' show MediaType;
 
 class PB {
   static PocketBase pb = PocketBase('https://chatly-app.pockethost.io/');

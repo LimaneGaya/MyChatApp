@@ -1,7 +1,7 @@
 name: mychatapp
 description: "My own take of a chat app"
 publish_to: 'none'
-version: 0.1.0
+version: 0.0.1+0.0.1
 
 environment:
   sdk: '>=3.2.5 <4.0.0'
@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^1.2.0
+  http_parser:
   image_picker: ^1.0.7
   pocketbase: ^0.18.1
   flutter_riverpod: ^2.4.9

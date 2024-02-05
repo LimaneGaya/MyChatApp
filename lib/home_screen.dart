@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'
     show ConsumerStatefulWidget, ConsumerState;
 import 'package:mychatapp/messages_screen.dart';
+import 'package:mychatapp/models/conversation.dart';
+import 'package:mychatapp/models/user.dart';
 import 'package:mychatapp/provider.dart' show authStateProvider;
 import 'package:mychatapp/services/pocketbase.dart';
 import 'package:pocketbase/pocketbase.dart' show RecordModel;
@@ -48,8 +50,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 child: GridView.builder(
                   itemCount: users.length,
                   itemBuilder: (context, index) {
+                    final UserModel user =
+                        UserModel.fromMap(users[index].toJson());
                     return GridTile(
                       child: Container(
+                        margin: const EdgeInsets.all(5),
                         width: 100,
                         height: 100,
                         decoration: BoxDecoration(
@@ -60,12 +65,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           onTap: () => checkConExistAndGoTo(index),
                           child: Column(
                             children: [
-                              Text(users[index].data['username']),
+                              Text(user.username),
                               Expanded(
                                 child: Image.network(
                                   PB.getUrl(
-                                    users[index],
-                                    users[index].data['avatar'],
+                                    RecordModel(
+                                      id: user.id,
+                                      collectionId: user.collectionId,
+                                      collectionName: user.collectionName,
+                                    ),
+                                    user.avatar,
                                   ),
                                   fit: BoxFit.cover,
                                   filterQuality: FilterQuality.medium,
@@ -91,17 +100,36 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 child: ListView.builder(
                   itemCount: conversations.length,
                   itemBuilder: (context, index) {
-                    final con = conversations[index];
+                    final con = Conversation.fromMap(
+                      conversations[index].toJson(),
+                    );
                     return ListTile(
                       onTap: () {
                         goToConversation(con.id);
                       },
                       title: Builder(
                         builder: (context) {
-                          final names = con.expand['participants']!
-                              .map((e) => e.data['username'])
-                              .join(', ');
-                          return Text(names);
+                          final names = con.participantData.map((e) {
+                            return e.username;
+                          }).join(', ');
+                          return Row(
+                            children: [
+                              Text(names),
+                              const Spacer(),
+                              ...con.participantData.map((e) {
+                                final image = PB.getUrl(
+                                  RecordModel(
+                                    id: e.id,
+                                    collectionId: e.collectionId,
+                                    collectionName: e.collectionName,
+                                  ),
+                                  e.avatar,
+                                );
+                                return CircleAvatar(
+                                    backgroundImage: NetworkImage(image));
+                              }),
+                            ],
+                          );
                         },
                       ),
                     );

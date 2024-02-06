@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'
     show ConsumerStatefulWidget, ConsumerState;
 import 'package:mychatapp/messages_screen.dart';
-import 'package:mychatapp/models/conversation.dart';
-import 'package:mychatapp/models/user.dart';
+import 'package:mychatapp/models/models.dart';
 import 'package:mychatapp/provider.dart' show authStateProvider;
 import 'package:mychatapp/services/pocketbase.dart';
 import 'package:pocketbase/pocketbase.dart' show RecordModel;
@@ -58,28 +57,48 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         width: 100,
                         height: 100,
                         decoration: BoxDecoration(
-                            color: Colors.blue,
                             borderRadius: BorderRadius.circular(15)),
+                        clipBehavior: Clip.antiAlias,
                         child: InkWell(
                           borderRadius: BorderRadius.circular(15),
                           onTap: () => checkConExistAndGoTo(index),
-                          child: Column(
+                          child: Stack(
                             children: [
-                              Text(user.username),
-                              Expanded(
-                                child: Image.network(
-                                  PB.getUrl(
-                                    RecordModel(
-                                      id: user.id,
-                                      collectionId: user.collectionId,
-                                      collectionName: user.collectionName,
-                                    ),
-                                    user.avatar,
+                              Image.network(
+                                PB.getUrl(
+                                  RecordModel(
+                                    id: user.id,
+                                    collectionId: user.collectionId,
+                                    collectionName: user.collectionName,
                                   ),
-                                  fit: BoxFit.cover,
-                                  filterQuality: FilterQuality.medium,
+                                  user.avatar,
                                 ),
-                              )
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                                filterQuality: FilterQuality.medium,
+                              ),
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Container(
+                                  height: 35,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withOpacity(0.7),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(user.username),
+                                      Text(
+                                        '${user.gender} ${user.age}',
+                                        style: const TextStyle(fontSize: 10),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -106,6 +125,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     return ListTile(
                       onTap: () {
                         goToConversation(con.id);
+                      },
+                      onLongPress: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text(
+                              'Delete conversation?',
+                              style: TextStyle(color: Colors.red[400]),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  deleteConversation(con.id);
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Delete'),
+                              ),
+                            ],
+                          ),
+                        );
                       },
                       title: Builder(
                         builder: (context) {
@@ -163,15 +202,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     if (mounted) setState(() {});
   }
 
-  void goToConversation(String id) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MessengerScreen(id),
-      ),
-    );
-  }
-
   void checkConExistAndGoTo(int index) async {
     final int idx = conversations.indexWhere(
       (e) => e.data['participants'].contains(
@@ -193,5 +223,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       final String id = conversations[idx].id;
       goToConversation(id);
     }
+  }
+
+  void goToConversation(String id) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MessengerScreen(id),
+      ),
+    );
+  }
+
+  void deleteConversation(String id) {
+    PB.deleteConvertation(id);
   }
 }

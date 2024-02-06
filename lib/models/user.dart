@@ -11,7 +11,9 @@ class UserModel {
   final bool verified;
   final DateTime created;
   final DateTime updated;
-  final DateTime? lastSeen;
+  final DateTime lastSeen;
+  final String gender;
+  final int age;
   const UserModel({
     required this.id,
     required this.collectionId,
@@ -23,6 +25,8 @@ class UserModel {
     required this.created,
     required this.updated,
     required this.lastSeen,
+    required this.gender,
+    required this.age,
   });
 
   UserModel copyWith({
@@ -36,6 +40,8 @@ class UserModel {
     DateTime? created,
     DateTime? updated,
     DateTime? lastSeen,
+    String? gender,
+    int? age,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -48,6 +54,8 @@ class UserModel {
       created: created ?? this.created,
       updated: updated ?? this.updated,
       lastSeen: lastSeen ?? this.lastSeen,
+      gender: gender ?? this.gender,
+      age: age ?? this.age,
     );
   }
 
@@ -62,7 +70,9 @@ class UserModel {
       'verified': verified,
       'created': created.toString(),
       'updated': updated.toString(),
-      'lastSeen': lastSeen?.toString(),
+      'lastSeen': lastSeen.toString(),
+      'gender': gender,
+      'age': age,
     };
   }
 
@@ -77,14 +87,14 @@ class UserModel {
       verified: map['verified'] as bool,
       created: DateTime.parse(map['created'] as String),
       updated: DateTime.parse(map['updated'] as String),
-      lastSeen: map['lastSeen'] != null && map['lastSeen'] != ''
-          ? DateTime.parse(map['lastSeen'] as String)
-          : null,
+      lastSeen: DateTime.parse(map['lastSeen'] as String),
+      gender: map['gender'] as String,
+      age: map['age'] as int,
     );
   }
   @override
   String toString() {
-    return 'UserModel(id: $id, collectionId: $collectionId, collectionName: $collectionName, username: $username, avatar: $avatar, name: $name, verified: $verified, created: $created, updated: $updated, lastSeen: $lastSeen)';
+    return 'UserModel(id: $id, collectionId: $collectionId, collectionName: $collectionName, username: $username, avatar: $avatar, name: $name, verified: $verified, created: $created, updated: $updated, lastSeen: $lastSeen, gender: $gender, age: $age)';
   }
 
   @override
@@ -100,7 +110,9 @@ class UserModel {
         other.verified == verified &&
         other.created == created &&
         other.updated == updated &&
-        other.lastSeen == lastSeen;
+        other.lastSeen == lastSeen &&
+        other.gender == gender &&
+        other.age == age;
   }
 
   @override
@@ -114,6 +126,8 @@ class UserModel {
         verified.hashCode ^
         created.hashCode ^
         updated.hashCode ^
-        lastSeen.hashCode;
+        lastSeen.hashCode ^
+        gender.hashCode ^
+        age.hashCode;
   }
 }

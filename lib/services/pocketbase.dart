@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
-import 'package:http/http.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter/foundation.dart' show Uint8List, debugPrint;
+import 'package:http/http.dart' show MultipartFile;
+import 'package:image_picker/image_picker.dart' show XFile;
 import 'package:pocketbase/pocketbase.dart';
 import 'package:http_parser/http_parser.dart' show MediaType;
 
@@ -54,24 +54,28 @@ class PB {
   }
 
   static Future<List<RecordModel>> getUsers({int page = 1}) async {
-    debugPrint('home initial id: ${pb.authStore.model.id}');
     final result = await pb.collection('users').getList(
           page: page,
           perPage: 20,
           filter: 'id != "${pb.authStore.model.id}"',
+          sort: 'lastSeen',
         );
     return result.items;
   }
 
   static Future<List<RecordModel>> getConversation({int page = 1}) async {
-    debugPrint('home initial id: ${pb.authStore.model.id}');
     final res = await pb.collection('converstion').getList(
           page: page,
           perPage: 20,
           filter: 'participants ~ "${pb.authStore.model.id}"',
           expand: 'participants',
+          sort: 'created',
         );
     return res.items;
+  }
+
+  static Future<void> deleteConvertation(String id) async {
+    await pb.collection('converstion').delete(id);
   }
 
   static void subscribe(

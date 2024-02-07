@@ -1,3 +1,4 @@
+import 'package:feedback/feedback.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
@@ -12,7 +13,7 @@ void main() {
   if (defaultTargetPlatform == TargetPlatform.android) {
     MobileAds.instance.initialize();
   }
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(const ProviderScope(child: BetterFeedback(child: MyApp())));
 }
 
 class MyApp extends StatelessWidget {
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.blue,
+        seedColor: Colors.blue.shade900,
         brightness: Brightness.dark,
       )),
       home: const InitialScreen(),

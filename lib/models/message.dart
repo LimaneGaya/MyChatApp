@@ -74,7 +74,10 @@ class Message {
       content: map['content'] as String,
       isEdited: (map['isEdited'] as bool?) ?? false,
       file: map['file'] != null
-          ? List<String>.from(map['file']).map((e) => PB.getUrl(rm, e)).toList()
+          ? List<String>.from(map['file'])
+              .map((e) =>
+                  PB.getFileUrl(rm.id, rm.collectionId, rm.collectionName, e))
+              .toList()
           : [],
     );
   }

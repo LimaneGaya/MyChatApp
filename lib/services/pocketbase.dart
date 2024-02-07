@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart' show Uint8List, debugPrint;
+import 'package:flutter/foundation.dart' show Uint8List;
 import 'package:http/http.dart' show MultipartFile;
 import 'package:image_picker/image_picker.dart' show XFile;
 import 'package:pocketbase/pocketbase.dart';
@@ -6,9 +6,6 @@ import 'package:http_parser/http_parser.dart' show MediaType;
 
 class PB {
   static PocketBase pb = PocketBase('https://chatly-app.pockethost.io/');
-  static String getUrl(RecordModel model, String filename) {
-    return pb.files.getUrl(model, filename).toString();
-  }
 
   static Future<RecordModel> createMessage({
     required String conversationId,
@@ -58,7 +55,7 @@ class PB {
           page: page,
           perPage: 20,
           filter: 'id != "${pb.authStore.model.id}"',
-          sort: 'lastSeen',
+          sort: '-lastSeen',
         );
     return result.items;
   }
@@ -76,6 +73,25 @@ class PB {
 
   static Future<void> deleteConvertation(String id) async {
     await pb.collection('converstion').delete(id);
+  }
+
+  static String getFileUrl(
+      String id, String colId, String colNam, String name) {
+    return pb.files
+        .getUrl(
+          RecordModel(id: id, collectionId: colId, collectionName: colNam),
+          name,
+        )
+        .toString();
+  }
+
+  static Future<void> updateUserLastSeen() async {
+    await pb.collection('users').update(
+      pb.authStore.model.id,
+      body: {
+        "lastSeen": DateTime.now().toUtc().toString(),
+      },
+    );
   }
 
   static void subscribe(

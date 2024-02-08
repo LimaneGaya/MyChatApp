@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter_riverpod/flutter_riverpod.dart'
-    show ConsumerStatefulWidget, ConsumerState;
+    show Consumer, ConsumerState, ConsumerStatefulWidget;
 import 'package:google_mobile_ads/google_mobile_ads.dart' show BannerAd;
 import 'package:image_picker/image_picker.dart' show ImagePicker, XFile;
+import 'package:mychatapp/messages/provider/messages_provider.dart';
 import 'package:mychatapp/messages/widgets/message_field.dart';
 import 'package:mychatapp/messages/widgets/message_tile.dart';
-import 'package:mychatapp/models/message.dart';
 import 'package:mychatapp/services/admob.dart';
 import 'package:mychatapp/services/pocketbase.dart';
-import 'package:pocketbase/pocketbase.dart' show PocketBase, RecordModel;
+import 'package:pocketbase/pocketbase.dart' show PocketBase;
 
 //TODO: chage this class to provider / view / widget and implement message Model
 
@@ -22,7 +22,6 @@ class MessengerScreen extends ConsumerStatefulWidget {
 }
 
 class _MessengerScreenState extends ConsumerState<MessengerScreen> {
-  List<RecordModel> msgs = [];
   PocketBase pb = PB.pb;
   BannerAd? _bannerAd;
   final bool isAndroid = defaultTargetPlatform == TargetPlatform.android;
@@ -32,7 +31,6 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
   @override
   void initState() {
     super.initState();
-    getMessages();
     if (isAndroid) {
       _bannerAd = AdMob.initializeAd();
       setState(() => _bannerAd = _bannerAd);
@@ -43,20 +41,6 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
   void dispose() {
     textController.dispose();
     super.dispose();
-  }
-
-  Future<void> getMessages() async {
-    final mes = await PB.getMessages(widget._conversationID);
-    if (mounted) setState(() => msgs = mes);
-    PB.subscribe('messages', (e) {
-      if (e.action == "create") msgs.insert(0, e.record!);
-      if (e.action == "delete") msgs.removeWhere((m) => m.id == e.record!.id);
-      if (e.action == 'update') {
-        final idx = msgs.indexWhere((m) => m.id == e.record!.id);
-        msgs[idx] = e.record!;
-      }
-      if (mounted) setState(() {});
-    });
   }
 
   Future<void> pickFile() async {
@@ -70,11 +54,9 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
   }
 
   void sendMessage() {
-    PB.createMessage(
-      conversationId: widget._conversationID,
-      content: textController.text,
-      files: files,
-    );
+    ref
+        .read(messagesStateProvider(widget._conversationID))
+        .sendMessage(textController.text, files);
     setState(() => textController.text = '');
   }
 
@@ -87,20 +69,28 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
         child: Column(
           children: [
             Expanded(
-              child: ListView.builder(
-                reverse: true,
-                itemCount: msgs.length,
-                itemBuilder: (context, index) {
-                  final ms = Message.fromMap(msgs[index]);
-                  final isMe = ms.sender == pb.authStore.model.id;
+              child: Consumer(
+                builder: (context, ref, child) {
+                  final msgs = ref
+                      .watch(messagesStateProvider(widget._conversationID))
+                      .messages;
+                  return ListView.builder(
+                    reverse: true,
+                    itemCount: msgs.length,
+                    itemBuilder: (context, index) {
+                      final ms = msgs[index];
+                      final isMe = ms.sender == pb.authStore.model.id;
 
-                  return MessageTile(
-                    isMe: isMe,
-                    content: ms.content,
-                    fileUrl: ms.file,
-                    leadingText: isMe ? null : ms.sender[0],
-                    trailingText:
-                        isMe ? pb.authStore.model.data['username'][0] : null,
+                      return MessageTile(
+                        isMe: isMe,
+                        content: ms.content,
+                        fileUrl: ms.file,
+                        leadingText: isMe ? null : ms.sender[0],
+                        trailingText: isMe
+                            ? pb.authStore.model.data['username'][0]
+                            : null,
+                      );
+                    },
                   );
                 },
               ),

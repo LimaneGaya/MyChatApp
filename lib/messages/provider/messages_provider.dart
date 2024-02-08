@@ -1,0 +1,46 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:mychatapp/models/models.dart';
+import 'package:mychatapp/services/pocketbase.dart';
+
+final messagesStateProvider =
+    ChangeNotifierProvider.family<MessagesChangeNotifier, String>(
+  (ref, id) => MessagesChangeNotifier(id),
+);
+
+class MessagesChangeNotifier extends ChangeNotifier {
+  final pb = PB.pb;
+  final String id;
+  List<Message> messages = [];
+  MessagesChangeNotifier(this.id) {
+    getMessages();
+  }
+
+  Future<void> getMessages() async {
+    final msgs = await PB.getMessages(id);
+    messages = msgs.map((e) => Message.fromMap(e)).toList();
+    notifyListeners();
+    PB.subscribe(
+      'messages',
+      (e) {
+        final msg = Message.fromMap(e.record!);
+        if (e.action == "create") messages.insert(0, msg);
+        if (e.action == "delete") messages.removeWhere((m) => m.id == msg.id);
+        if (e.action == 'update') {
+          final idx = messages.indexWhere((m) => m.id == msg.id);
+          messages[idx] = msg;
+        }
+        notifyListeners();
+      },
+    );
+  }
+
+  void sendMessage(String text, List<XFile> files) {
+    PB.createMessage(
+      conversationId: id,
+      content: text,
+      files: files,
+    );
+  }
+}

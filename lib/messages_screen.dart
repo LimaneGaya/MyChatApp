@@ -3,12 +3,15 @@ import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter_riverpod/flutter_riverpod.dart'
     show ConsumerStatefulWidget, ConsumerState;
 import 'package:google_mobile_ads/google_mobile_ads.dart' show BannerAd;
-import 'package:image_picker/image_picker.dart';
+import 'package:image_picker/image_picker.dart' show ImagePicker, XFile;
+import 'package:mychatapp/messages/widgets/message_field.dart';
 import 'package:mychatapp/messages/widgets/message_tile.dart';
 import 'package:mychatapp/models/message.dart';
 import 'package:mychatapp/services/admob.dart';
 import 'package:mychatapp/services/pocketbase.dart';
 import 'package:pocketbase/pocketbase.dart' show PocketBase, RecordModel;
+
+//TODO: chage this class to provider / view / widget and implement message Model
 
 class MessengerScreen extends ConsumerStatefulWidget {
   final String _conversationID;
@@ -19,11 +22,12 @@ class MessengerScreen extends ConsumerStatefulWidget {
 }
 
 class _MessengerScreenState extends ConsumerState<MessengerScreen> {
-  List<RecordModel> messages = [];
+  List<RecordModel> msgs = [];
   PocketBase pb = PB.pb;
   BannerAd? _bannerAd;
   final bool isAndroid = defaultTargetPlatform == TargetPlatform.android;
   List<XFile> files = [];
+  TextEditingController textController = TextEditingController();
 
   @override
   void initState() {
@@ -35,12 +39,22 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
     }
   }
 
+  @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
+  }
+
   Future<void> getMessages() async {
     final mes = await PB.getMessages(widget._conversationID);
-    if (mounted) setState(() => messages = mes);
+    if (mounted) setState(() => msgs = mes);
     PB.subscribe('messages', (e) {
-      messages.insert(0, e.record!);
-      debugPrint('realtime message: ${e.record!.data.toString()}');
+      if (e.action == "create") msgs.insert(0, e.record!);
+      if (e.action == "delete") msgs.removeWhere((m) => m.id == e.record!.id);
+      if (e.action == 'update') {
+        final idx = msgs.indexWhere((m) => m.id == e.record!.id);
+        msgs[idx] = e.record!;
+      }
       if (mounted) setState(() {});
     });
   }
@@ -55,12 +69,13 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
     files = f.length >= 4 ? f.sublist(0, 4) : f;
   }
 
-  void sendMessage(String value) {
+  void sendMessage() {
     PB.createMessage(
       conversationId: widget._conversationID,
-      content: value,
+      content: textController.text,
       files: files,
     );
+    setState(() => textController.text = '');
   }
 
   @override
@@ -74,9 +89,9 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
             Expanded(
               child: ListView.builder(
                 reverse: true,
-                itemCount: messages.length,
+                itemCount: msgs.length,
                 itemBuilder: (context, index) {
-                  final ms = Message.fromMap(messages[index]);
+                  final ms = Message.fromMap(msgs[index]);
                   final isMe = ms.sender == pb.authStore.model.id;
 
                   return MessageTile(
@@ -99,23 +114,11 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
                 Row(
                   children: [
                     IconButton(
-                      onPressed: pickFile,
-                      icon: const Icon(Icons.image),
-                    ),
-                    Expanded(
-                      child: TextField(
-                        autofocus: true,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(50),
-                            borderSide: const BorderSide(width: 5),
-                          ),
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 20),
-                        ),
-                        onSubmitted: sendMessage,
-                      ),
-                    ),
+                        onPressed: pickFile, icon: const Icon(Icons.image)),
+                    Expanded(child: MessageField(textController, sendMessage)),
+                    IconButton(
+                        onPressed: sendMessage,
+                        icon: const Icon(Icons.send_rounded)),
                   ],
                 ),
               ],

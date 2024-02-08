@@ -34,15 +34,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
         actions: [
           IconButton(
-              onPressed: () async {
-                ref.read(authStateProvider.notifier).logout();
-              },
-              icon: const Icon(Icons.logout)),
-          IconButton(
               //TODO: Implement Error reporting
               onPressed: () =>
                   BetterFeedback.of(context).show((UserFeedback feedback) {}),
               icon: const Icon(Icons.bug_report)),
+          IconButton(
+              onPressed: () async {
+                ref.read(authStateProvider.notifier).logout();
+              },
+              icon: const Icon(Icons.logout)),
         ],
       ),
       body: IndexedStack(

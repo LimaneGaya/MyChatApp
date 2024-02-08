@@ -8,14 +8,19 @@ final userStateProvider =
 );
 
 class UserStateNotifier extends StateNotifier<List<UserModel>> {
+  int page = 0;
   UserStateNotifier() : super([]) {
     getUsers();
-    //TODO: Uncoment This / updateLastSeen();
+    //TODO: Uncoment This to: updateLastSeen();
   }
 
   void getUsers() async {
-    final usersJson = await PB.getUsers();
-    state = usersJson.map((e) => UserModel.fromMap(e.toJson())).toList();
+    //TODO: Implement better page loading with limit reached end case
+    page = page + 1;
+    final usersJson = await PB.getUsers(page: page);
+    final data = usersJson.map((e) => UserModel.fromMap(e.toJson())).toList();
+
+    state = state + data;
   }
 
   void updateLastSeen() async {

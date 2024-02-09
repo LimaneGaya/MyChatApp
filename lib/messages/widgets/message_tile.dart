@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:mychatapp/messages/widgets/interactive_image_view.dart';
 
 class MessageTile extends StatelessWidget {
   final bool isMe;
@@ -55,11 +57,22 @@ class MessageTile extends StatelessWidget {
                     decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
-                    child: Image.network(
-                      fileUrl[0],
-                      height: 250,
-                      filterQuality: FilterQuality.low,
-                      fit: BoxFit.fitWidth,
+                    child: InkWell(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  InteractImageViewer(fileUrl[0]))),
+                      child: Hero(
+                        tag: fileUrl[0],
+                        child: CachedNetworkImage(
+                          imageUrl: fileUrl[0],
+                          height: 250,
+                          filterQuality: FilterQuality.low,
+                          fit: BoxFit.fitWidth,
+                        ),
+                      ),
                     ),
                   ),
               ],

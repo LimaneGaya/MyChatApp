@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "999227741912",
+    "project_id": "mychatapp-lg",
+    "storage_bucket": "mychatapp-lg.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:999227741912:android:78ad6b536261ec310269ad",
+        "android_client_info": {
+          "package_name": "com.gaya.mychatapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBiaKnvI1a1FYLXdpgaaycs6vSZAL1LHY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

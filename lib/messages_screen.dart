@@ -10,8 +10,7 @@ import 'package:mychatapp/messages/widgets/message_tile.dart';
 import 'package:mychatapp/services/admob.dart';
 import 'package:mychatapp/services/pocketbase.dart';
 import 'package:pocketbase/pocketbase.dart' show PocketBase;
-
-//TODO: chage this class to provider / view / widget and implement message Model
+import 'package:google_mlkit_smart_reply/google_mlkit_smart_reply.dart';
 
 class MessengerScreen extends ConsumerStatefulWidget {
   final String _conversationID;
@@ -27,6 +26,7 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
   final bool isAndroid = defaultTargetPlatform == TargetPlatform.android;
   List<XFile> files = [];
   TextEditingController textController = TextEditingController();
+  final smartReply = SmartReply();
 
   @override
   void initState() {
@@ -40,6 +40,7 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
   @override
   void dispose() {
     textController.dispose();
+    smartReply.close();
     super.dispose();
   }
 
@@ -53,11 +54,31 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
     files = f.length >= 4 ? f.sublist(0, 4) : f;
   }
 
-  void sendMessage() {
-    ref
-        .read(messagesStateProvider(widget._conversationID))
-        .sendMessage(textController.text, files);
-    setState(() => textController.text = '');
+  void sendMessage() async {
+    //#Block Smart Reply
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      smartReply.addMessageToConversationFromLocalUser(
+        textController.text,
+        DateTime.now().microsecondsSinceEpoch,
+      );
+      final res = await smartReply.suggestReplies();
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+              content: Column(
+            children: res.suggestions.map((e) => Text(e)).toList(),
+          )),
+        );
+      }
+      //#Block Smart Reply
+
+      //Send Message
+      ref
+          .read(messagesStateProvider(widget._conversationID))
+          .sendMessage(textController.text, files);
+      setState(() => textController.text = '');
+    }
   }
 
   @override

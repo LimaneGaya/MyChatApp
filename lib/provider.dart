@@ -11,49 +11,70 @@ final authStateProvider = StateNotifierProvider<AuthStateNotifier, bool>(
 final sharedPrefProvider = FutureProvider<SharedPreferences>(
   (ref) => SharedPreferences.getInstance(),
 );
+final authCheckifLoginIsValid = FutureProvider<bool>((ref) async {
+  final pb = PB.pb;
+  final sharedPref = ref.watch(sharedPrefProvider).value!;
+  final auth = sharedPref.getString('auth');
+  if (auth == null) return false;
+  final decoded = jsonDecode(auth) as Map<String, dynamic>;
+  final String token = decoded['token'];
+  final record =
+      RecordModel.fromJson(decoded['record'] as Map<String, dynamic>);
+  pb.authStore.save(token, record);
+  final newRecord = await pb.collection('users').authRefresh();
+  if (newRecord.record == null) return false;
+  final data =
+      jsonEncode({'token': newRecord.token, 'record': newRecord.record});
+  await sharedPref.setString('auth', data);
+  return true;
+});
 
 class AuthStateNotifier extends StateNotifier<bool> {
   final SharedPreferences _sharedPref;
   AuthStateNotifier({required SharedPreferences sharedPrefs})
       : _sharedPref = sharedPrefs,
         super(false);
-
-  final _pocketbase = PB.pb;
-
-  PocketBase get pb => _pocketbase;
+  final _pb = PB.pb;
 
   Future<bool> login(String userName, String password) async {
     state = true;
-    final authData = await _pocketbase
-        .collection('users')
-        .authWithPassword(userName, password);
+    final authData =
+        await _pb.collection('users').authWithPassword(userName, password);
     if (authData.record != null) {
       authData.record!;
-      final data = jsonEncode({
-        'token': authData.token,
-        'record': authData.record,
-      });
+      final data =
+          jsonEncode({'token': authData.token, 'record': authData.record});
       await _sharedPref.setString('auth', data);
     }
     state = false;
-    return _pocketbase.authStore.isValid;
+    return _pb.authStore.isValid;
   }
 
-  bool checkIfLogedIn() {
-    //TODO: Add check to see if user was deleted or banned
-    final auth = _sharedPref.getString('auth');
-    if (auth == null) return false;
-    final decoded = jsonDecode(auth) as Map<String, dynamic>;
-    final String token = decoded['token'];
-    final record =
-        RecordModel.fromJson(decoded['record'] as Map<String, dynamic>);
-    _pocketbase.authStore.save(token, record);
-    return _pocketbase.authStore.isValid;
+  Future<bool> register({
+    required String password,
+    required String passwordConfirm,
+    required int age,
+    required bool isMan,
+    String? name,
+  }) async {
+    state = true;
+    final body = <String, dynamic>{
+      //"email": "test@example.com",
+      "password": password,
+      "passwordConfirm": passwordConfirm,
+      "name": name,
+      "lastSeen": DateTime.now().toUtc().toString(),
+      "gender": isMan ? 'man' : 'woman',
+      "age": age
+    };
+
+    final record = await _pb.collection('users').create(body: body);
+    return await login(record.data['username'], password);
   }
 
   Future<void> logout() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth');
-    _pocketbase.authStore.clear();
+    _pb.authStore.clear();
   }
 }

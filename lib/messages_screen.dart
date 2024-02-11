@@ -72,13 +72,12 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
         );
       }
       //#Block Smart Reply
-
-      //Send Message
-      ref
-          .read(messagesStateProvider(widget._conversationID))
-          .sendMessage(textController.text, files);
-      setState(() => textController.text = '');
     }
+    //Send Message
+    ref
+        .read(messagesStateProvider(widget._conversationID))
+        .sendMessage(textController.text.trim(), files);
+    setState(() => textController.text = '');
   }
 
   @override

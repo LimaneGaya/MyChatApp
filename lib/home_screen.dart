@@ -1,4 +1,5 @@
 import 'package:feedback/feedback.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'
     show ConsumerStatefulWidget, ConsumerState;
@@ -16,6 +17,35 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   int index = 0;
+  @override
+  void initState() {
+    super.initState();
+    startMessagingNotification();
+  }
+
+  startMessagingNotification() async {
+    //Cloud Messaging //TODO: Add tocken saving to backend and autorefresh.
+    try {
+      await Future.delayed(const Duration(seconds: 5));
+      await FirebaseMessaging.instance.requestPermission(provisional: true);
+      String? apnsToken = await FirebaseMessaging.instance.getToken(
+          vapidKey:
+              'BGdFmH81mQRXyROc_64sE-q74R8qkP2dJLNuJlUTIcXCP4u5Wvpoop6_k8nwhzEWv-Xp9gLmmVv8Z1W63rGifIM');
+      await Future.delayed(const Duration(seconds: 5));
+      apnsToken = await FirebaseMessaging.instance.getToken(
+          vapidKey:
+              'BGdFmH81mQRXyROc_64sE-q74R8qkP2dJLNuJlUTIcXCP4u5Wvpoop6_k8nwhzEWv-Xp9gLmmVv8Z1W63rGifIM');
+      await Future.delayed(const Duration(seconds: 5));
+      apnsToken = await FirebaseMessaging.instance.getToken(
+          vapidKey:
+              'BGdFmH81mQRXyROc_64sE-q74R8qkP2dJLNuJlUTIcXCP4u5Wvpoop6_k8nwhzEWv-Xp9gLmmVv8Z1W63rGifIM');
+      if (apnsToken != null) print(apnsToken);
+      //save changed token
+      // FirebaseMessaging.instance.onTokenRefresh.listen(saveTokenToDatabase);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

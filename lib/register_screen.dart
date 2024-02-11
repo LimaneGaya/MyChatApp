@@ -1,22 +1,24 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'
     show Consumer, WidgetRef;
+import 'package:mychatapp/auth/widgets/auth_text_field.dart';
 import 'package:mychatapp/home_screen.dart';
 import 'package:mychatapp/provider.dart' show authStateProvider;
-import 'package:mychatapp/register_screen.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController userNameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController ageController = TextEditingController();
   bool canSeePassword = false;
+  bool isMale = false;
+  int age = 18;
   @override
   void dispose() {
     userNameController.dispose();
@@ -40,47 +42,47 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             const SizedBox(height: 10),
-            TextField(
-              controller: userNameController,
-              maxLength: 25,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    width: 4,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  gapPadding: 10,
-                ),
+            AuthTextField(
+                con: userNameController,
                 hintText: 'User Name',
                 icon: const Icon(Icons.person_3),
-              ),
-            ),
+                length: 25),
             const SizedBox(height: 10),
-            TextField(
-              controller: passwordController,
-              obscureText: !canSeePassword,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    width: 4,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  gapPadding: 10,
-                ),
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      canSeePassword = !canSeePassword;
-                    });
-                  },
-                  icon: Icon(canSeePassword
-                      ? Icons.close_rounded
-                      : Icons.remove_red_eye),
-                ),
+            AuthTextField(
+                con: passwordController,
                 hintText: 'Password',
                 icon: const Icon(Icons.password),
-              ),
+                isHidden: true),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                const SizedBox(width: 50),
+                Radio(
+                  value: false,
+                  groupValue: isMale,
+                  onChanged: (value) => setState(() => isMale = value!),
+                ),
+                const Text('Female')
+              ],
             ),
+            Row(
+              children: [
+                const SizedBox(width: 50),
+                Radio(
+                  value: true,
+                  groupValue: isMale,
+                  onChanged: (value) => setState(() => isMale = value!),
+                ),
+                const Text('Male')
+              ],
+            ),
+            const SizedBox(height: 10),
+            AuthTextField(
+                con: ageController,
+                isNumber: true,
+                hintText: 'Age',
+                icon: const Icon(Icons.person_3),
+                length: 2),
             const SizedBox(height: 10),
             Align(
               alignment: Alignment.centerRight,
@@ -92,12 +94,17 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () {},
                           child: const CircularProgressIndicator())
                       : ElevatedButton(
-                          child: const Text('LogIn'),
+                          child: const Text('Register'),
                           onPressed: () async {
                             final isLoggedin = await ref
                                 .read(authStateProvider.notifier)
-                                .login(userNameController.text,
-                                    passwordController.text);
+                                .register(
+                                  password: passwordController.text,
+                                  name: userNameController.text,
+                                  isMan: isMale,
+                                  age: int.parse(ageController.text),
+                                  passwordConfirm: passwordController.text,
+                                );
 
                             if (isLoggedin && mounted) {
                               Navigator.pushAndRemoveUntil(
@@ -110,16 +117,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
               ),
             ),
-            const SizedBox(height: 10),
-            Text.rich(TextSpan(text: 'Don\'t have an account?', children: [
-              TextSpan(
-                  text: 'Register',
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const RegisterScreen()));
-                    })
-            ]))
           ],
         ),
       ),

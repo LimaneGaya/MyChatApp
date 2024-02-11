@@ -1,7 +1,6 @@
 import 'package:feedback/feedback.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -21,18 +20,11 @@ void main() async {
         options: DefaultFirebaseOptions.currentPlatform);
     //Analytics
     FirebaseAnalytics.instance;
-    //Cloud Messaging
-    await FirebaseMessaging.instance.requestPermission(provisional: true);
-    final apnsToken = await FirebaseMessaging.instance.getToken(
-        vapidKey:
-            'BGdFmH81mQRXyROc_64sE-q74R8qkP2dJLNuJlUTIcXCP4u5Wvpoop6_k8nwhzEWv-Xp9gLmmVv8Z1W63rGifIM');
-    if (apnsToken != null) print(apnsToken);
     //Remote Config
     final remoteConfig = FirebaseRemoteConfig.instance;
     await remoteConfig.setConfigSettings(RemoteConfigSettings(
-      fetchTimeout: const Duration(minutes: 1),
-      minimumFetchInterval: const Duration(hours: 5),
-    ));
+        fetchTimeout: const Duration(minutes: 1),
+        minimumFetchInterval: const Duration(hours: 5)));
   }
   if (defaultTargetPlatform == TargetPlatform.android) {
     //Mobile Ads
@@ -68,9 +60,12 @@ class InitialScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ref.watch(sharedPrefProvider).when(
         data: (data) {
-          return ref.watch(authStateProvider.notifier).checkIfLogedIn()
-              ? const HomeScreen()
-              : const LoginScreen();
+          return ref.watch(authCheckifLoginIsValid).when(
+              data: (data) => data ? const HomeScreen() : const LoginScreen(),
+              error: (error, stackTrace) =>
+                  Scaffold(body: Center(child: Text(error.toString()))),
+              loading: () => const Scaffold(
+                  body: Center(child: CircularProgressIndicator())));
         },
         error: (error, stackTrace) => Text(error.toString()),
         loading: () =>

@@ -7,6 +7,11 @@ import 'package:mychatapp/conversations/screens/conversation_screen.dart';
 import 'package:mychatapp/provider.dart' show authStateProvider;
 import 'package:mychatapp/users/screens/users_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart' show MobileAds;
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -21,6 +26,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   void initState() {
     super.initState();
     startMessagingNotification();
+    startFirebaseServices();
+  }
+
+  startFirebaseServices() async {
+    if (kIsWeb || defaultTargetPlatform == TargetPlatform.android) {
+      //Analytics
+      FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
+      //Remote Config
+      final remoteConfig = FirebaseRemoteConfig.instance;
+      await remoteConfig.setConfigSettings(RemoteConfigSettings(
+          fetchTimeout: const Duration(minutes: 1),
+          minimumFetchInterval: const Duration(hours: 5)));
+    }
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      //Mobile Ads
+      MobileAds.instance.initialize();
+      //Crashlitics
+      FirebaseCrashlytics.instance.recordFlutterFatalError;
+    }
   }
 
   startMessagingNotification() async {

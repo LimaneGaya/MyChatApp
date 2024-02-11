@@ -1,12 +1,8 @@
 import 'package:feedback/feedback.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart' show MobileAds;
 import 'package:mychatapp/firebase_options.dart';
 import 'package:mychatapp/home_screen.dart';
 import 'package:mychatapp/login_screen.dart';
@@ -18,19 +14,6 @@ void main() async {
   if (kIsWeb || defaultTargetPlatform == TargetPlatform.android) {
     await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
-    //Analytics
-    FirebaseAnalytics.instance;
-    //Remote Config
-    final remoteConfig = FirebaseRemoteConfig.instance;
-    await remoteConfig.setConfigSettings(RemoteConfigSettings(
-        fetchTimeout: const Duration(minutes: 1),
-        minimumFetchInterval: const Duration(hours: 5)));
-  }
-  if (defaultTargetPlatform == TargetPlatform.android) {
-    //Mobile Ads
-    MobileAds.instance.initialize();
-    //Crashlitics
-    FirebaseCrashlytics.instance.recordFlutterFatalError;
   }
 
   runApp(const ProviderScope(child: BetterFeedback(child: MyApp())));

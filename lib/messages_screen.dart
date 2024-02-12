@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter_riverpod/flutter_riverpod.dart'
@@ -54,22 +56,26 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
     files = f.length >= 4 ? f.sublist(0, 4) : f;
   }
 
+  bool isme = true;
   void sendMessage() async {
     //#Block Smart Reply
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      smartReply.addMessageToConversationFromLocalUser(
-        textController.text,
-        DateTime.now().microsecondsSinceEpoch,
-      );
+    if (Platform.isAndroid) {
+      isme
+          ? smartReply.addMessageToConversationFromLocalUser(
+              textController.text.trim(), DateTime.now().millisecondsSinceEpoch)
+          : smartReply.addMessageToConversationFromRemoteUser(
+              textController.text.trim(),
+              DateTime.now().millisecondsSinceEpoch,
+              'user');
+      isme = !isme;
       final res = await smartReply.suggestReplies();
       if (mounted) {
         showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-              content: Column(
-            children: res.suggestions.map((e) => Text(e)).toList(),
-          )),
-        );
+            context: context,
+            builder: (context) => AlertDialog(
+                content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: res.suggestions.map((e) => Text(e)).toList())));
       }
       //#Block Smart Reply
     }

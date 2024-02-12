@@ -1,7 +1,11 @@
-import 'package:feedback/feedback.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'dart:io' show Platform;
+
+import 'package:feedback/feedback.dart' show BetterFeedback;
+import 'package:firebase_analytics/firebase_analytics.dart'
+    show FirebaseAnalytics, FirebaseAnalyticsObserver;
+import 'package:firebase_core/firebase_core.dart' show Firebase;
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mychatapp/firebase_options.dart';
 import 'package:mychatapp/home_screen.dart';
@@ -11,7 +15,7 @@ import 'package:mychatapp/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (kIsWeb || defaultTargetPlatform == TargetPlatform.android) {
+  if (kIsWeb || Platform.isAndroid) {
     await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
   }
@@ -21,16 +25,20 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+//Analytics
+  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  static FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: analytics);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'My chat App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.blue.shade900,
-        brightness: Brightness.dark,
-      )),
+              seedColor: Colors.blue.shade900, brightness: Brightness.dark)),
+      navigatorObservers: [observer],
       home: const InitialScreen(),
     );
   }

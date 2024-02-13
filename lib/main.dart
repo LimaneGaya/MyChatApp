@@ -1,11 +1,8 @@
-import 'dart:io' show Platform;
-
 import 'package:feedback/feedback.dart' show BetterFeedback;
 import 'package:firebase_analytics/firebase_analytics.dart'
     show FirebaseAnalytics, FirebaseAnalyticsObserver;
 import 'package:firebase_core/firebase_core.dart' show Firebase;
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mychatapp/firebase_options.dart';
 import 'package:mychatapp/home_screen.dart';
@@ -14,12 +11,7 @@ import 'package:mychatapp/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  if (kIsWeb || Platform.isAndroid) {
-    await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform);
-  }
-
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const ProviderScope(child: BetterFeedback(child: MyApp())));
 }
 
@@ -32,6 +24,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    analytics.logAppOpen();
     return MaterialApp(
       title: 'My chat App',
       debugShowCheckedModeBanner: false,

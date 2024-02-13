@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart'
     show StateNotifierProvider, FutureProvider, StateNotifier;
 import 'package:mychatapp/services/pocketbase.dart';
-import 'package:pocketbase/pocketbase.dart' show PocketBase, RecordModel;
+import 'package:pocketbase/pocketbase.dart' show RecordModel;
 import 'package:shared_preferences/shared_preferences.dart';
 
 final authStateProvider = StateNotifierProvider<AuthStateNotifier, bool>(

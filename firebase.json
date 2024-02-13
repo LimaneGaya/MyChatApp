@@ -1,16 +1,1 @@
-{
-  "hosting": {
-    "public": "build/web",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
-  }
-}
+{"flutter":{"platforms":{"android":{"default":{"projectId":"mychatapp-lg","appId":"1:999227741912:android:78ad6b536261ec310269ad","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"mychatapp-lg","configurations":{"android":"1:999227741912:android:78ad6b536261ec310269ad","web":"1:999227741912:web:1cdc325da355e2260269ad","windows":"1:999227741912:web:0c2acdf901ce73aa0269ad"}}}}}}

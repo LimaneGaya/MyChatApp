@@ -33,10 +33,7 @@ class DefaultFirebaseOptions {
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -66,4 +63,15 @@ class DefaultFirebaseOptions {
     projectId: 'mychatapp-lg',
     storageBucket: 'mychatapp-lg.appspot.com',
   );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyAHJieLaiMiOLrO4LdBaKJNiRNBf3Z-mcs',
+    appId: '1:999227741912:web:0c2acdf901ce73aa0269ad',
+    messagingSenderId: '999227741912',
+    projectId: 'mychatapp-lg',
+    authDomain: 'mychatapp-lg.firebaseapp.com',
+    storageBucket: 'mychatapp-lg.appspot.com',
+    measurementId: 'G-J4V17W7Z1X',
+  );
+
 }

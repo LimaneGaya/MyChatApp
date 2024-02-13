@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show defaultTargetPlatform;
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart'
     show Consumer, ConsumerState, ConsumerStatefulWidget;
 import 'package:google_mobile_ads/google_mobile_ads.dart' show BannerAd;
@@ -59,7 +59,7 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
   bool isme = true;
   void sendMessage() async {
     //#Block Smart Reply
-    if (Platform.isAndroid) {
+    if (!kIsWeb && Platform.isAndroid) {
       isme
           ? smartReply.addMessageToConversationFromLocalUser(
               textController.text.trim(), DateTime.now().millisecondsSinceEpoch)

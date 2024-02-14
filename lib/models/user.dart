@@ -7,7 +7,7 @@ class UserModel {
   final String collectionName;
   final String username;
   final String avatar;
-  final String? name;
+  final String name;
   final bool verified;
   final DateTime created;
   final DateTime updated;
@@ -20,7 +20,7 @@ class UserModel {
     required this.collectionName,
     required this.username,
     required this.avatar,
-    this.name,
+    required this.name,
     required this.verified,
     required this.created,
     required this.updated,
@@ -83,7 +83,8 @@ class UserModel {
       collectionName: map['collectionName'] as String,
       username: map['username'] as String,
       avatar: map['avatar'] as String,
-      name: map['name'] != null ? map['name'] as String : null,
+      name:
+          map['name'] == "" ? map['name'] as String : map['username'] as String,
       verified: map['verified'] as bool,
       created: DateTime.parse(map['created'] as String),
       updated: DateTime.parse(map['updated'] as String),

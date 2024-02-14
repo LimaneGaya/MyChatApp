@@ -1,8 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cached_network_image/cached_network_image.dart'
+    show CachedNetworkImage;
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mychatapp/conversations/providers/conversation_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' show Consumer;
 import 'package:mychatapp/models/models.dart';
+import 'package:mychatapp/profiles/user_profile_screen.dart';
 import 'package:mychatapp/services/pocketbase.dart';
 
 class UserTile extends StatelessWidget {
@@ -24,21 +25,23 @@ class UserTile extends StatelessWidget {
           builder: (context, ref, child) {
             return InkWell(
               borderRadius: BorderRadius.circular(15),
-              onTap: () => ref
-                  .read(conversationStateProvider.notifier)
-                  .checkConExistAndGoTo(context, user.id),
+              onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => UserProfile(user))),
               child: Stack(
                 children: [
-                  CachedNetworkImage(
-                    imageUrl: PB.getFileUrl(
-                      user.id,
-                      user.collectionId,
-                      user.collectionName,
-                      user.avatar,
+                  Hero(
+                    tag: user.id,
+                    child: CachedNetworkImage(
+                      imageUrl: PB.getFileUrl(
+                        user.id,
+                        user.collectionId,
+                        user.collectionName,
+                        user.avatar,
+                      ),
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      filterQuality: FilterQuality.medium,
                     ),
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    filterQuality: FilterQuality.medium,
                   ),
                   Align(
                     alignment: Alignment.bottomCenter,

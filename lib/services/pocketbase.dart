@@ -43,7 +43,7 @@ class PB {
   static Future<List<RecordModel>> getMessages(String record) async {
     final res = await pb.collection('messages').getList(
           page: 1,
-          perPage: 50,
+          perPage: 20,
           filter: 'conversation = "$record"',
           sort: '-created',
         );
@@ -99,5 +99,11 @@ class PB {
     Function(RecordSubscriptionEvent) func,
   ) {
     pb.collection(collection).subscribe('*', func);
+  }
+
+  static Future<RecordModel> getUserDetails(String id, {int page = 1}) async {
+    final result =
+        await pb.collection('user_details').getFirstListItem('user="$id"');
+    return result;
   }
 }

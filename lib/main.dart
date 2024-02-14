@@ -24,7 +24,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    analytics.logAppOpen();
     return MaterialApp(
       title: 'My chat App',
       debugShowCheckedModeBanner: false,

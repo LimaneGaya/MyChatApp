@@ -67,10 +67,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           apnsToken = await getNotificationToken();
           await timetowait;
         } catch (e) {
-          print(e.toString());
+          debugPrint(e.toString());
         }
       }
-      print(apnsToken);
+      debugPrint(apnsToken);
     }
     //save changed token
     // FirebaseMessaging.instance.onTokenRefresh.listen(saveTokenToDatabase);

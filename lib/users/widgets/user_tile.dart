@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' show Consumer;
 import 'package:mychatapp/models/models.dart';
 import 'package:mychatapp/profiles/user_profile_screen.dart';
-import 'package:mychatapp/services/pocketbase.dart';
 
 class UserTile extends StatelessWidget {
   final UserModel user;

@@ -12,7 +12,7 @@ class UsersScreen extends ConsumerWidget {
     return GridView.builder(
       itemCount: users.length,
       itemBuilder: (context, index) {
-        // TODO: uncoment when correctly implementing page loading
+        // TODO: logic here to dynamicaly load users
         // if (index >= users.length) {
         //   ref.read(userStateProvider.notifier).getUsers();
         // }

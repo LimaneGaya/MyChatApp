@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mychatapp/conversations/providers/conversation_provider.dart';
-import 'package:mychatapp/services/pocketbase.dart';
 
 class ConversationsScreen extends ConsumerWidget {
   const ConversationsScreen({super.key});

@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart' show Uint8List, kIsWeb;
+import 'package:flutter/foundation.dart' show Uint8List, debugPrint, kIsWeb;
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:http/http.dart' show MultipartFile;
 import 'package:pocketbase/pocketbase.dart';
@@ -129,11 +129,11 @@ class PB {
     ));
 
     try {
-      final record = await pb.collection('reports').create(
+      await pb.collection('reports').create(
           body: {"content": content, "user": pb.authStore.model.id},
           files: file);
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 }

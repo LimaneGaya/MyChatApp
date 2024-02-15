@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'
     show Consumer, WidgetRef;
+import 'package:mychatapp/auth/widgets/auth_text_field.dart';
 import 'package:mychatapp/home_screen.dart';
 import 'package:mychatapp/provider.dart' show authStateProvider;
 import 'package:mychatapp/register_screen.dart';
@@ -40,46 +41,18 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             const SizedBox(height: 10),
-            TextField(
-              controller: userNameController,
-              maxLength: 25,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    width: 4,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  gapPadding: 10,
-                ),
-                hintText: 'User Name',
-                icon: const Icon(Icons.person_3),
-              ),
+            AuthTextField(
+              con: userNameController,
+              hintText: 'Username',
+              icon: const Icon(Icons.person_3),
+              length: 25,
             ),
             const SizedBox(height: 10),
-            TextField(
-              controller: passwordController,
-              obscureText: !canSeePassword,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    width: 4,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  gapPadding: 10,
-                ),
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      canSeePassword = !canSeePassword;
-                    });
-                  },
-                  icon: Icon(canSeePassword
-                      ? Icons.close_rounded
-                      : Icons.remove_red_eye),
-                ),
-                hintText: 'Password',
-                icon: const Icon(Icons.password),
-              ),
+            AuthTextField(
+              con: passwordController,
+              hintText: 'Password',
+              isHidden: true,
+              icon: const Icon(Icons.password),
             ),
             const SizedBox(height: 10),
             Align(
@@ -111,9 +84,13 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             const SizedBox(height: 10),
-            Text.rich(TextSpan(text: 'Don\'t have an account?', children: [
+            Text.rich(TextSpan(text: 'Don\'t have an account? ', children: [
               TextSpan(
                   text: 'Register',
+                  style: const TextStyle(
+                    color: Colors.lightBlue,
+                    fontWeight: FontWeight.bold,
+                  ),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(

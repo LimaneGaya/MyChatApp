@@ -20,7 +20,7 @@ class MessageField extends StatelessWidget {
       decoration: InputDecoration(
           counterText: '',
           contentPadding:
-              const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              const EdgeInsets.symmetric(horizontal: 18, vertical: 5),
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
               borderSide: const BorderSide(width: 5))),

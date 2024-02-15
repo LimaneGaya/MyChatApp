@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart'
@@ -57,9 +55,18 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
   }
 
   bool isme = true;
-  void sendMessage() async {
+  void sendMessage() {
+    if (!kIsWeb) guessResponse();
+    //Send Message
+    ref
+        .read(messagesStateProvider(widget._conversationID))
+        .sendMessage(textController.text.trim(), files);
+    setState(() => textController.text = '');
+  }
+
+  void guessResponse() async {
     //#Block Smart Reply
-    if (!kIsWeb && Platform.isAndroid) {
+    if (isAndroid) {
       isme
           ? smartReply.addMessageToConversationFromLocalUser(
               textController.text.trim(), DateTime.now().millisecondsSinceEpoch)
@@ -79,11 +86,6 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
       }
       //#Block Smart Reply
     }
-    //Send Message
-    ref
-        .read(messagesStateProvider(widget._conversationID))
-        .sendMessage(textController.text.trim(), files);
-    setState(() => textController.text = '');
   }
 
   @override
@@ -125,16 +127,18 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (isAndroid && _bannerAd != null)
+                if (!kIsWeb && isAndroid && _bannerAd != null)
                   AdMob.getAdWidget(_bannerAd!),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     IconButton(
-                        onPressed: pickFile, icon: const Icon(Icons.image)),
+                        onPressed: pickFile,
+                        icon: const Icon(Icons.image, size: 30)),
                     Expanded(child: MessageField(textController, sendMessage)),
                     IconButton(
                         onPressed: sendMessage,
-                        icon: const Icon(Icons.send_rounded)),
+                        icon: const Icon(Icons.send_rounded, size: 30)),
                   ],
                 ),
               ],

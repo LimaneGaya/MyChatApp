@@ -5,7 +5,7 @@ import 'package:mychatapp/models/models.dart';
 import 'package:mychatapp/services/pocketbase.dart';
 
 final messagesStateProvider =
-    ChangeNotifierProvider.family<MessagesChangeNotifier, String>(
+    ChangeNotifierProvider.family.autoDispose<MessagesChangeNotifier, String>(
   (ref, id) => MessagesChangeNotifier(id),
 );
 

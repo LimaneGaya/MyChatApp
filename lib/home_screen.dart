@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart'
     show ConsumerStatefulWidget, ConsumerState;
 import 'package:mychatapp/conversations/screens/conversation_screen.dart';
 import 'package:mychatapp/provider.dart' show authStateProvider;
+import 'package:mychatapp/services/pocketbase.dart';
 import 'package:mychatapp/users/screens/users_screen.dart';
 import 'package:google_fonts/google_fonts.dart' show GoogleFonts;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart'
@@ -28,7 +29,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    startMessagingNotification();
+    if (kIsWeb || Platform.isAndroid) startMessagingNotification();
     startFirebaseServices();
   }
 
@@ -40,7 +41,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           fetchTimeout: const Duration(minutes: 1),
           minimumFetchInterval: const Duration(hours: 5)));
     }
-    if (Platform.isAndroid) {
+    if (!kIsWeb && Platform.isAndroid) {
       //Mobile Ads
       MobileAds.instance.initialize();
       //Crashlitics
@@ -49,28 +50,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   startMessagingNotification() async {
-    await Future.delayed(const Duration(seconds: 5));
+    final timetowait = Future.delayed(const Duration(seconds: 5));
+    await timetowait;
     await FirebaseMessaging.instance.requestPermission(provisional: true);
     //Cloud Messaging //TODO: Add tocken saving to backend and autorefresh.
+    String? apnsToken;
     try {
-      String? apnsToken = await FirebaseMessaging.instance.getToken(
-          vapidKey:
-              'BGdFmH81mQRXyROc_64sE-q74R8qkP2dJLNuJlUTIcXCP4u5Wvpoop6_k8nwhzEWv-Xp9gLmmVv8Z1W63rGifIM');
-      await Future.delayed(const Duration(seconds: 5));
-      apnsToken = await FirebaseMessaging.instance.getToken(
-          vapidKey:
-              'BGdFmH81mQRXyROc_64sE-q74R8qkP2dJLNuJlUTIcXCP4u5Wvpoop6_k8nwhzEWv-Xp9gLmmVv8Z1W63rGifIM');
-      await Future.delayed(const Duration(seconds: 5));
-      apnsToken = await FirebaseMessaging.instance.getToken(
-          vapidKey:
-              'BGdFmH81mQRXyROc_64sE-q74R8qkP2dJLNuJlUTIcXCP4u5Wvpoop6_k8nwhzEWv-Xp9gLmmVv8Z1W63rGifIM');
-      if (apnsToken != null) print(apnsToken);
-      //save changed token
-      // FirebaseMessaging.instance.onTokenRefresh.listen(saveTokenToDatabase);
+      apnsToken = await getNotificationToken();
+      await timetowait;
     } catch (e) {
-      print(e.toString());
+      try {
+        apnsToken = await getNotificationToken();
+        await timetowait;
+      } catch (e) {
+        try {
+          apnsToken = await getNotificationToken();
+          await timetowait;
+        } catch (e) {
+          print(e.toString());
+        }
+      }
+      print(apnsToken);
     }
+    //save changed token
+    // FirebaseMessaging.instance.onTokenRefresh.listen(saveTokenToDatabase);
   }
+
+  Future<String?> getNotificationToken() => FirebaseMessaging.instance.getToken(
+      vapidKey:
+          'BGdFmH81mQRXyROc_64sE-q74R8qkP2dJLNuJlUTIcXCP4u5Wvpoop6_k8nwhzEWv-Xp9gLmmVv8Z1W63rGifIM');
 
   @override
   Widget build(BuildContext context) {
@@ -89,9 +97,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
         actions: [
           IconButton(
-              //TODO: Implement Error reporting
               onPressed: () =>
-                  BetterFeedback.of(context).show((UserFeedback feedback) {}),
+                  BetterFeedback.of(context).show((UserFeedback feedback) {
+                    if (feedback.text != '') {
+                      PB.uploadReport(feedback.text, feedback.screenshot);
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const AlertDialog(
+                            content: Text('Please enter feedback')),
+                      );
+                    }
+                  }),
               icon: const Icon(Icons.bug_report)),
           IconButton(
               onPressed: () async {

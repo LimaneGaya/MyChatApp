@@ -1,11 +1,16 @@
-import 'package:flutter/foundation.dart' show Uint8List;
+import 'package:flutter/foundation.dart' show Uint8List, kIsWeb;
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:http/http.dart' show MultipartFile;
-import 'package:image_picker/image_picker.dart' show XFile;
 import 'package:pocketbase/pocketbase.dart';
 import 'package:http_parser/http_parser.dart' show MediaType;
+import 'package:fetch_client/fetch_client.dart';
 
 class PB {
-  static PocketBase pb = PocketBase('https://chatly-app.pockethost.io/');
+  static PocketBase pb = PocketBase(
+    'https://chatly-app.pockethost.io/',
+    httpClientFactory:
+        kIsWeb ? () => FetchClient(mode: RequestMode.cors) : null,
+  );
 
   static Future<RecordModel> createMessage({
     required String conversationId,
@@ -105,5 +110,30 @@ class PB {
     final result =
         await pb.collection('user_details').getFirstListItem('user="$id"');
     return result;
+  }
+
+  static Future uploadReport(String content, Uint8List image) async {
+    var ima = await FlutterImageCompress.compressWithList(image,
+        minHeight: 1280,
+        minWidth: 720,
+        quality: 20,
+        format: CompressFormat.webp);
+
+    List<MultipartFile> file = [];
+
+    file.add(MultipartFile.fromBytes(
+      'image',
+      ima,
+      filename: '${DateTime.now().toUtc().microsecondsSinceEpoch}.webp',
+      contentType: MediaType('image', 'webp'),
+    ));
+
+    try {
+      final record = await pb.collection('reports').create(
+          body: {"content": content, "user": pb.authStore.model.id},
+          files: file);
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

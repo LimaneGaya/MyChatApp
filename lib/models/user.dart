@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart' show immutable;
+import 'package:mychatapp/services/pocketbase.dart';
 
 @immutable
 class UserModel {
@@ -82,7 +83,14 @@ class UserModel {
       collectionId: map['collectionId'] as String,
       collectionName: map['collectionName'] as String,
       username: map['username'] as String,
-      avatar: map['avatar'] as String,
+      avatar: map['avatar'] == ''
+          ? 'https://picsum.photos/200'
+          : PB.getFileUrl(
+              map['id'] as String,
+              map['collectionId'] as String,
+              map['collectionName'] as String,
+              map['avatar'] as String,
+            ),
       name:
           map['name'] == "" ? map['name'] as String : map['username'] as String,
       verified: map['verified'] as bool,

@@ -42,7 +42,7 @@ class _AuthTextFieldState extends State<AuthTextField> {
     return TextField(
       keyboardType: widget.isNumber ? TextInputType.number : null,
       controller: widget.con,
-      obscureText: !isObscured,
+      obscureText: isObscured,
       maxLength: widget.length,
       maxLengthEnforcement: MaxLengthEnforcement.enforced,
       decoration: InputDecoration(
@@ -58,7 +58,7 @@ class _AuthTextFieldState extends State<AuthTextField> {
             ? IconButton(
                 onPressed: () => setState(() => isObscured = !isObscured),
                 icon: Icon(
-                    isObscured ? Icons.close_rounded : Icons.remove_red_eye),
+                    !isObscured ? Icons.close_rounded : Icons.remove_red_eye),
               )
             : null,
         hintText: widget.hintText,

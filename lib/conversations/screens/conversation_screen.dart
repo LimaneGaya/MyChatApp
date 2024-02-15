@@ -52,12 +52,7 @@ class ConversationsScreen extends ConsumerWidget {
                 const Spacer(),
                 ...con.participantData.map(
                   (e) {
-                    final image = PB.getFileUrl(
-                      e.id,
-                      e.collectionId,
-                      e.collectionName,
-                      e.avatar,
-                    );
+                    final image = e.avatar;
                     return CircleAvatar(
                       backgroundImage: CachedNetworkImageProvider(image),
                     );

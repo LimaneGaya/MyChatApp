@@ -32,12 +32,7 @@ class UserTile extends StatelessWidget {
                   Hero(
                     tag: user.id,
                     child: CachedNetworkImage(
-                      imageUrl: PB.getFileUrl(
-                        user.id,
-                        user.collectionId,
-                        user.collectionName,
-                        user.avatar,
-                      ),
+                      imageUrl: user.avatar,
                       width: double.infinity,
                       fit: BoxFit.cover,
                       filterQuality: FilterQuality.medium,

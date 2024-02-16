@@ -1,16 +1,14 @@
-import 'package:flutter/foundation.dart' show Uint8List, debugPrint, kIsWeb;
+import 'package:mychatapp/services/pocketbase_web.dart'
+    if (dart.library.io) 'package:mychatapp/services/pocketbase_none_web.dart'
+    as pocket;
+import 'package:flutter/foundation.dart' show Uint8List, debugPrint;
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:http/http.dart' show MultipartFile;
-import 'package:pocketbase/pocketbase.dart';
 import 'package:http_parser/http_parser.dart' show MediaType;
-import 'package:fetch_client/fetch_client.dart';
+import 'package:pocketbase/pocketbase.dart';
 
 class PB {
-  static PocketBase pb = PocketBase(
-    'https://chatly-app.pockethost.io/',
-    httpClientFactory:
-        kIsWeb ? () => FetchClient(mode: RequestMode.cors) : null,
-  );
+  static PocketBase pb = pocket.pb;
 
   static Future<RecordModel> createMessage({
     required String conversationId,

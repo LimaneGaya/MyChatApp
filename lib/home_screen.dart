@@ -53,7 +53,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final timetowait = Future.delayed(const Duration(seconds: 5));
     await timetowait;
     await FirebaseMessaging.instance.requestPermission(provisional: true);
-    //Cloud Messaging //TODO: Add tocken saving to backend and autorefresh.
+    //Cloud Messaging //TODO: Add token saving to backend and autorefresh.
     String? apnsToken;
     try {
       apnsToken = await getNotificationToken();

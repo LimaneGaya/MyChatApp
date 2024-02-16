@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mychatapp/conversations/providers/conversation_provider.dart';
+import 'package:mychatapp/messages/widgets/interactive_image_view.dart';
 import 'package:mychatapp/models/models.dart';
 import 'package:mychatapp/services/pocketbase.dart';
 import 'package:mychatapp/users/providers/user_provider.dart';
@@ -106,19 +107,27 @@ class UserProfile extends StatelessWidget {
                                 crossAxisCount: 3),
                         itemCount: data.data['images'].length,
                         itemBuilder: (context, index) {
+                          final String url = PB.getFileUrl(
+                              data.id,
+                              data.collectionId,
+                              data.collectionName,
+                              data.data['images'][index]);
                           return GridTile(
                               child: Container(
                                   margin: spacing,
                                   clipBehavior: Clip.antiAlias,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(15)),
-                                  child: CachedNetworkImage(
-                                      imageUrl: PB.getFileUrl(
-                                          data.id,
-                                          data.collectionId,
-                                          data.collectionName,
-                                          data.data['images'][index]),
-                                      fit: BoxFit.cover)));
+                                  child: InkWell(
+                                      borderRadius: BorderRadius.circular(15),
+                                      onTap: () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                InteractImageViewer(url),
+                                          )),
+                                      child: CachedNetworkImage(
+                                          imageUrl: url, fit: BoxFit.cover))));
                         },
                       ),
                     ],

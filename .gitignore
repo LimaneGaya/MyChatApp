@@ -46,3 +46,4 @@ app.*.map.json
 firebase.json
 flutterfire_dev.exe
 .firebaserc
+commands.exe

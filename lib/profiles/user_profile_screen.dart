@@ -127,8 +127,11 @@ class UserProfile extends StatelessWidget {
                                             builder: (context) =>
                                                 InteractImageViewer(url),
                                           )),
-                                      child: CachedNetworkImage(
-                                          imageUrl: url, fit: BoxFit.cover))));
+                                      child: Hero(
+                                        tag: url,
+                                        child: CachedNetworkImage(
+                                            imageUrl: url, fit: BoxFit.cover),
+                                      ))));
                         },
                       ),
                     ],

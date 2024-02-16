@@ -5,6 +5,7 @@ import 'package:mychatapp/conversations/providers/conversation_provider.dart';
 import 'package:mychatapp/models/models.dart';
 import 'package:mychatapp/services/pocketbase.dart';
 import 'package:mychatapp/users/providers/user_provider.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class UserProfile extends StatelessWidget {
   final UserModel user;
@@ -59,6 +60,10 @@ class UserProfile extends StatelessWidget {
           ],
           body: Consumer(
             builder: (context, ref, child) {
+              const spacing = EdgeInsets.all(8);
+              final decoration = BoxDecoration(
+                  color: Theme.of(context).colorScheme.onTertiary,
+                  borderRadius: BorderRadius.circular(15));
               return ref.watch(userDetailsProvider(user.id)).when(
                 data: (data) {
                   return TabBarView(
@@ -66,8 +71,33 @@ class UserProfile extends StatelessWidget {
                       Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text('Last Seen: ${user.lastSeen.toLocal()}'),
-                          Text(data.data['bio'] as String),
+                          Container(
+                            margin: spacing,
+                            padding: spacing,
+                            decoration: decoration,
+                            child: RichText(
+                              text: TextSpan(
+                                  text: 'Last seen: ',
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                  children: [
+                                    TextSpan(
+                                        text: timeago
+                                            .format(user.lastSeen.toLocal())
+                                            .toString(),
+                                        style: const TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.normal))
+                                  ]),
+                            ),
+                          ),
+                          Container(
+                              constraints: BoxConstraints.expand(height: 300),
+                              margin: spacing,
+                              padding: spacing,
+                              decoration: decoration,
+                              child: Text(data.data['bio'] as String)),
                         ],
                       ),
                       GridView.builder(
@@ -77,12 +107,18 @@ class UserProfile extends StatelessWidget {
                         itemCount: data.data['images'].length,
                         itemBuilder: (context, index) {
                           return GridTile(
-                              child: CachedNetworkImage(
-                                  imageUrl: PB.getFileUrl(
-                                      data.id,
-                                      data.collectionId,
-                                      data.collectionName,
-                                      data.data['images'][index])));
+                              child: Container(
+                                  margin: spacing,
+                                  clipBehavior: Clip.antiAlias,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15)),
+                                  child: CachedNetworkImage(
+                                      imageUrl: PB.getFileUrl(
+                                          data.id,
+                                          data.collectionId,
+                                          data.collectionName,
+                                          data.data['images'][index]),
+                                      fit: BoxFit.cover)));
                         },
                       ),
                     ],

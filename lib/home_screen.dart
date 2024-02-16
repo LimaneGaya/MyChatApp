@@ -57,6 +57,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     String? apnsToken;
     try {
       apnsToken = await getNotificationToken();
+      apnsToken = await getNotificationToken();
+      apnsToken = await getNotificationToken();
       await timetowait;
     } catch (e) {
       try {
@@ -77,8 +79,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<String?> getNotificationToken() => FirebaseMessaging.instance.getToken(
-      vapidKey:
-          'BGdFmH81mQRXyROc_64sE-q74R8qkP2dJLNuJlUTIcXCP4u5Wvpoop6_k8nwhzEWv-Xp9gLmmVv8Z1W63rGifIM');
+      vapidKey: 'BGdFmH81mQRXyROc_64sE-q74R8qkP2dJLNuJlUTIcXCP'
+          '4u5Wvpoop6_k8nwhzEWv-Xp9gLmmVv8Z1W63rGifIM');
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +114,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               icon: const Icon(Icons.bug_report)),
           IconButton(
               onPressed: () async {
-                ref.read(authStateProvider.notifier).logout();
+                ref.read(authStateProvider.notifier).logout(context);
               },
               icon: const Icon(Icons.logout)),
         ],

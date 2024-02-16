@@ -26,12 +26,13 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
   final bool isAndroid = defaultTargetPlatform == TargetPlatform.android;
   List<XFile> files = [];
   TextEditingController textController = TextEditingController();
-  final smartReply = SmartReply();
+  SmartReply? smartReply;
 
   @override
   void initState() {
     super.initState();
     if (isAndroid) {
+      smartReply = SmartReply();
       _bannerAd = AdMob.initializeAd();
       setState(() => _bannerAd = _bannerAd);
     }
@@ -40,7 +41,7 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
   @override
   void dispose() {
     textController.dispose();
-    smartReply.close();
+    smartReply?.close();
     super.dispose();
   }
 
@@ -66,16 +67,16 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
 
   void guessResponse() async {
     //#Block Smart Reply
-    if (isAndroid) {
+    if (smartReply != null) {
       isme
-          ? smartReply.addMessageToConversationFromLocalUser(
+          ? smartReply!.addMessageToConversationFromLocalUser(
               textController.text.trim(), DateTime.now().millisecondsSinceEpoch)
-          : smartReply.addMessageToConversationFromRemoteUser(
+          : smartReply!.addMessageToConversationFromRemoteUser(
               textController.text.trim(),
               DateTime.now().millisecondsSinceEpoch,
               'user');
       isme = !isme;
-      final res = await smartReply.suggestReplies();
+      final res = await smartReply!.suggestReplies();
       if (mounted) {
         showDialog(
             context: context,

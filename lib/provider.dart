@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'
     show StateNotifierProvider, FutureProvider, StateNotifier;
+import 'package:mychatapp/login_screen.dart';
 import 'package:mychatapp/services/pocketbase.dart';
 import 'package:pocketbase/pocketbase.dart' show RecordModel;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -72,9 +74,15 @@ class AuthStateNotifier extends StateNotifier<bool> {
     return await login(record.data['username'], password);
   }
 
-  Future<void> logout() async {
+  Future<void> logout(BuildContext context) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth');
     _pb.authStore.clear();
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const LoginScreen(),
+        ),
+        (route) => false);
   }
 }

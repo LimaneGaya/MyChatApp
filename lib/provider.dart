@@ -78,11 +78,13 @@ class AuthStateNotifier extends StateNotifier<bool> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth');
     _pb.authStore.clear();
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const LoginScreen(),
-        ),
-        (route) => false);
+    if (context.mounted) {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginScreen(),
+          ),
+          (route) => false);
+    }
   }
 }

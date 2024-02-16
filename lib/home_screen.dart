@@ -84,8 +84,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final color = Theme.of(context).colorScheme.onSecondary;
     return Scaffold(
+      backgroundColor: color,
       appBar: AppBar(
+        backgroundColor: color,
         centerTitle: true,
         title: Text(
           'Chatly',
@@ -127,6 +130,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: color,
         onTap: (value) => setState(() => index = value),
         items: [
           BottomNavigationBarItem(

@@ -106,7 +106,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   passwordConfirm: passwordController.text,
                                 );
 
-                            if (isLoggedin && mounted) {
+                            if (isLoggedin && context.mounted) {
                               Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(

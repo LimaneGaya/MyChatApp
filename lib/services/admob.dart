@@ -2,8 +2,6 @@ import 'package:flutter/material.dart' show Widget, debugPrint, SizedBox;
 import 'package:google_mobile_ads/google_mobile_ads.dart'
     show BannerAd, AdRequest, AdSize, BannerAdListener, AdWidget;
 
-//TODO: Convert to provider
-
 class AdMob {
   static BannerAd? initializeAd() {
     return BannerAd(

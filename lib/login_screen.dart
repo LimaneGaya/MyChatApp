@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 .login(userNameController.text,
                                     passwordController.text);
 
-                            if (isLoggedin && mounted) {
+                            if (isLoggedin && context.mounted) {
                               Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(

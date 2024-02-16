@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.blue.shade900, brightness: Brightness.dark)),
+              seedColor: Colors.purple, brightness: Brightness.dark)),
       navigatorObservers: [observer],
       home: const InitialScreen(),
     );

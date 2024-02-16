@@ -94,7 +94,8 @@ class UserProfile extends StatelessWidget {
                             ),
                           ),
                           Container(
-                              constraints: BoxConstraints.expand(height: 300),
+                              constraints:
+                                  const BoxConstraints.expand(height: 300),
                               margin: spacing,
                               padding: spacing,
                               decoration: decoration,

@@ -15,7 +15,7 @@ void main() async {
   runApp(const ProviderScope(child: BetterFeedback(child: MyApp())));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 //Analytics
   static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
@@ -23,13 +23,15 @@ class MyApp extends StatelessWidget {
       FirebaseAnalyticsObserver(analytics: analytics);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       title: 'My chat App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.purple, brightness: Brightness.dark)),
+        seedColor: ref.watch(themeColor),
+        brightness: ref.watch(brightness),
+      )),
       navigatorObservers: [observer],
       home: const InitialScreen(),
     );

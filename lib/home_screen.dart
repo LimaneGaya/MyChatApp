@@ -1,10 +1,11 @@
 import 'dart:io' show Platform;
+import 'dart:math';
 
 import 'package:feedback/feedback.dart' show BetterFeedback, UserFeedback;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'
-    show ConsumerStatefulWidget, ConsumerState;
+    show ConsumerState, ConsumerStatefulWidget, StateProvider;
 import 'package:mychatapp/conversations/screens/conversation_screen.dart';
 import 'package:mychatapp/provider.dart' show authStateProvider;
 import 'package:mychatapp/services/pocketbase.dart';
@@ -16,6 +17,10 @@ import 'package:firebase_remote_config/firebase_remote_config.dart'
     show FirebaseRemoteConfig, RemoteConfigSettings;
 import 'package:google_mobile_ads/google_mobile_ads.dart' show MobileAds;
 import 'package:flutter/foundation.dart' show kIsWeb;
+
+final themeColor = StateProvider<Color>((ref) => Colors.pink);
+
+final brightness = StateProvider<Brightness>((ref) => Brightness.dark);
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -101,6 +106,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ),
         actions: [
+          IconButton(
+              onPressed: () {
+                ref.read(themeColor.notifier).state = Color.fromARGB(
+                    255,
+                    Random().nextInt(255),
+                    Random().nextInt(255),
+                    Random().nextInt(255));
+              },
+              icon: const Icon(Icons.color_lens_rounded)),
+          IconButton(
+              onPressed: () {
+                final br = ref.read(brightness);
+                ref.read(brightness.notifier).state =
+                    br == Brightness.dark ? Brightness.light : Brightness.dark;
+              },
+              icon: ref.watch(brightness) == Brightness.dark
+                  ? const Icon(Icons.nightlight)
+                  : const Icon(Icons.sunny)),
           IconButton(
               onPressed: () =>
                   BetterFeedback.of(context).show((UserFeedback feedback) {

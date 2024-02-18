@@ -10,7 +10,6 @@ import 'package:mychatapp/messages/widgets/message_tile.dart';
 import 'package:mychatapp/services/admob.dart';
 import 'package:mychatapp/services/pocketbase.dart';
 import 'package:pocketbase/pocketbase.dart' show PocketBase;
-import 'package:google_mlkit_smart_reply/google_mlkit_smart_reply.dart';
 
 class MessengerScreen extends ConsumerStatefulWidget {
   final String _conversationID;
@@ -26,13 +25,11 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
   final bool isAndroid = defaultTargetPlatform == TargetPlatform.android;
   List<XFile> files = [];
   TextEditingController textController = TextEditingController();
-  SmartReply? smartReply;
 
   @override
   void initState() {
     super.initState();
     if (isAndroid) {
-      smartReply = SmartReply();
       _bannerAd = AdMob.initializeAd();
       setState(() => _bannerAd = _bannerAd);
     }
@@ -41,7 +38,7 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
   @override
   void dispose() {
     textController.dispose();
-    smartReply?.close();
+
     super.dispose();
   }
 
@@ -57,36 +54,11 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
 
   bool isme = true;
   void sendMessage() {
-    if (!kIsWeb) guessResponse();
     //Send Message
     ref
         .read(messagesStateProvider(widget._conversationID))
         .sendMessage(textController.text.trim(), files);
     setState(() => textController.text = '');
-  }
-
-  void guessResponse() async {
-    //#Block Smart Reply
-    if (smartReply != null) {
-      isme
-          ? smartReply!.addMessageToConversationFromLocalUser(
-              textController.text.trim(), DateTime.now().millisecondsSinceEpoch)
-          : smartReply!.addMessageToConversationFromRemoteUser(
-              textController.text.trim(),
-              DateTime.now().millisecondsSinceEpoch,
-              'user');
-      isme = !isme;
-      final res = await smartReply!.suggestReplies();
-      if (mounted) {
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: res.suggestions.map((e) => Text(e)).toList())));
-      }
-      //#Block Smart Reply
-    }
   }
 
   @override
@@ -97,6 +69,17 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
+            Consumer(builder: (context, ref, child) {
+              final messages = ref
+                  .watch(messagesStateProvider(widget._conversationID).notifier)
+                  .replies;
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: messages.suggestions
+                    .map((e) => Text(e, style: const TextStyle(fontSize: 10)))
+                    .toList(),
+              );
+            }),
             Expanded(
               child: Consumer(
                 builder: (context, ref, child) {

@@ -21,7 +21,7 @@ class UserProfile extends StatelessWidget {
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             SliverAppBar(
               iconTheme: const IconThemeData(
-                  shadows: [Shadow(blurRadius: 5)], opacity: 0.9),
+                  shadows: [Shadow(blurRadius: 5)], opacity: 1),
               backgroundColor: Colors.blue,
               expandedHeight: 200,
               floating: false,

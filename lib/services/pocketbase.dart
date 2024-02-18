@@ -9,6 +9,7 @@ import 'package:pocketbase/pocketbase.dart';
 
 class PB {
   static PocketBase pb = pocket.pb;
+  static const int fetchCount = 30;
 
   static Future<RecordModel> createMessage({
     required String conversationId,
@@ -43,10 +44,11 @@ class PB {
     );
   }
 
-  static Future<List<RecordModel>> getMessages(String record) async {
+  static Future<List<RecordModel>> getMessages(String record,
+      {int page = 1}) async {
     final res = await pb.collection('messages').getList(
-          page: 1,
-          perPage: 20,
+          page: page,
+          perPage: fetchCount,
           filter: 'conversation = "$record"',
           sort: '-created',
         );
@@ -56,7 +58,7 @@ class PB {
   static Future<List<RecordModel>> getUsers({int page = 1}) async {
     final result = await pb.collection('users').getList(
           page: page,
-          perPage: 20,
+          perPage: fetchCount,
           filter: 'id != "${pb.authStore.model.id}"',
           sort: '-lastSeen',
         );
@@ -66,7 +68,7 @@ class PB {
   static Future<List<RecordModel>> getConversation({int page = 1}) async {
     final res = await pb.collection('converstion').getList(
           page: page,
-          perPage: 20,
+          perPage: fetchCount,
           filter: 'participants ~ "${pb.authStore.model.id}"',
           expand: 'participants',
           sort: 'created',
@@ -112,9 +114,9 @@ class PB {
 
   static Future uploadReport(String content, Uint8List image) async {
     var ima = await FlutterImageCompress.compressWithList(image,
-        minHeight: 1280,
+        minHeight: 720,
         minWidth: 720,
-        quality: 20,
+        quality: 15,
         format: CompressFormat.webp);
 
     List<MultipartFile> file = [];

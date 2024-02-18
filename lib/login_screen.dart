@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'
     show Consumer, WidgetRef;
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mychatapp/auth/widgets/auth_text_field.dart';
 import 'package:mychatapp/home_screen.dart';
 import 'package:mychatapp/provider.dart' show authStateProvider;
@@ -33,11 +34,14 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'Chatty',
-              style: TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
+            Text(
+              'Chatly',
+              style: GoogleFonts.tangerine(
+                textStyle: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 50,
+                  color: Colors.purple,
+                ),
               ),
             ),
             const SizedBox(height: 10),

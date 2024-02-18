@@ -103,10 +103,23 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
                   final msgs = ref
                       .watch(messagesStateProvider(widget._conversationID))
                       .messages;
+                  final bool isDoneFetching = ref
+                      .watch(messagesStateProvider(widget._conversationID)
+                          .notifier)
+                      .isDone;
                   return ListView.builder(
                     reverse: true,
-                    itemCount: msgs.length,
                     itemBuilder: (context, index) {
+                      if (index == msgs.length) {
+                        if (isDoneFetching) return null;
+                        ref
+                            .read(messagesStateProvider(widget._conversationID)
+                                .notifier)
+                            .fetchNextPage(index ~/ PB.fetchCount);
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      if (index > msgs.length) return null;
+
                       final ms = msgs[index];
                       final isMe = ms.sender == pb.authStore.model.id;
 

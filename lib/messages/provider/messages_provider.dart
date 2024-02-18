@@ -12,6 +12,7 @@ final messagesStateProvider =
 class MessagesChangeNotifier extends ChangeNotifier {
   final pb = PB.pb;
   final String id;
+  bool isDone = false;
   List<Message> messages = [];
   MessagesChangeNotifier(this.id) {
     getMessages();
@@ -34,6 +35,14 @@ class MessagesChangeNotifier extends ChangeNotifier {
         notifyListeners();
       },
     );
+  }
+
+  Future<void> fetchNextPage(int page) async {
+    if (isDone) return;
+    final msgs = await PB.getMessages(id, page: page);
+    if (msgs.length < PB.fetchCount) isDone = true;
+    messages = messages + msgs.map((e) => Message.fromMap(e)).toList();
+    notifyListeners();
   }
 
   void sendMessage(String text, List<XFile> files) {

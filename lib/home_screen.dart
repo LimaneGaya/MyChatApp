@@ -87,6 +87,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       vapidKey: 'BGdFmH81mQRXyROc_64sE-q74R8qkP2dJLNuJlUTIcXCP'
           '4u5Wvpoop6_k8nwhzEWv-Xp9gLmmVv8Z1W63rGifIM');
 
+  void setRandomColor() {
+    ref.read(themeColor.notifier).state = Color.fromARGB(255,
+        Random().nextInt(255), Random().nextInt(255), Random().nextInt(255));
+  }
+
+  void changeTheme() {
+    final br = ref.read(brightness);
+    ref.read(brightness.notifier).state =
+        br == Brightness.dark ? Brightness.light : Brightness.dark;
+  }
+
+  void showFeedBack() {
+    BetterFeedback.of(context).show((UserFeedback feedback) {
+      if (feedback.text != '') {
+        PB.uploadReport(feedback.text, feedback.screenshot);
+      } else {
+        showDialog(
+            context: context,
+            builder: (context) =>
+                const AlertDialog(content: Text('Please enter feedback')));
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme.onSecondary;
@@ -106,43 +130,64 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ),
         actions: [
-          IconButton(
-              onPressed: () {
-                ref.read(themeColor.notifier).state = Color.fromARGB(
-                    255,
-                    Random().nextInt(255),
-                    Random().nextInt(255),
-                    Random().nextInt(255));
-              },
-              icon: const Icon(Icons.color_lens_rounded)),
-          IconButton(
-              onPressed: () {
-                final br = ref.read(brightness);
-                ref.read(brightness.notifier).state =
-                    br == Brightness.dark ? Brightness.light : Brightness.dark;
-              },
-              icon: ref.watch(brightness) == Brightness.dark
-                  ? const Icon(Icons.nightlight)
-                  : const Icon(Icons.sunny)),
-          IconButton(
-              onPressed: () =>
-                  BetterFeedback.of(context).show((UserFeedback feedback) {
-                    if (feedback.text != '') {
-                      PB.uploadReport(feedback.text, feedback.screenshot);
-                    } else {
-                      showDialog(
-                        context: context,
-                        builder: (context) => const AlertDialog(
-                            content: Text('Please enter feedback')),
-                      );
-                    }
-                  }),
-              icon: const Icon(Icons.bug_report)),
-          IconButton(
-              onPressed: () async {
-                ref.read(authStateProvider.notifier).logout(context);
-              },
-              icon: const Icon(Icons.logout)),
+          PopupMenuButton(
+            icon: const Icon(Icons.settings),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                onTap: () => setRandomColor,
+                child: const Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(Icons.color_lens_rounded),
+                    SizedBox(width: 10),
+                    Text('Change color'),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                  onTap: changeTheme,
+                  child: ref.watch(brightness) == Brightness.dark
+                      ? const Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(Icons.nightlight),
+                            SizedBox(width: 10),
+                            Text('Dark mode'),
+                          ],
+                        )
+                      : const Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(Icons.sunny),
+                            SizedBox(width: 10),
+                            Text('Light mode'),
+                          ],
+                        )),
+              PopupMenuItem(
+                onTap: showFeedBack,
+                child: const Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(Icons.bug_report),
+                    SizedBox(width: 10),
+                    Text('Report a bug / Request a feature'),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                onTap: () async {
+                  ref.read(authStateProvider.notifier).logout(context);
+                },
+                child: const Row(
+                  children: [
+                    Icon(Icons.logout),
+                    SizedBox(width: 10),
+                    Text('Logout'),
+                  ],
+                ),
+              )
+            ],
+          ),
         ],
       ),
       body: IndexedStack(

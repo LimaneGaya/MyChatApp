@@ -11,17 +11,16 @@ final userDetailsProvider = FutureProvider.family
     .autoDispose((ref, String id) => PB.getUserDetails(id));
 
 class UserStateNotifier extends StateNotifier<List<UserModel>> {
-  int page = 0;
+  bool isDoneFetching = false;
   UserStateNotifier() : super([]) {
-    getUsers();
     //TODO: Uncoment This to update last seen
     //updateLastSeen();
   }
 
-  void getUsers() async {
-    //TODO: Implement better page loading with limit reached end case
-    page = page + 1;
+  void getNextUsers({int page = 1}) async {
+    if (isDoneFetching) return;
     final usersJson = await PB.getUsers(page: page);
+    if (usersJson.length < PB.fetchCount) isDoneFetching = true;
     final data = usersJson.map((e) => UserModel.fromMap(e.toJson())).toList();
 
     state = state + data;

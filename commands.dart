@@ -20,12 +20,13 @@ void release(List<String> args) {
   final versioning = file.readAsStringSync().split(' ');
   final List<int> version =
       versioning[0].split('.').map((e) => int.parse(e)).toList();
-  if (args.contains('M'))
+  if (args.contains('M')) {
     version[0] = version[0] + 1;
-  else if (args.contains('m'))
+  } else if (args.contains('m')) {
     version[1] = version[1] + 1;
-  else
+  } else {
     version[2] = version[2] + 1;
+  }
 
   final int buildNumber = int.parse(versioning[1]) + 1;
   final String buildName = '${version[0]}.${version[1]}.${version[2]}';

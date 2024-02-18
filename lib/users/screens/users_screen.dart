@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mychatapp/services/pocketbase.dart';
 import 'package:mychatapp/users/providers/user_provider.dart';
 import 'package:mychatapp/users/widgets/user_tile.dart';
 
@@ -9,13 +10,17 @@ class UsersScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final users = ref.watch(userStateProvider);
+    final isDoneFetching = ref.watch(userStateProvider.notifier).isDoneFetching;
     return GridView.builder(
-      itemCount: users.length,
       itemBuilder: (context, index) {
-        // TODO: logic here to dynamicaly load users
-        // if (index >= users.length) {
-        //   ref.read(userStateProvider.notifier).getUsers();
-        // }
+        if (index == users.length) {
+          if (isDoneFetching) return null;
+          ref
+              .read(userStateProvider.notifier)
+              .getNextUsers(page: index ~/ PB.fetchCount);
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (index > users.length) return null;
         return UserTile(users[index]);
       },
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(

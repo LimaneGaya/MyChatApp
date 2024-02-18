@@ -19,9 +19,6 @@ class MessagesChangeNotifier extends ChangeNotifier {
   }
 
   Future<void> getMessages() async {
-    final msgs = await PB.getMessages(id);
-    messages = msgs.map((e) => Message.fromMap(e)).toList();
-    notifyListeners();
     PB.subscribe(
       'messages',
       (e) {

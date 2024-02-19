@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mychatapp/consts/consts.dart';
 import 'package:mychatapp/conversations/providers/conversation_provider.dart';
 import 'package:mychatapp/messages/widgets/interactive_image_view.dart';
 import 'package:mychatapp/models/models.dart';
@@ -20,12 +21,16 @@ class UserProfile extends StatelessWidget {
         child: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             SliverAppBar(
-              iconTheme: const IconThemeData(
-                  shadows: [Shadow(blurRadius: 5)], opacity: 1),
+              iconTheme:
+                  IconThemeData(shadows: getShadows(context), opacity: 1),
               backgroundColor: Colors.blue,
               expandedHeight: 200,
               floating: false,
-              title: Text(user.name),
+              title: Text(user.name,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    shadows: getShadows(context),
+                  )),
               flexibleSpace: Stack(
                 children: [
                   Hero(

@@ -199,6 +199,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: color,
+        currentIndex: index,
         onTap: (value) => setState(() => index = value),
         items: [
           BottomNavigationBarItem(

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart'
     show CachedNetworkImage;
+import 'package:country/country.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' show Consumer;
 import 'package:mychatapp/consts/consts.dart';
@@ -69,6 +70,27 @@ class UserTile extends StatelessWidget {
                       ),
                     ),
                   ),
+                  if (user.countryCode != '')
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6.0,
+                          vertical: 2,
+                        ),
+                        child: Text(
+                          Countries.values
+                              .firstWhere(
+                                (element) => element.alpha2 == user.countryCode,
+                              )
+                              .flagEmoji,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                    ),
                 ],
               ),
             );

@@ -1,8 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mychatapp/consts/consts.dart';
 import 'package:mychatapp/conversations/providers/conversation_provider.dart';
+import 'package:mychatapp/conversations/widgets/conversation_tile.dart';
 
 class ConversationsScreen extends ConsumerWidget {
   const ConversationsScreen({super.key});
@@ -23,10 +22,8 @@ class ConversationsScreen extends ConsumerWidget {
           onLongPress: () => showDialog(
               context: context,
               builder: (context) => AlertDialog(
-                      title: Text(
-                        'Delete conversation?',
-                        style: TextStyle(color: Colors.red[400]),
-                      ),
+                      title: Text('Delete conversation?',
+                          style: TextStyle(color: Colors.red[400])),
                       actions: [
                         TextButton(
                             onPressed: () {
@@ -37,30 +34,7 @@ class ConversationsScreen extends ConsumerWidget {
                             },
                             child: const Text('Delete'))
                       ])),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondaryContainer,
-                borderRadius: BorderRadius.circular(15)),
-            height: 60,
-            child: Row(
-              children: [
-                Text(names,
-                    style:
-                        TextStyle(fontSize: 20, shadows: getShadows(context))),
-                const Spacer(),
-                ...con.participantData.map(
-                  (e) {
-                    final image = e.avatar;
-                    return CircleAvatar(
-                      backgroundImage: CachedNetworkImageProvider(image),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
+          child: ConversationTile(names: names, con: con),
         );
       },
     );

@@ -15,6 +15,7 @@ class UserModel {
   final DateTime lastSeen;
   final String gender;
   final int age;
+  final String countryCode;
   const UserModel({
     required this.id,
     required this.collectionId,
@@ -28,6 +29,7 @@ class UserModel {
     required this.lastSeen,
     required this.gender,
     required this.age,
+    required this.countryCode,
   });
 
   UserModel copyWith({
@@ -43,6 +45,7 @@ class UserModel {
     DateTime? lastSeen,
     String? gender,
     int? age,
+    String? countryCode,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -57,6 +60,7 @@ class UserModel {
       lastSeen: lastSeen ?? this.lastSeen,
       gender: gender ?? this.gender,
       age: age ?? this.age,
+      countryCode: countryCode ?? this.countryCode,
     );
   }
 
@@ -74,6 +78,7 @@ class UserModel {
       'lastSeen': lastSeen.toString(),
       'gender': gender,
       'age': age,
+      'country_code': countryCode,
     };
   }
 
@@ -92,18 +97,19 @@ class UserModel {
               map['avatar'] as String,
             ),
       name:
-          map['name'] == "" ? map['name'] as String : map['username'] as String,
+          map['name'] != "" ? map['name'] as String : map['username'] as String,
       verified: map['verified'] as bool,
       created: DateTime.parse(map['created'] as String),
       updated: DateTime.parse(map['updated'] as String),
       lastSeen: DateTime.parse(map['lastSeen'] as String),
       gender: map['gender'] as String,
       age: map['age'] as int,
+      countryCode: map['country_code'] as String,
     );
   }
   @override
   String toString() {
-    return 'UserModel(id: $id, collectionId: $collectionId, collectionName: $collectionName, username: $username, avatar: $avatar, name: $name, verified: $verified, created: $created, updated: $updated, lastSeen: $lastSeen, gender: $gender, age: $age)';
+    return 'UserModel(id: $id, collectionId: $collectionId, collectionName: $collectionName, username: $username, avatar: $avatar, name: $name, verified: $verified, created: $created, updated: $updated, lastSeen: $lastSeen, gender: $gender, age: $age, countryCode: $countryCode)';
   }
 
   @override
@@ -121,7 +127,8 @@ class UserModel {
         other.updated == updated &&
         other.lastSeen == lastSeen &&
         other.gender == gender &&
-        other.age == age;
+        other.age == age &&
+        other.countryCode == countryCode;
   }
 
   @override

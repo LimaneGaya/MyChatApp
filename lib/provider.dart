@@ -51,8 +51,10 @@ class AuthStateNotifier extends StateNotifier<bool> {
         await _sharedPref.setString('auth', data);
       }
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Center(child: Text(e.toString()))));
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Center(child: Text(e.toString()))));
+      }
     }
 
     state = false;
@@ -66,6 +68,7 @@ class AuthStateNotifier extends StateNotifier<bool> {
     required int age,
     required bool isMan,
     String? name,
+    required String countryCode,
   }) async {
     state = true;
     final body = <String, dynamic>{
@@ -75,7 +78,8 @@ class AuthStateNotifier extends StateNotifier<bool> {
       "name": name,
       "lastSeen": DateTime.now().toUtc().toString(),
       "gender": isMan ? 'man' : 'woman',
-      "age": age
+      "age": age,
+      "country_code": countryCode,
     };
 
     final record = await _pb.collection('users').create(body: body);

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'
     show Consumer, WidgetRef;
@@ -5,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mychatapp/auth/widgets/auth_text_field.dart';
 import 'package:mychatapp/home_screen.dart';
 import 'package:mychatapp/provider.dart' show authStateProvider;
+import 'package:http/http.dart ' as http;
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -20,6 +23,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool canSeePassword = false;
   bool isMale = false;
   int age = 18;
+  String country = '';
+  @override
+  void initState() {
+    super.initState();
+    getPosition();
+  }
+
+  void getPosition() async {
+    var url = Uri.http('ip-api.com', 'json', {'fields': 'status,countryCode'});
+    http.get(url).then((value) {
+      if (value.statusCode == 200) {
+        final decoded = jsonDecode(value.body);
+        if (decoded['status'] == 'success') {
+          country = ['countryCode'] as String;
+        } else {
+          getPosition();
+        }
+      } else {
+        getPosition();
+      }
+    }).onError((error, stackTrace) {
+      debugPrint(error.toString());
+    });
+  }
+
   @override
   void dispose() {
     userNameController.dispose();
@@ -48,7 +76,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const SizedBox(height: 10),
             AuthTextField(
                 con: userNameController,
-                hintText: 'User Name',
+                hintText: 'Name',
                 icon: const Icon(Icons.person_3),
                 length: 25),
             const SizedBox(height: 10),
@@ -109,6 +137,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   isMan: isMale,
                                   age: int.parse(ageController.text),
                                   passwordConfirm: passwordController.text,
+                                  countryCode: country,
                                 );
 
                             if (isLoggedin && context.mounted) {

@@ -29,6 +29,7 @@ dependencies:
   flutter_image_compress: ^2.1.0
   fetch_client: ^1.0.2
   timeago: ^3.6.1
+  country: ^4.1.2
   
 
 dev_dependencies:

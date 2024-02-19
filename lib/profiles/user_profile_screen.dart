@@ -81,7 +81,10 @@ class UserProfile extends StatelessWidget {
                             child: RichText(
                               text: TextSpan(
                                   text: 'Last seen: ',
-                                  style: const TextStyle(
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold),
                                   children: [
@@ -89,7 +92,10 @@ class UserProfile extends StatelessWidget {
                                         text: timeago
                                             .format(user.lastSeen.toLocal())
                                             .toString(),
-                                        style: const TextStyle(
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .tertiary,
                                             fontSize: 15,
                                             fontWeight: FontWeight.normal))
                                   ]),

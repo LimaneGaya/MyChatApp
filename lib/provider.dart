@@ -38,21 +38,29 @@ class AuthStateNotifier extends StateNotifier<bool> {
         super(false);
   final _pb = PB.pb;
 
-  Future<bool> login(String userName, String password) async {
+  Future<bool> login(
+      BuildContext context, String userName, String password) async {
     state = true;
-    final authData =
-        await _pb.collection('users').authWithPassword(userName, password);
-    if (authData.record != null) {
-      authData.record!;
-      final data =
-          jsonEncode({'token': authData.token, 'record': authData.record});
-      await _sharedPref.setString('auth', data);
+    try {
+      final authData =
+          await _pb.collection('users').authWithPassword(userName, password);
+      if (authData.record != null) {
+        authData.record!;
+        final data =
+            jsonEncode({'token': authData.token, 'record': authData.record});
+        await _sharedPref.setString('auth', data);
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Center(child: Text(e.toString()))));
     }
+
     state = false;
     return _pb.authStore.isValid;
   }
 
-  Future<bool> register({
+  Future<bool> register(
+    BuildContext context, {
     required String password,
     required String passwordConfirm,
     required int age,
@@ -71,7 +79,7 @@ class AuthStateNotifier extends StateNotifier<bool> {
     };
 
     final record = await _pb.collection('users').create(body: body);
-    return await login(record.data['username'], password);
+    return await login(context, record.data['username'], password);
   }
 
   Future<void> logout(BuildContext context) async {

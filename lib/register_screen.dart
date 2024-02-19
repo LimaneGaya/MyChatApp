@@ -103,6 +103,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             final isLoggedin = await ref
                                 .read(authStateProvider.notifier)
                                 .register(
+                                  context,
                                   password: passwordController.text,
                                   name: userNameController.text,
                                   isMan: isMale,

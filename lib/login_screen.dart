@@ -73,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () async {
                             final isLoggedin = await ref
                                 .read(authStateProvider.notifier)
-                                .login(userNameController.text,
+                                .login(context, userNameController.text,
                                     passwordController.text);
 
                             if (isLoggedin && context.mounted) {

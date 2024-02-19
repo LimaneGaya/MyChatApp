@@ -134,7 +134,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             icon: const Icon(Icons.settings),
             itemBuilder: (context) => [
               PopupMenuItem(
-                onTap: () => setRandomColor,
+                onTap: setRandomColor,
                 child: const Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mychatapp/consts/consts.dart';
 import 'package:mychatapp/conversations/providers/conversation_provider.dart';
 
 class ConversationsScreen extends ConsumerWidget {
@@ -46,8 +47,8 @@ class ConversationsScreen extends ConsumerWidget {
             child: Row(
               children: [
                 Text(names,
-                    style: const TextStyle(
-                        fontSize: 20, shadows: [Shadow(blurRadius: 5)])),
+                    style:
+                        TextStyle(fontSize: 20, shadows: getShadows(context))),
                 const Spacer(),
                 ...con.participantData.map(
                   (e) {

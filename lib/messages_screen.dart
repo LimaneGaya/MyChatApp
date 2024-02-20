@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart'
 import 'package:google_mobile_ads/google_mobile_ads.dart' show BannerAd;
 import 'package:image_picker/image_picker.dart' show ImagePicker, XFile;
 import 'package:mychatapp/messages/provider/messages_provider.dart';
+import 'package:mychatapp/messages/widgets/ai_responses.dart';
 import 'package:mychatapp/messages/widgets/message_field.dart';
 import 'package:mychatapp/messages/widgets/message_tile.dart';
 import 'package:mychatapp/services/admob.dart';
@@ -69,17 +70,7 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
-            Consumer(builder: (context, ref, child) {
-              final messages = ref
-                  .watch(messagesStateProvider(widget._conversationID).notifier)
-                  .replies;
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: messages.suggestions
-                    .map((e) => Text(e, style: const TextStyle(fontSize: 10)))
-                    .toList(),
-              );
-            }),
+            AiResponses(widget._conversationID),
             Expanded(
               child: Consumer(
                 builder: (context, ref, child) {

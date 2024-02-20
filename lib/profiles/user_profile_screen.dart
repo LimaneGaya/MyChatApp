@@ -50,17 +50,6 @@ class UserProfile extends StatelessWidget {
                               end: Alignment.center))),
                 ],
               ),
-
-              // Stack(children: [
-              //   Align(
-              //     alignment: Alignment.center,
-              //     child: CircleAvatar(
-              //       radius: 50,
-              //       foregroundImage:
-              //           NetworkImage('https://picsum.photos/id/237/200/300'),
-              //     ),
-              //   )
-              // ]),
               bottom: const TabBar(
                 tabs: [Tab(child: Text('Info')), Tab(child: Text('Photos'))],
               ),
@@ -71,6 +60,8 @@ class UserProfile extends StatelessWidget {
               const spacing = EdgeInsets.all(8);
               final decoration = BoxDecoration(
                   color: Theme.of(context).colorScheme.onTertiary,
+                  border: Border.all(
+                      color: Theme.of(context).colorScheme.tertiary, width: 3),
                   borderRadius: BorderRadius.circular(15));
               return ref.watch(userDetailsProvider(user.id)).when(
                 data: (data) {
@@ -107,12 +98,13 @@ class UserProfile extends StatelessWidget {
                             ),
                           ),
                           Container(
-                              constraints:
-                                  const BoxConstraints.expand(height: 300),
-                              margin: spacing,
-                              padding: spacing,
-                              decoration: decoration,
-                              child: Text(data.data['bio'] as String)),
+                            constraints:
+                                const BoxConstraints.expand(height: 300),
+                            margin: spacing,
+                            padding: spacing,
+                            decoration: decoration,
+                            child: Text(data.data['bio'] as String),
+                          ),
                         ],
                       ),
                       GridView.builder(

@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart'
     show CachedNetworkImage;
-import 'package:country/country.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' show Consumer;
 import 'package:mychatapp/consts/consts.dart';
 import 'package:mychatapp/models/models.dart';
 import 'package:mychatapp/profiles/user_profile_screen.dart';
+import 'package:locale_emoji/locale_emoji.dart' as le;
 
 class UserTile extends StatelessWidget {
   final UserModel user;
@@ -79,11 +79,7 @@ class UserTile extends StatelessWidget {
                           vertical: 2,
                         ),
                         child: Text(
-                          Countries.values
-                              .firstWhere(
-                                (element) => element.alpha2 == user.countryCode,
-                              )
-                              .flagEmoji,
+                          le.getFlagEmoji(countryCode: user.countryCode) ?? '???',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,

@@ -112,7 +112,7 @@ class PB {
     return result;
   }
 
-  static Future uploadReport(String content, Uint8List image) async {
+  static Future<void> uploadReport(String content, Uint8List image) async {
     var ima = await FlutterImageCompress.compressWithList(image,
         minHeight: 720,
         minWidth: 720,
@@ -135,5 +135,14 @@ class PB {
     } catch (e) {
       debugPrint(e.toString());
     }
+  }
+
+  static Future<void> updateToken(String token) async {
+    await pb.collection('users').update(
+      pb.authStore.model.id,
+      body: {
+        "notification_token": token,
+      },
+    );
   }
 }

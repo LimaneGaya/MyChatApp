@@ -1,13 +1,13 @@
 import 'dart:io' show Platform;
-import 'dart:math';
-
+import 'dart:math' show Random;
 import 'package:feedback/feedback.dart' show BetterFeedback, UserFeedback;
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'
     show ConsumerState, ConsumerStatefulWidget, StateProvider;
 import 'package:mychatapp/conversations/screens/conversation_screen.dart';
-import 'package:mychatapp/provider.dart' show authStateProvider;
+import 'package:mychatapp/auth/provider/auth_provider.dart'
+    show authStateProvider;
+import 'package:mychatapp/services/firebase_messaging.dart';
 import 'package:mychatapp/services/pocketbase.dart';
 import 'package:mychatapp/users/screens/users_screen.dart';
 import 'package:google_fonts/google_fonts.dart' show GoogleFonts;
@@ -34,7 +34,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    if (kIsWeb || Platform.isAndroid) startMessagingNotification();
+    if (kIsWeb || Platform.isAndroid) ref.read(firebaseMessagingProvider);
     startFirebaseServices();
   }
 
@@ -53,39 +53,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       FirebaseCrashlytics.instance.recordFlutterFatalError;
     }
   }
-
-  startMessagingNotification() async {
-    final timetowait = Future.delayed(const Duration(seconds: 5));
-    await timetowait;
-    await FirebaseMessaging.instance.requestPermission(provisional: true);
-    //Cloud Messaging //TODO: Add token saving to backend and autorefresh.
-    String? apnsToken;
-    try {
-      apnsToken = await getNotificationToken();
-      apnsToken = await getNotificationToken();
-      apnsToken = await getNotificationToken();
-      await timetowait;
-    } catch (e) {
-      try {
-        apnsToken = await getNotificationToken();
-        await timetowait;
-      } catch (e) {
-        try {
-          apnsToken = await getNotificationToken();
-          await timetowait;
-        } catch (e) {
-          debugPrint(e.toString());
-        }
-      }
-      debugPrint(apnsToken);
-    }
-    //save changed token
-    // FirebaseMessaging.instance.onTokenRefresh.listen(saveTokenToDatabase);
-  }
-
-  Future<String?> getNotificationToken() => FirebaseMessaging.instance.getToken(
-      vapidKey: 'BGdFmH81mQRXyROc_64sE-q74R8qkP2dJLNuJlUTIcXCP'
-          '4u5Wvpoop6_k8nwhzEWv-Xp9gLmmVv8Z1W63rGifIM');
 
   void setRandomColor() {
     ref.read(themeColor.notifier).state = Color.fromARGB(255,

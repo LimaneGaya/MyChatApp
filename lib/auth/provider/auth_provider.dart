@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'
     show StateNotifierProvider, FutureProvider, StateNotifier;
-import 'package:mychatapp/login_screen.dart';
+import 'package:mychatapp/auth/screens/login_screen.dart';
 import 'package:mychatapp/services/pocketbase.dart';
 import 'package:pocketbase/pocketbase.dart' show RecordModel;
 import 'package:shared_preferences/shared_preferences.dart';

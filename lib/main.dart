@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mychatapp/firebase_options.dart';
 import 'package:mychatapp/home_screen.dart';
-import 'package:mychatapp/login_screen.dart';
-import 'package:mychatapp/provider.dart';
+import 'package:mychatapp/auth/screens/login_screen.dart';
+import 'package:mychatapp/auth/provider/auth_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -5,8 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart'
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mychatapp/auth/widgets/auth_text_field.dart';
 import 'package:mychatapp/home_screen.dart';
-import 'package:mychatapp/provider.dart' show authStateProvider;
-import 'package:mychatapp/register_screen.dart';
+import 'package:mychatapp/auth/provider/auth_provider.dart'
+    show authStateProvider;
+import 'package:mychatapp/auth/screens/register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

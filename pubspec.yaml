@@ -30,6 +30,7 @@ dependencies:
   fetch_client: ^1.0.2
   timeago: ^3.6.1
   locale_emoji: ^0.2.1
+  google_generative_ai: ^0.2.0
   
 
 dev_dependencies:

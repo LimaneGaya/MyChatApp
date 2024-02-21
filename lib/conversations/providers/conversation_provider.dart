@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mychatapp/messages_screen.dart';
+import 'package:mychatapp/messages/screens/messages_screen.dart';
 import 'package:mychatapp/models/models.dart';
 import 'package:mychatapp/services/pocketbase.dart';
 

@@ -11,7 +11,7 @@ class GeminiScreen extends StatefulWidget {
 }
 
 class _GeminiScreenState extends State<GeminiScreen> {
-  late final model;
+  late final GenerativeModel model;
   @override
   void initState() {
     super.initState();
@@ -31,6 +31,6 @@ class _GeminiScreenState extends State<GeminiScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center());
+    return const Scaffold(body: Center());
   }
 }

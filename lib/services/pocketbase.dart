@@ -141,7 +141,7 @@ class PB {
     await pb.collection('users').update(
       pb.authStore.model.id,
       body: {
-        "notification_token": token,
+        "token": token,
       },
     );
   }

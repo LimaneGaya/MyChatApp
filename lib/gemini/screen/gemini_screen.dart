@@ -6,9 +6,6 @@ import 'package:mychatapp/messages/widgets/message_field.dart';
 import 'package:mychatapp/messages/widgets/message_tile.dart';
 import 'package:mychatapp/services/admob.dart';
 import 'package:mychatapp/services/env.dart';
-import 'package:mychatapp/services/pocketbase_web.dart'
-    if (dart.library.io) 'package:mychatapp/services/pocketbase_none_web.dart'
-    as pocket;
 
 class GeminiScreen extends StatefulWidget {
   const GeminiScreen({super.key});
@@ -25,11 +22,16 @@ class GeminiMessage {
 
 class _GeminiScreenState extends State<GeminiScreen> {
   final GenerativeModel model = GenerativeModel(
-      model: 'gemini-pro',
-      safetySettings: [],
-      apiKey: Env.ia,
-      generationConfig: GenerationConfig(maxOutputTokens: 200),
-      httpClient: pocket.client);
+    model: 'gemini-pro',
+    safetySettings: [
+      SafetySetting(HarmCategory.hateSpeech, HarmBlockThreshold.high),
+      SafetySetting(HarmCategory.dangerousContent, HarmBlockThreshold.high),
+      SafetySetting(HarmCategory.harassment, HarmBlockThreshold.high),
+      SafetySetting(HarmCategory.sexuallyExplicit, HarmBlockThreshold.none),
+    ],
+    apiKey: Env.ia,
+  );
+
   late final ChatSession chat;
 
   BannerAd? _bannerAd;
@@ -41,7 +43,14 @@ class _GeminiScreenState extends State<GeminiScreen> {
   @override
   void initState() {
     super.initState();
-    chat = model.startChat();
+    chat = model.startChat(
+      safetySettings: [
+        SafetySetting(HarmCategory.hateSpeech, HarmBlockThreshold.high),
+        SafetySetting(HarmCategory.dangerousContent, HarmBlockThreshold.high),
+        SafetySetting(HarmCategory.harassment, HarmBlockThreshold.high),
+        SafetySetting(HarmCategory.sexuallyExplicit, HarmBlockThreshold.none),
+      ],
+    );
     if (isAndroid) {
       _bannerAd = AdMob.initializeAd();
       setState(() => _bannerAd = _bannerAd);
@@ -50,21 +59,36 @@ class _GeminiScreenState extends State<GeminiScreen> {
 
   void sendMessage() async {
     if (textController.text.trim() == "") return;
-    final String m = textController.text.trim();
-    messages.add(GeminiMessage(true, m));
+
     setState(() {
       isLoading = true;
-      messages = messages;
-      textController.text = '';
     });
 
-    final content = Content.text(m.toLowerCase());
-    final response = await chat.sendMessage(content);
+    try {
+      var response = await chat.sendMessage(
+        Content.text(textController.text.trim()),
+      );
+      final text = response.text;
 
-    setState(() {
-      isLoading = false;
-      messages.add(GeminiMessage(false, response.text!));
-    });
+      if (text == null) {
+        debugPrint('No response from API.');
+        return;
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      setState(() {
+        isLoading = false;
+      });
+    } finally {
+      textController.clear();
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -92,13 +116,18 @@ class _GeminiScreenState extends State<GeminiScreen> {
               AdMob.getAdWidget(_bannerAd!),
             Expanded(
               child: ListView.builder(
-                itemCount: messages.length,
+                itemCount: chat.history.length,
                 itemBuilder: (context, index) {
+                  final mess = chat.history.elementAt(index);
+                  final bool me = mess.role == 'user';
                   return MessageTile(
-                    isMe: messages[index].isMe,
-                    content: messages[index].message,
-                    leadingText: messages[index].isMe ? null : 'Me',
-                    trailingText: messages[index].isMe ? 'AI' : null,
+                    isMe: me,
+                    content: mess.parts
+                        .whereType<TextPart>()
+                        .map<String>((e) => e.text)
+                        .join(''),
+                    leadingText: me ? null : 'AI',
+                    trailingText: me ? 'Me' : null,
                   );
                 },
               ),

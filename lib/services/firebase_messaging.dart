@@ -17,23 +17,15 @@ class FCM {
   setFCM() async {
     await FirebaseMessaging.instance.requestPermission(provisional: true);
     String? apnsToken;
-    try {
-      apnsToken = await getNotificationToken();
-      apnsToken = await getNotificationToken();
-      apnsToken = await getNotificationToken();
-    } catch (e) {
-      Future.delayed(const Duration(seconds: 3));
-      try {
-        apnsToken = await getNotificationToken();
-      } catch (e) {
-        Future.delayed(const Duration(seconds: 3));
-        try {
-          apnsToken = await getNotificationToken();
-        } catch (e) {
-          debugPrint(e.toString());
-        }
-      }
-    }
+    apnsToken ??= await getNotificationToken();
+    apnsToken ??= await getNotificationToken();
+    apnsToken ??= await getNotificationToken();
+    apnsToken ??= await getNotificationToken();
+    apnsToken ??= await getNotificationToken();
+    apnsToken ??= await getNotificationToken();
+    apnsToken ??= await getNotificationToken();
+    apnsToken ??= await getNotificationToken();
+    debugPrint(apnsToken);
     if (apnsToken != null) PB.updateToken(apnsToken);
     FirebaseMessaging.instance.onTokenRefresh.listen(PB.updateToken);
   }

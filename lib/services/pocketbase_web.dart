@@ -5,5 +5,3 @@ final PocketBase pb = PocketBase(
   'https://chatly-app.pockethost.io/',
   httpClientFactory: () => FetchClient(mode: RequestMode.cors),
 );
-
-final client = FetchClient(mode: RequestMode.cors);

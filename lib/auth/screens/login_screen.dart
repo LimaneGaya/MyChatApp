@@ -24,79 +24,87 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Chatly',
-              style: GoogleFonts.tangerine(
-                textStyle: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 50,
-                  color: Colors.purple,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            AuthTextField(
-              con: userNameController,
-              hintText: 'Username',
-              icon: const Icon(Icons.person_3),
-              length: 25,
-            ),
-            const SizedBox(height: 10),
-            AuthTextField(
-              con: passwordController,
-              hintText: 'Password',
-              isHidden: true,
-              icon: const Icon(Icons.password),
-            ),
-            const SizedBox(height: 10),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Consumer(
-                builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                  final bool isLoading = ref.watch(authStateProvider);
-                  return isLoading
-                      ? ElevatedButton(
-                          onPressed: () {},
-                          child: const CircularProgressIndicator())
-                      : ElevatedButton(
-                          child: const Text('LogIn'),
-                          onPressed: () async {
-                            final isLoggedin = await ref
-                                .read(authStateProvider.notifier)
-                                .login(context, userNameController.text,
-                                    passwordController.text);
-
-                            if (isLoggedin && context.mounted) {
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const HomeScreen()),
-                                  (route) => false);
-                            }
-                          });
-                },
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text.rich(TextSpan(text: 'Don\'t have an account? ', children: [
-              TextSpan(
-                  text: 'Register',
-                  style: const TextStyle(
-                    color: Colors.lightBlue,
-                    fontWeight: FontWeight.bold,
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Chatly',
+                  style: GoogleFonts.tangerine(
+                    textStyle: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 50,
+                      color: Colors.purple,
+                    ),
                   ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const RegisterScreen()));
-                    })
-            ]))
-          ],
+                ),
+                const SizedBox(height: 10),
+                AuthTextField(
+                  con: userNameController,
+                  hintText: 'Username',
+                  icon: const Icon(Icons.person_3),
+                  length: 25,
+                ),
+                const SizedBox(height: 10),
+                AuthTextField(
+                  con: passwordController,
+                  hintText: 'Password',
+                  isHidden: true,
+                  icon: const Icon(Icons.password),
+                ),
+                const SizedBox(height: 10),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Consumer(
+                    builder:
+                        (BuildContext context, WidgetRef ref, Widget? child) {
+                      final bool isLoading = ref.watch(authStateProvider);
+                      return isLoading
+                          ? ElevatedButton(
+                              onPressed: () {},
+                              child: const CircularProgressIndicator())
+                          : ElevatedButton(
+                              child: const Text('LogIn'),
+                              onPressed: () async {
+                                final isLoggedin = await ref
+                                    .read(authStateProvider.notifier)
+                                    .login(context, userNameController.text,
+                                        passwordController.text);
+
+                                if (isLoggedin && context.mounted) {
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const HomeScreen()),
+                                      (route) => false);
+                                }
+                              });
+                    },
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text.rich(TextSpan(text: 'Don\'t have an account? ', children: [
+                  TextSpan(
+                      text: 'Register',
+                      style: const TextStyle(
+                        color: Colors.lightBlue,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const RegisterScreen()));
+                        })
+                ]))
+              ],
+            ),
+          ),
         ),
       ),
     );

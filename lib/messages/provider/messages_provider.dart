@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,18 +9,20 @@ import 'package:mychatapp/services/pocketbase.dart';
 
 final messagesStateProvider =
     ChangeNotifierProvider.family<MessagesChangeNotifier, String>(
-  (ref, id) =>
-      MessagesChangeNotifier(id, ref.watch(smartReplyProvider(id).notifier)),
+  (ref, id) => MessagesChangeNotifier(
+      id: id,
+      smartReply: (!kIsWeb && Platform.isAndroid)
+          ? ref.watch(smartReplyProvider(id).notifier)
+          : null),
 );
 
 class MessagesChangeNotifier extends ChangeNotifier {
   final pb = PB.pb;
-  final SmartReplyNotifier smartReply;
+  final SmartReplyNotifier? smartReply;
   final String id;
   bool isDone = false;
   List<Message> messages = [];
-
-  MessagesChangeNotifier(this.id, this.smartReply) {
+  MessagesChangeNotifier({required this.id, this.smartReply}) {
     getMessages();
   }
 
@@ -29,7 +33,7 @@ class MessagesChangeNotifier extends ChangeNotifier {
         final msg = Message.fromMap(e.record!);
         if (e.action == "create") {
           messages.insert(0, msg);
-          smartReply.smartMessageReply(msg);
+          smartReply?.smartMessageReply(msg);
         }
         if (e.action == "delete") messages.removeWhere((m) => m.id == msg.id);
         if (e.action == 'update') {

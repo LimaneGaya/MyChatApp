@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart'
 import 'package:mychatapp/conversations/screens/conversation_screen.dart';
 import 'package:mychatapp/auth/provider/auth_provider.dart'
     show authStateProvider;
+import 'package:mychatapp/gemini/screen/gemini_screen.dart';
 import 'package:mychatapp/services/firebase_messaging.dart';
 import 'package:mychatapp/services/pocketbase.dart';
 import 'package:mychatapp/users/screens/users_screen.dart';
@@ -83,85 +84,88 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final color = Theme.of(context).colorScheme.onSecondary;
     return Scaffold(
       backgroundColor: color,
-      appBar: AppBar(
-        backgroundColor: color,
-        centerTitle: true,
-        title: Text(
-          'Chatly',
-          style: GoogleFonts.tangerine(
-            textStyle: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 40,
-              color: Colors.purple,
-            ),
-          ),
-        ),
-        actions: [
-          PopupMenuButton(
-            icon: const Icon(Icons.settings),
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                onTap: setRandomColor,
-                child: const Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(Icons.color_lens_rounded),
-                    SizedBox(width: 10),
-                    Text('Change color'),
-                  ],
+      appBar: (index != 2)
+          ? AppBar(
+              backgroundColor: color,
+              centerTitle: true,
+              title: Text(
+                'Chatly',
+                style: GoogleFonts.tangerine(
+                  textStyle: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 40,
+                    color: Colors.purple,
+                  ),
                 ),
               ),
-              PopupMenuItem(
-                  onTap: changeTheme,
-                  child: ref.watch(brightness) == Brightness.dark
-                      ? const Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(Icons.nightlight),
-                            SizedBox(width: 10),
-                            Text('Dark mode'),
-                          ],
-                        )
-                      : const Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(Icons.sunny),
-                            SizedBox(width: 10),
-                            Text('Light mode'),
-                          ],
-                        )),
-              PopupMenuItem(
-                onTap: showFeedBack,
-                child: const Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(Icons.bug_report),
-                    SizedBox(width: 10),
-                    Text('Report a bug / Request a feature'),
+              actions: [
+                PopupMenuButton(
+                  icon: const Icon(Icons.settings),
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      onTap: setRandomColor,
+                      child: const Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(Icons.color_lens_rounded),
+                          SizedBox(width: 10),
+                          Text('Change color'),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                        onTap: changeTheme,
+                        child: ref.watch(brightness) == Brightness.dark
+                            ? const Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.nightlight),
+                                  SizedBox(width: 10),
+                                  Text('Dark mode'),
+                                ],
+                              )
+                            : const Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.sunny),
+                                  SizedBox(width: 10),
+                                  Text('Light mode'),
+                                ],
+                              )),
+                    PopupMenuItem(
+                      onTap: showFeedBack,
+                      child: const Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(Icons.bug_report),
+                          SizedBox(width: 10),
+                          Text('Report a bug / Request a feature'),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      onTap: () async {
+                        ref.read(authStateProvider.notifier).logout(context);
+                      },
+                      child: const Row(
+                        children: [
+                          Icon(Icons.logout),
+                          SizedBox(width: 10),
+                          Text('Logout'),
+                        ],
+                      ),
+                    )
                   ],
                 ),
-              ),
-              PopupMenuItem(
-                onTap: () async {
-                  ref.read(authStateProvider.notifier).logout(context);
-                },
-                child: const Row(
-                  children: [
-                    Icon(Icons.logout),
-                    SizedBox(width: 10),
-                    Text('Logout'),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ],
-      ),
+              ],
+            )
+          : null,
       body: IndexedStack(
         index: index,
         children: const [
           UsersScreen(),
           ConversationsScreen(),
+          GeminiScreen(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -176,6 +180,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(index == 1 ? Icons.message : Icons.message_outlined),
             label: 'Chats',
+          ),
+          BottomNavigationBarItem(
+            icon: Text(
+              'AI',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: index == 2 ? FontWeight.bold : FontWeight.normal,
+              ),
+            ),
+            label: 'Advices',
           ),
         ],
       ),

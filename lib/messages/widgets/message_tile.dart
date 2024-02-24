@@ -14,7 +14,7 @@ class MessageTile extends StatelessWidget {
     this.leadingText,
     this.trailingText,
     required this.content,
-    required this.fileUrl,
+    this.fileUrl = const [],
   });
 
   @override

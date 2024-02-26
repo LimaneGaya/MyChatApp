@@ -30,6 +30,8 @@ class HomeScreen extends ConsumerStatefulWidget {
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
+//TODO:fix gemini not working with maxtoken
+//TODO:add matching system
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   int index = 0;
   @override

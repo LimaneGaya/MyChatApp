@@ -139,7 +139,12 @@ class _GeminiScreenState extends State<GeminiScreen> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Expanded(child: MessageField(textController, sendMessage)),
+                    Expanded(
+                        child: MessageField(
+                      textController,
+                      sendMessage,
+                      autofocus: false,
+                    )),
                     isLoading
                         ? IconButton(
                             onPressed: () {},

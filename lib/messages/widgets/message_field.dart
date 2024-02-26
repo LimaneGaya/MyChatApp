@@ -4,8 +4,17 @@ import 'package:flutter/services.dart';
 class MessageField extends StatelessWidget {
   final TextEditingController con;
   final VoidCallback func;
+  final bool autofocus;
 
-  const MessageField(this.con, this.func, {super.key});
+  const MessageField(
+    this.con,
+    this.func, {
+    super.key,
+
+    /// if focus should be on this widget (showing keyboard as soon as this
+    /// widget is built)
+    this.autofocus = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +24,7 @@ class MessageField extends StatelessWidget {
       maxLines: 4,
       maxLengthEnforcement: MaxLengthEnforcement.enforced,
       controller: con,
-      autofocus: true,
+      autofocus: autofocus,
       onEditingComplete: func,
       decoration: InputDecoration(
           counterText: '',

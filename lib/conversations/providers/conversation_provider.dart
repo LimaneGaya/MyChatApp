@@ -45,6 +45,7 @@ class ConversationNotifier extends StateNotifier<List<Conversation>> {
         builder: (context) => MessengerScreen(id),
       ),
     );
+    getConversations();
   }
 
   void deleteConversation(String id) async {

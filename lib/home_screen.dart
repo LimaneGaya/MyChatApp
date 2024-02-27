@@ -34,11 +34,18 @@ class HomeScreen extends ConsumerStatefulWidget {
 //TODO:add matching system
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   int index = 0;
+  final PageController pageCont = PageController(initialPage: 0);
   @override
   void initState() {
     super.initState();
     if (kIsWeb || Platform.isAndroid) ref.read(firebaseMessagingProvider);
     startFirebaseServices();
+  }
+
+  @override
+  void dispose() {
+    pageCont.dispose();
+    super.dispose();
   }
 
   startFirebaseServices() async {
@@ -162,35 +169,39 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ],
             )
           : null,
-      body: IndexedStack(
-        index: index,
+      body: PageView(
+        controller: pageCont,
+        onPageChanged: (value) => setState(() => index = value),
         children: const [
           UsersScreen(),
           ConversationsScreen(),
           GeminiScreen(),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
+      bottomNavigationBar: NavigationBar(
         backgroundColor: color,
-        currentIndex: index,
-        onTap: (value) => setState(() => index = value),
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(index == 0 ? Icons.person : Icons.person_outline),
+        selectedIndex: index,
+        onDestinationSelected: (value) => setState(() {
+          index = value;
+          pageCont.animateToPage(value,
+              duration: const Duration(milliseconds: 300), curve: Curves.ease);
+        }),
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.person_outline),
+            selectedIcon: Icon(Icons.person),
             label: 'People',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(index == 1 ? Icons.message : Icons.message_outlined),
+          NavigationDestination(
+            icon: Icon(Icons.message_outlined),
+            selectedIcon: Icon(Icons.message),
             label: 'Chats',
           ),
-          BottomNavigationBarItem(
-            icon: Text(
-              'AI',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: index == 2 ? FontWeight.bold : FontWeight.normal,
-              ),
-            ),
+          NavigationDestination(
+            icon: Text('AI',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
+            selectedIcon: Text('AI',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             label: 'Advices',
           ),
         ],

@@ -93,82 +93,80 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final color = Theme.of(context).colorScheme.onSecondary;
     return Scaffold(
       backgroundColor: color,
-      appBar: (index != 2)
-          ? AppBar(
-              backgroundColor: color,
-              centerTitle: true,
-              title: Text(
-                'Chatly',
-                style: GoogleFonts.tangerine(
-                  textStyle: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 40,
-                    color: Colors.purple,
-                  ),
-                ),
-              ),
-              actions: [
-                PopupMenuButton(
-                  icon: const Icon(Icons.settings),
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      onTap: setRandomColor,
-                      child: const Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(Icons.color_lens_rounded),
-                          SizedBox(width: 10),
-                          Text('Change color'),
-                        ],
-                      ),
-                    ),
-                    PopupMenuItem(
-                        onTap: changeTheme,
-                        child: ref.watch(brightness) == Brightness.dark
-                            ? const Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.nightlight),
-                                  SizedBox(width: 10),
-                                  Text('Dark mode'),
-                                ],
-                              )
-                            : const Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.sunny),
-                                  SizedBox(width: 10),
-                                  Text('Light mode'),
-                                ],
-                              )),
-                    PopupMenuItem(
-                      onTap: showFeedBack,
-                      child: const Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(Icons.bug_report),
-                          SizedBox(width: 10),
-                          Text('Report a bug / Request a feature'),
-                        ],
-                      ),
-                    ),
-                    PopupMenuItem(
-                      onTap: () async {
-                        ref.read(authStateProvider.notifier).logout(context);
-                      },
-                      child: const Row(
-                        children: [
-                          Icon(Icons.logout),
-                          SizedBox(width: 10),
-                          Text('Logout'),
-                        ],
-                      ),
-                    )
+      appBar: AppBar(
+        backgroundColor: color,
+        centerTitle: true,
+        title: Text(
+          (index != 2) ? 'Chatly' : 'AI',
+          style: GoogleFonts.tangerine(
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 40,
+              color: Colors.purple,
+            ),
+          ),
+        ),
+        actions: [
+          PopupMenuButton(
+            icon: const Icon(Icons.settings),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                onTap: setRandomColor,
+                child: const Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(Icons.color_lens_rounded),
+                    SizedBox(width: 10),
+                    Text('Change color'),
                   ],
                 ),
-              ],
-            )
-          : null,
+              ),
+              PopupMenuItem(
+                  onTap: changeTheme,
+                  child: ref.watch(brightness) == Brightness.dark
+                      ? const Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(Icons.nightlight),
+                            SizedBox(width: 10),
+                            Text('Dark mode'),
+                          ],
+                        )
+                      : const Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(Icons.sunny),
+                            SizedBox(width: 10),
+                            Text('Light mode'),
+                          ],
+                        )),
+              PopupMenuItem(
+                onTap: showFeedBack,
+                child: const Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(Icons.bug_report),
+                    SizedBox(width: 10),
+                    Text('Report a bug / Request a feature'),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                onTap: () async {
+                  ref.read(authStateProvider.notifier).logout(context);
+                },
+                child: const Row(
+                  children: [
+                    Icon(Icons.logout),
+                    SizedBox(width: 10),
+                    Text('Logout'),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
       body: PageView(
         controller: pageCont,
         onPageChanged: (value) => setState(() => index = value),

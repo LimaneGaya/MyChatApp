@@ -29,7 +29,6 @@ class _GeminiScreenState extends State<GeminiScreen> {
       SafetySetting(HarmCategory.harassment, HarmBlockThreshold.high),
       SafetySetting(HarmCategory.sexuallyExplicit, HarmBlockThreshold.none),
     ],
-    generationConfig: GenerationConfig(maxOutputTokens: 200),
     apiKey: Env.ia,
   );
 
@@ -40,6 +39,7 @@ class _GeminiScreenState extends State<GeminiScreen> {
   TextEditingController textController = TextEditingController();
   List<GeminiMessage> messages = [];
   bool isLoading = false;
+  final ScrollController scrollCont = ScrollController();
 
   @override
   void initState() {
@@ -51,7 +51,6 @@ class _GeminiScreenState extends State<GeminiScreen> {
         SafetySetting(HarmCategory.harassment, HarmBlockThreshold.high),
         SafetySetting(HarmCategory.sexuallyExplicit, HarmBlockThreshold.none),
       ],
-      generationConfig: GenerationConfig(maxOutputTokens: 200),
     );
     if (isAndroid) {
       _bannerAd = AdMob.initializeAd();
@@ -78,6 +77,13 @@ class _GeminiScreenState extends State<GeminiScreen> {
       } else {
         setState(() {
           isLoading = false;
+          WidgetsBinding.instance.addPostFrameCallback(
+            (_) => scrollCont.animateTo(
+              scrollCont.position.maxScrollExtent,
+              duration: const Duration(seconds: 4),
+              curve: Curves.linear,
+            ),
+          );
         });
       }
     } catch (e) {
@@ -96,20 +102,13 @@ class _GeminiScreenState extends State<GeminiScreen> {
   @override
   void dispose() {
     textController.dispose();
+    scrollCont.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.onSecondary,
-        centerTitle: true,
-        title: const Text(
-          'AI',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
@@ -118,6 +117,7 @@ class _GeminiScreenState extends State<GeminiScreen> {
               AdMob.getAdWidget(_bannerAd!),
             Expanded(
               child: ListView.builder(
+                controller: scrollCont,
                 itemCount: chat.history.length,
                 itemBuilder: (context, index) {
                   final mess = chat.history.elementAt(index);
@@ -128,8 +128,8 @@ class _GeminiScreenState extends State<GeminiScreen> {
                         .whereType<TextPart>()
                         .map<String>((e) => e.text)
                         .join(''),
-                    leadingText: me ? null : 'AI',
-                    trailingText: me ? 'Me' : null,
+                    leadingText: null,
+                    trailingText: null,
                   );
                 },
               ),

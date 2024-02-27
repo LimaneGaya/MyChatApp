@@ -29,6 +29,7 @@ class _GeminiScreenState extends State<GeminiScreen> {
       SafetySetting(HarmCategory.harassment, HarmBlockThreshold.high),
       SafetySetting(HarmCategory.sexuallyExplicit, HarmBlockThreshold.none),
     ],
+    generationConfig: GenerationConfig(maxOutputTokens: 200),
     apiKey: Env.ia,
   );
 
@@ -50,6 +51,7 @@ class _GeminiScreenState extends State<GeminiScreen> {
         SafetySetting(HarmCategory.harassment, HarmBlockThreshold.high),
         SafetySetting(HarmCategory.sexuallyExplicit, HarmBlockThreshold.none),
       ],
+      generationConfig: GenerationConfig(maxOutputTokens: 200),
     );
     if (isAndroid) {
       _bannerAd = AdMob.initializeAd();

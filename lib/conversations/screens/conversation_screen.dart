@@ -13,7 +13,7 @@ class ConversationsScreen extends ConsumerWidget {
       itemCount: conversations.length,
       itemBuilder: (context, index) {
         final con = conversations[index];
-        final names = con.participantData.map((e) => e.username).join(', ');
+        final names = con.participantData.map((e) => e.name).join(', ');
         return InkWell(
           borderRadius: BorderRadius.circular(15),
           onTap: () => ref

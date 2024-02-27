@@ -55,7 +55,7 @@ class UserTile extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            user.username,
+                            user.name,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               shadows: getShadows(context),
@@ -79,7 +79,8 @@ class UserTile extends StatelessWidget {
                           vertical: 2,
                         ),
                         child: Text(
-                          le.getFlagEmoji(countryCode: user.countryCode) ?? '???',
+                          le.getFlagEmoji(countryCode: user.countryCode) ??
+                              '???',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,

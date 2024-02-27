@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'
@@ -10,7 +8,6 @@ import 'package:mychatapp/auth/widgets/auth_text_field.dart';
 import 'package:mychatapp/home_screen.dart';
 import 'package:mychatapp/auth/provider/auth_provider.dart'
     show authStateProvider;
-import 'package:http/http.dart ' as http;
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -30,25 +27,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   void initState() {
     super.initState();
-    getPosition();
-  }
-
-  void getPosition() async {
-    var url = Uri.http('ip-api.com', 'json', {'fields': 'status,countryCode'});
-    http.get(url).then((value) {
-      if (value.statusCode == 200) {
-        final decoded = jsonDecode(value.body);
-        if (decoded['status'] == 'success') {
-          country = ['countryCode'] as String;
-        } else {
-          getPosition();
-        }
-      } else {
-        getPosition();
-      }
-    }).onError((error, stackTrace) {
-      debugPrint(error.toString());
-    });
   }
 
   @override
@@ -139,7 +117,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       isMan: isMale,
                                       age: int.parse(ageController.text),
                                       passwordConfirm: passwordController.text,
-                                      countryCode: country,
                                     );
 
                                 if (isLoggedin && context.mounted) {

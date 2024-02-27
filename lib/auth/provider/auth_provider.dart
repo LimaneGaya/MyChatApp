@@ -6,6 +6,7 @@ import 'package:mychatapp/auth/screens/login_screen.dart';
 import 'package:mychatapp/services/pocketbase.dart';
 import 'package:pocketbase/pocketbase.dart' show RecordModel;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 final authStateProvider = StateNotifierProvider<AuthStateNotifier, bool>(
   (ref) => AuthStateNotifier(sharedPrefs: ref.watch(sharedPrefProvider).value!),
@@ -68,9 +69,9 @@ class AuthStateNotifier extends StateNotifier<bool> {
     required int age,
     required bool isMan,
     String? name,
-    required String countryCode,
   }) async {
     state = true;
+    final String country = await getPosition();
     final body = <String, dynamic>{
       //"email": "test@example.com",
       "password": password,
@@ -79,11 +80,30 @@ class AuthStateNotifier extends StateNotifier<bool> {
       "lastSeen": DateTime.now().toUtc().toString(),
       "gender": isMan ? 'man' : 'woman',
       "age": age,
-      "country_code": countryCode,
+      "country_code": country,
     };
 
     final record = await _pb.collection('users').create(body: body);
     return await login(context, record.data['username'], password);
+  }
+
+  Future<String> getPosition() async {
+    var url = Uri.http('ip-api.com', 'json', {'fields': 'status,countryCode'});
+    return await http.get(url).then((value) {
+      if (value.statusCode == 200) {
+        final decoded = jsonDecode(value.body);
+        if (decoded['status'] == 'success') {
+          return decoded['countryCode'] as String;
+        } else {
+          return '';
+        }
+      } else {
+        return '';
+      }
+    }).onError((error, stackTrace) {
+      debugPrint(error.toString());
+      return '';
+    });
   }
 
   Future<void> logout(BuildContext context) async {

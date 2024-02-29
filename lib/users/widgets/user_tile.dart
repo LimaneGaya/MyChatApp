@@ -13,6 +13,7 @@ class UserTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final shadow = getShadows(context);
     return GridTile(
       child: Container(
         margin: const EdgeInsets.all(5),
@@ -47,8 +48,8 @@ class UserTile extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Theme.of(context)
                             .colorScheme
-                            .background
-                            .withOpacity(0.7),
+                            .onTertiary
+                            .withOpacity(0.75),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -58,7 +59,7 @@ class UserTile extends StatelessWidget {
                             user.name,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              shadows: getShadows(context),
+                              shadows: shadow,
                             ),
                           ),
                           Text(
@@ -81,7 +82,8 @@ class UserTile extends StatelessWidget {
                         child: Text(
                           le.getFlagEmoji(countryCode: user.countryCode) ??
                               '???',
-                          style: const TextStyle(
+                          style: TextStyle(
+                            shadows: shadow,
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
                           ),

@@ -8,6 +8,7 @@ import 'package:mychatapp/conversations/screens/conversation_screen.dart';
 import 'package:mychatapp/auth/provider/auth_provider.dart'
     show authStateProvider;
 import 'package:mychatapp/gemini/screen/gemini_screen.dart';
+import 'package:mychatapp/match/screen/match_screen.dart';
 import 'package:mychatapp/services/firebase_messaging.dart';
 import 'package:mychatapp/services/pocketbase.dart';
 import 'package:mychatapp/users/screens/users_screen.dart';
@@ -31,7 +32,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 //TODO:fix gemini not working with maxtoken
-//TODO:add matching system
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   int index = 0;
   final PageController pageCont = PageController(initialPage: 0);
@@ -173,6 +173,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         children: const [
           UsersScreen(),
           ConversationsScreen(),
+          MatchScreen(),
           GeminiScreen(),
         ],
       ),
@@ -194,6 +195,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             icon: Icon(Icons.message_outlined),
             selectedIcon: Icon(Icons.message),
             label: 'Chats',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.person_search_outlined),
+            selectedIcon: Icon(Icons.person_search),
+            label: 'Match',
           ),
           NavigationDestination(
             icon: Text('AI',

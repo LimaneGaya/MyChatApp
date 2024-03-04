@@ -151,7 +151,7 @@ class PB {
     final result = await pb.collection('users').getList(
           perPage: fetchCount,
           sort: '@random',
-          //filter: 'gender = "${'women'}"',
+          filter: 'gender = "${'woman'}"',
         );
     return result.items;
   }

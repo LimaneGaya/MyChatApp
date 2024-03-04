@@ -6,6 +6,8 @@ import 'package:mychatapp/services/pocketbase.dart';
 final matchProvider = ChangeNotifierProvider<MatchChangeNotifier>(
   (ref) => MatchChangeNotifier(),
 );
+final userImagesProvider = FutureProvider.family
+    .autoDispose((ref, String id) => PB.getUserDetails(id));
 
 class MatchChangeNotifier extends ChangeNotifier {
   int index = 0;

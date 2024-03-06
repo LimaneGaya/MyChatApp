@@ -13,17 +13,9 @@ class MatchScreen extends ConsumerStatefulWidget {
 
 class _MatchScreenState extends ConsumerState<MatchScreen> {
   @override
-  void initState() {
-    super.initState();
-    ref.read(matchProvider).getMatches();
-  }
-
-//TODO: Move All the logic to provider (changing sceen reset index)
-  @override
   Widget build(BuildContext context) {
-    final matches = ref.watch(matchProvider.select((v) => v.matches));
-    final index = ref.watch(matchProvider.select((v) => v.index));
-    if (matches.isEmpty || index >= matches.length) {
+    final match = ref.watch(matchProvider);
+    if (match == null) {
       return const Center(child: CircularProgressIndicator());
     }
     return Column(
@@ -35,15 +27,15 @@ class _MatchScreenState extends ConsumerState<MatchScreen> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
           ),
-          child: Image.network(matches[index].avatar, fit: BoxFit.contain),
+          child: Image.network(match.avatar, fit: BoxFit.contain),
         ),
         Text(
-          "${matches[index].name} ${matches[index].age} "
-          "${le.getFlagEmoji(countryCode: matches[index].countryCode)}",
+          "${match.name} ${match.age} "
+          "${le.getFlagEmoji(countryCode: match.countryCode)}",
           style: Theme.of(context).textTheme.titleLarge,
         ),
         Expanded(
-          child: ref.watch(userImagesProvider(matches[index].id)).when(
+          child: ref.watch(userImagesProvider(match.id)).when(
                 data: (data) {
                   final listImages = data.data['images'] as List;
                   return ListView.builder(
@@ -74,13 +66,13 @@ class _MatchScreenState extends ConsumerState<MatchScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ElevatedButton.icon(
-              onPressed: ref.read(matchProvider).dislike,
+              onPressed: ref.read(matchProvider.notifier).dislike,
               icon: const Icon(Icons.close),
               label: const Text('Dislike'),
               iconAlignment: IconAlignment.end,
             ),
             ElevatedButton.icon(
-              onPressed: ref.read(matchProvider).like,
+              onPressed: ref.read(matchProvider.notifier).like,
               icon: const Icon(Icons.check),
               label: const Text('Like  '),
             ),

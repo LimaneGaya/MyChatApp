@@ -1,22 +1,29 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mychatapp/models/models.dart';
 import 'package:mychatapp/services/pocketbase.dart';
 
-final matchProvider = ChangeNotifierProvider<MatchChangeNotifier>(
-  (ref) => MatchChangeNotifier(),
+final matchProvider = StateNotifierProvider<MatchStateNotifier, UserModel?>(
+  (ref) => MatchStateNotifier(),
 );
 final userImagesProvider = FutureProvider.family
     .autoDispose((ref, String id) => PB.getUserDetails(id));
 
-class MatchChangeNotifier extends ChangeNotifier {
+class MatchStateNotifier extends StateNotifier<UserModel?> {
   int index = 0;
   List<UserModel> matches = [];
+  bool _loading = false;
+
+  MatchStateNotifier() : super(null) {
+    getMatches();
+  }
 
   Future<void> getMatches() async {
+    _loading = true;
     final m = await PB.getMatches();
     matches = m.map((e) => UserModel.fromMap(e.toJson())).toList();
-    notifyListeners();
+    index = 0;
+    state = matches[index];
+    _loading = false;
   }
 
   void like() async {
@@ -31,11 +38,12 @@ class MatchChangeNotifier extends ChangeNotifier {
 
   void next() async {
     index++;
-    notifyListeners();
 
-    if (index >= matches.length - 1) {
-      await getMatches();
-      index = 0;
+    if (index >= matches.length - 1 && !_loading) {
+      state = null;
+      return getMatches();
     }
+
+    state = matches[index];
   }
 }

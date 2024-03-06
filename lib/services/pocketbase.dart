@@ -147,7 +147,7 @@ class PB {
   }
 
   static Future<List<RecordModel>> getMatches() async {
-    print('getting matches');
+    debugPrint('getting matches');
     final result = await pb.collection('users').getList(
           perPage: fetchCount,
           sort: '@random',

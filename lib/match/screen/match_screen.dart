@@ -1,19 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mychatapp/match/provider/match_provider.dart';
 import 'package:mychatapp/services/pocketbase.dart';
 import 'package:locale_emoji/locale_emoji.dart' as le;
 
-class MatchScreen extends ConsumerStatefulWidget {
+class MatchScreen extends ConsumerWidget {
   const MatchScreen({super.key});
 
   @override
-  ConsumerState<MatchScreen> createState() => _MatchScreenState();
-}
-
-class _MatchScreenState extends ConsumerState<MatchScreen> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final match = ref.watch(matchProvider);
     if (match == null) {
       return const Center(child: CircularProgressIndicator());
@@ -27,7 +23,8 @@ class _MatchScreenState extends ConsumerState<MatchScreen> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
           ),
-          child: Image.network(match.avatar, fit: BoxFit.contain),
+          child:
+              CachedNetworkImage(imageUrl: match.avatar, fit: BoxFit.contain),
         ),
         Text(
           "${match.name} ${match.age} "
@@ -47,8 +44,8 @@ class _MatchScreenState extends ConsumerState<MatchScreen> {
                           data.collectionId,
                           data.collectionName,
                           data.data['images'][index]);
-                      return Image.network(
-                        url,
+                      return CachedNetworkImage(
+                        imageUrl: url,
                         fit: BoxFit.contain,
                       );
                     },

@@ -72,18 +72,15 @@ class AuthStateNotifier extends StateNotifier<bool> {
   }) async {
     state = true;
     final String country = await getPosition();
-    final body = <String, dynamic>{
-      //"email": "test@example.com",
-      "password": password,
-      "passwordConfirm": passwordConfirm,
-      "name": name,
-      "lastSeen": DateTime.now().toUtc().toString(),
-      "gender": isMan ? 'man' : 'woman',
-      "age": age,
-      "country_code": country,
-    };
-
-    final record = await _pb.collection('users').create(body: body);
+    final RecordModel record = await PB.register(
+      password,
+      passwordConfirm,
+      age,
+      isMan,
+      name,
+      country,
+    );
+    // ignore: use_build_context_synchronously
     return await login(context, record.data['username'], password);
   }
 

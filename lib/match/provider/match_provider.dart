@@ -27,6 +27,7 @@ class MatchStateNotifier extends StateNotifier<UserModel?> {
   }
 
   void like() async {
+    PB.setMatch(matches[index].id);
     print('like ${matches[index].name}');
     next();
   }
@@ -39,7 +40,7 @@ class MatchStateNotifier extends StateNotifier<UserModel?> {
   void next() async {
     index++;
 
-    if (index >= matches.length - 1 && !_loading) {
+    if (index >= matches.length && !_loading) {
       state = null;
       return getMatches();
     }

@@ -1,8 +1,8 @@
+import 'package:image_picker/image_picker.dart';
 import 'package:mychatapp/services/pocketbase_web.dart'
     if (dart.library.io) 'package:mychatapp/services/pocketbase_none_web.dart'
     as pocket;
 import 'package:flutter/foundation.dart' show Uint8List, debugPrint;
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:http/http.dart' show MultipartFile;
 import 'package:http_parser/http_parser.dart' show MediaType;
 import 'package:pocketbase/pocketbase.dart';
@@ -113,19 +113,13 @@ class PB {
   }
 
   static Future<void> uploadReport(String content, Uint8List image) async {
-    var ima = await FlutterImageCompress.compressWithList(image,
-        minHeight: 720,
-        minWidth: 720,
-        quality: 15,
-        format: CompressFormat.webp);
-
     List<MultipartFile> file = [];
 
     file.add(MultipartFile.fromBytes(
       'image',
-      ima,
-      filename: '${DateTime.now().toUtc().microsecondsSinceEpoch}.webp',
-      contentType: MediaType('image', 'webp'),
+      image,
+      filename: '${DateTime.now().toUtc().microsecondsSinceEpoch}.png',
+      contentType: MediaType('image', 'png'),
     ));
 
     try {
@@ -154,5 +148,36 @@ class PB {
           //filter: 'gender = "${'woman'}"',
         );
     return result.items;
+  }
+
+  static Future<RecordModel> setMatch(String id) async {
+    return await pb.collection('matches').create(
+      body: {
+        "user": pb.authStore.model.id,
+        "match": id,
+      },
+    );
+  }
+
+  static Future<RecordModel> register(
+    String password,
+    String passwordConfirm,
+    int age,
+    bool isMan,
+    String? name,
+    String country,
+  ) async {
+    final body = <String, dynamic>{
+      //"email": "test@example.com",
+      "password": password,
+      "passwordConfirm": passwordConfirm,
+      "name": name,
+      "lastSeen": DateTime.now().toUtc().toString(),
+      "gender": isMan ? 'man' : 'woman',
+      "age": age,
+      "country_code": country,
+    };
+
+    return await pb.collection('users').create(body: body);
   }
 }

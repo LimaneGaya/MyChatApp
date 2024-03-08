@@ -9,6 +9,7 @@ import 'package:mychatapp/auth/provider/auth_provider.dart'
     show authStateProvider;
 import 'package:mychatapp/gemini/screen/gemini_screen.dart';
 import 'package:mychatapp/match/screen/match_screen.dart';
+import 'package:mychatapp/match/screen/matched_screen.dart';
 import 'package:mychatapp/services/firebase_messaging.dart';
 import 'package:mychatapp/services/pocketbase.dart';
 import 'package:mychatapp/users/screens/users_screen.dart';
@@ -174,6 +175,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           UsersScreen(),
           ConversationsScreen(),
           MatchScreen(),
+          MatchedScreen(),
           GeminiScreen(),
         ],
       ),
@@ -200,6 +202,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             icon: Icon(Icons.person_search_outlined),
             selectedIcon: Icon(Icons.person_search),
             label: 'Match',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.favorite_outline),
+            selectedIcon: Icon(Icons.favorite),
+            label: 'Likes',
           ),
           NavigationDestination(
             icon: Text('AI',

@@ -159,6 +159,17 @@ class PB {
     );
   }
 
+  static Future<List<RecordModel>> getMatchedList() async {
+    debugPrint('getting matched list');
+    final result = await pb.collection('matches').getList(
+          perPage: fetchCount,
+          sort: '-created',
+          filter: 'match = "${pb.authStore.model.id}"',
+          expand: 'user',
+        );
+    return result.items;
+  }
+
   static Future<RecordModel> register(
     String password,
     String passwordConfirm,

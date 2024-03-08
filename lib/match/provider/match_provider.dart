@@ -8,6 +8,13 @@ final matchProvider = StateNotifierProvider<MatchStateNotifier, UserModel?>(
 final userImagesProvider = FutureProvider.family
     .autoDispose((ref, String id) => PB.getUserDetails(id));
 
+final matchedListProvide = FutureProvider((ref) async {
+  final m = await PB.getMatchedList();
+  return m
+      .map((e) => UserModel.fromMap(e.expand['user']![0].toJson()))
+      .toList();
+});
+
 class MatchStateNotifier extends StateNotifier<UserModel?> {
   int index = 0;
   List<UserModel> matches = [];

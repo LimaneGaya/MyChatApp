@@ -92,13 +92,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme.onSecondary;
+    final useRail = MediaQuery.of(context).size.aspectRatio > 1;
     return Scaffold(
       backgroundColor: color,
       appBar: AppBar(
         backgroundColor: color,
         centerTitle: true,
         title: Text(
-          (index != 2) ? 'Chatly' : 'AI',
+          'Chatly',
           style: GoogleFonts.tangerine(
             textStyle: const TextStyle(
               fontWeight: FontWeight.bold,
@@ -168,55 +169,121 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ],
       ),
-      body: PageView(
-        controller: pageCont,
-        onPageChanged: (value) => setState(() => index = value),
-        children: const [
-          UsersScreen(),
-          ConversationsScreen(),
-          MatchScreen(),
-          MatchedScreen(),
-          GeminiScreen(),
-        ],
-      ),
-      bottomNavigationBar: NavigationBar(
-        backgroundColor: color,
-        selectedIndex: index,
-        onDestinationSelected: (value) => setState(() {
-          index = value;
-          pageCont.animateToPage(value,
-              duration: const Duration(milliseconds: 300), curve: Curves.ease);
-        }),
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
-            label: 'People',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.message_outlined),
-            selectedIcon: Icon(Icons.message),
-            label: 'Chats',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.person_search_outlined),
-            selectedIcon: Icon(Icons.person_search),
-            label: 'Match',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.favorite_outline),
-            selectedIcon: Icon(Icons.favorite),
-            label: 'Likes',
-          ),
-          NavigationDestination(
-            icon: Text('AI',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal)),
-            selectedIcon: Text('AI',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            label: 'Advices',
-          ),
-        ],
-      ),
+      body: useRail
+          ? Row(
+              children: [
+                NavigationRail(
+                  labelType: NavigationRailLabelType.all,
+                  backgroundColor: color,
+                  selectedIndex: index,
+                  onDestinationSelected: (value) => setState(() {
+                    index = value;
+                    pageCont.animateToPage(value,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.ease);
+                  }),
+                  destinations: const [
+                    NavigationRailDestination(
+                      icon: Icon(Icons.person_outline),
+                      selectedIcon: Icon(Icons.person),
+                      label: Text('People'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.message_outlined),
+                      selectedIcon: Icon(Icons.message),
+                      label: Text('Chats'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.person_search_outlined),
+                      selectedIcon: Icon(Icons.person_search),
+                      label: Text('Match'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.favorite_outline),
+                      selectedIcon: Icon(Icons.favorite),
+                      label: Text('Likes'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Text('AI',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.normal)),
+                      selectedIcon: Text('AI',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      label: Text('Advices'),
+                    ),
+                  ],
+                ),
+                const VerticalDivider(width: 2),
+                Expanded(
+                  child: PageView(
+                    controller: pageCont,
+                    onPageChanged: (value) => setState(() => index = value),
+                    children: const [
+                      UsersScreen(),
+                      ConversationsScreen(),
+                      MatchScreen(),
+                      MatchedScreen(),
+                      GeminiScreen(),
+                    ],
+                  ),
+                )
+              ],
+            )
+          : PageView(
+              controller: pageCont,
+              onPageChanged: (value) => setState(() => index = value),
+              children: const [
+                UsersScreen(),
+                ConversationsScreen(),
+                MatchScreen(),
+                MatchedScreen(),
+                GeminiScreen(),
+              ],
+            ),
+      bottomNavigationBar: useRail
+          ? null
+          : NavigationBar(
+              backgroundColor: color,
+              selectedIndex: index,
+              onDestinationSelected: (value) => setState(() {
+                index = value;
+                pageCont.animateToPage(value,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.ease);
+              }),
+              destinations: const [
+                NavigationDestination(
+                  icon: Icon(Icons.person_outline),
+                  selectedIcon: Icon(Icons.person),
+                  label: 'People',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.message_outlined),
+                  selectedIcon: Icon(Icons.message),
+                  label: 'Chats',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.person_search_outlined),
+                  selectedIcon: Icon(Icons.person_search),
+                  label: 'Match',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.favorite_outline),
+                  selectedIcon: Icon(Icons.favorite),
+                  label: 'Likes',
+                ),
+                NavigationDestination(
+                  icon: Text('AI',
+                      style: TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.normal)),
+                  selectedIcon: Text('AI',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  label: 'Advices',
+                ),
+              ],
+            ),
     );
   }
 }

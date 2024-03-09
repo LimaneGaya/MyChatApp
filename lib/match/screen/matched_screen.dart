@@ -12,6 +12,9 @@ class MatchedScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ref.watch(matchedListProvide).when(
           data: (data) {
+            if (data.isEmpty) {
+              return const Center(child: Text('No matches yet'));
+            }
             return ListView.builder(
               itemCount: data.length,
               itemBuilder: (context, index) {
@@ -55,10 +58,7 @@ class MatchedScreen extends ConsumerWidget {
           },
           error: (error, stackTrace) {
             debugPrint(error.toString());
-            return const Center(
-                child: Text('No matches yet',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20)));
+            return const Center(child: Text('Please refresh the page'));
           },
           loading: () => const Center(child: CircularProgressIndicator()),
         );

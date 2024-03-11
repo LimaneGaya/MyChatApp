@@ -35,10 +35,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.windows:
         return windows;
       case TargetPlatform.linux:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for linux - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       default:
         throw UnsupportedError(
           'DefaultFirebaseOptions are not supported for this platform.',
@@ -73,5 +70,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'mychatapp-lg.appspot.com',
     measurementId: 'G-J4V17W7Z1X',
   );
-
 }

@@ -16,6 +16,28 @@ class ConversationNotifier extends StateNotifier<List<Conversation>> {
   }
 
   void getConversations() async {
+    PB.subscribe(
+      'converstion',
+      (e) {
+        final con = Conversation.fromMap(e.record!.toJson());
+        if (e.action == "create") {
+          final conv = state;
+          conv.insert(0, con);
+          state = conv;
+        }
+        if (e.action == "delete") {
+          final conv = state;
+          conv.removeWhere((m) => m.id == con.id);
+          state = conv;
+        }
+        if (e.action == 'update') {
+          final conv = state;
+          final idx = conv.indexWhere((m) => m.id == con.id);
+          conv[idx] = con;
+          state = conv;
+        }
+      },
+    );
     final convs = await PB.getConversation();
     state = convs.map((e) => Conversation.fromMap(e.toJson())).toList();
   }
@@ -45,7 +67,6 @@ class ConversationNotifier extends StateNotifier<List<Conversation>> {
         builder: (context) => MessengerScreen(id),
       ),
     );
-    getConversations();
   }
 
   void deleteConversation(String id) async {

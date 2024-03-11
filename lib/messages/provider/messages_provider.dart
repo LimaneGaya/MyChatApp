@@ -24,7 +24,9 @@ class MessagesChangeNotifier extends ChangeNotifier {
   MessagesChangeNotifier({required this.id, this.smartReply}) {
     getMessages();
   }
-
+  //TODO: Move realtime conversation provider to HomeScreen init
+  //TODO: Add message realtime of conversation loading
+//TODO: add realtime to conversations and new conversation and realtime to every conversation
   Future<void> getMessages() async {
     PB.subscribe(
       'messages',

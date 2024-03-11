@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'
     show StateNotifierProvider, FutureProvider, StateNotifier;
-import 'package:mychatapp/auth/screens/login_screen.dart';
+import 'package:mychatapp/auth/screens/auth_screen.dart';
+import 'package:mychatapp/home_screen.dart';
 import 'package:mychatapp/services/pocketbase.dart';
 import 'package:pocketbase/pocketbase.dart' show RecordModel;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,7 +38,21 @@ class AuthStateNotifier extends StateNotifier<bool> {
   AuthStateNotifier({required SharedPreferences sharedPrefs})
       : _sharedPref = sharedPrefs,
         super(false);
+
   final _pb = PB.pb;
+
+  void authchanged(BuildContext context) {
+    _pb.authStore.onChange.listen((event) {
+      if (event.model?.id == null) {
+        logout(context);
+      } else {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+            (route) => false);
+      }
+    });
+  }
 
   Future<bool> login(
       BuildContext context, String userName, String password) async {
@@ -46,15 +61,23 @@ class AuthStateNotifier extends StateNotifier<bool> {
       final authData =
           await _pb.collection('users').authWithPassword(userName, password);
       if (authData.record != null) {
-        authData.record!;
-        final data =
-            jsonEncode({'token': authData.token, 'record': authData.record});
+        final data = jsonEncode({
+          'token': authData.token,
+          'record': authData.record,
+        });
         await _sharedPref.setString('auth', data);
+      } else {
+        showDialog(
+            // ignore: use_build_context_synchronously
+            context: context,
+            builder: (context) =>
+                const AlertDialog(content: Text('Wrong username or password')));
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Center(child: Text(e.toString()))));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Center(child: Text(e.toString())),
+        ));
       }
     }
 
@@ -111,7 +134,7 @@ class AuthStateNotifier extends StateNotifier<bool> {
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => const LoginScreen(),
+            builder: (context) => const AuthScreen(),
           ),
           (route) => false);
     }

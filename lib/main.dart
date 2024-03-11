@@ -4,9 +4,9 @@ import 'package:firebase_analytics/firebase_analytics.dart'
 import 'package:firebase_core/firebase_core.dart' show Firebase;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mychatapp/auth/screens/auth_screen.dart';
 import 'package:mychatapp/firebase_options.dart';
 import 'package:mychatapp/home_screen.dart';
-import 'package:mychatapp/auth/screens/login_screen.dart';
 import 'package:mychatapp/auth/provider/auth_provider.dart';
 
 void main() async {
@@ -46,7 +46,7 @@ class InitialScreen extends ConsumerWidget {
     return ref.watch(sharedPrefProvider).when(
         data: (data) {
           return ref.watch(authCheckifLoginIsValid).when(
-              data: (data) => data ? const HomeScreen() : const LoginScreen(),
+              data: (data) => data ? const HomeScreen() : const AuthScreen(),
               error: (error, stackTrace) =>
                   Scaffold(body: Center(child: Text(error.toString()))),
               loading: () => const Scaffold(

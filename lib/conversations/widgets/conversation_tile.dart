@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mychatapp/consts/consts.dart';
+import 'package:mychatapp/messages/provider/messages_provider.dart';
 import 'package:mychatapp/models/models.dart';
 
-class ConversationTile extends StatelessWidget {
+class ConversationTile extends ConsumerStatefulWidget {
   const ConversationTile({
     super.key,
     required this.names,
@@ -12,6 +14,17 @@ class ConversationTile extends StatelessWidget {
 
   final String names;
   final Conversation con;
+
+  @override
+  ConsumerState<ConversationTile> createState() => _ConversationTileState();
+}
+
+class _ConversationTileState extends ConsumerState<ConversationTile> {
+  @override
+  initState() {
+    super.initState();
+    ref.read(messagesStateProvider(widget.con.id));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +37,13 @@ class ConversationTile extends StatelessWidget {
       height: 60,
       child: Row(
         children: [
-          Text(names,
+          Text(widget.names,
               style: TextStyle(
                 fontSize: 20,
                 shadows: getShadows(context),
               )),
           const Spacer(),
-          ...con.participantData.map(
+          ...widget.con.participantData.map(
             (e) {
               final image = e.avatar;
               return CircleAvatar(

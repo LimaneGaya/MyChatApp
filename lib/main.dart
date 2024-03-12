@@ -8,6 +8,7 @@ import 'package:mychatapp/auth/screens/auth_screen.dart';
 import 'package:mychatapp/firebase_options.dart';
 import 'package:mychatapp/home_screen.dart';
 import 'package:mychatapp/auth/provider/auth_provider.dart';
+import 'package:mychatapp/onboarding_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,6 +46,9 @@ class InitialScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ref.watch(sharedPrefProvider).when(
         data: (data) {
+          if (data.getBool('onboarding') == null) {
+            return OnboadringScreen();
+          }
           return ref.watch(authCheckifLoginIsValid).when(
               data: (data) => data ? const HomeScreen() : const AuthScreen(),
               error: (error, stackTrace) =>

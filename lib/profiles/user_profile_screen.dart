@@ -143,9 +143,9 @@ class UserProfile extends StatelessWidget {
                   );
                 },
                 error: (error, stackTrace) {
-                  return TabBarView(children: [
-                    Center(child: Text(error.toString())),
-                    Center(child: Text(error.toString())),
+                  return const TabBarView(children: [
+                    Center(child: Text("Nothing to show here")),
+                    Center(child: Text("Nothing to show here")),
                   ]);
                 },
                 loading: () {

@@ -89,7 +89,7 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
                         ref
                             .read(messagesStateProvider(widget._conversationID)
                                 .notifier)
-                            .fetchNextPage(index ~/ PB.fetchCount);
+                            .fetchNextPage(index ~/ PB.fetchCount + 1);
                         return const Center(child: CircularProgressIndicator());
                       }
                       if (index > msgs.length) return null;

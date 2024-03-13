@@ -174,17 +174,35 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                           ),
                           const SizedBox(height: 10),
                           AuthTextField(
-                              con: ageController,
-                              isNumber: true,
-                              hintText: 'Age',
-                              icon: const Icon(Icons.person_3),
-                              length: 2),
+                            con: ageController,
+                            isNumber: true,
+                            hintText: 'Age',
+                            icon: const Icon(Icons.person_3),
+                            length: 2,
+                          ),
                           const SizedBox(height: 10),
                           Align(
                             alignment: Alignment.centerRight,
                             child: ElevatedButton(
                               child: const Text('Register'),
                               onPressed: () async {
+                                final parse = int.tryParse(ageController.text);
+                                if (parse == null) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => const AlertDialog(
+                                          content: Text(
+                                              'Please enter a valid number for age.')));
+                                  return;
+                                }
+                                if (parse < 18) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => const AlertDialog(
+                                          content: Text(
+                                              'You have to be 18 or older to register.')));
+                                  return;
+                                }
                                 final isLoggedin = await ref
                                     .read(authStateProvider.notifier)
                                     .register(
@@ -192,7 +210,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                                       password: passwordController.text,
                                       name: userNameController.text,
                                       isMan: isMale,
-                                      age: int.parse(ageController.text),
+                                      age: parse,
                                       passwordConfirm: passwordController.text,
                                     );
 

@@ -366,6 +366,46 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.1"
+  flutter_image_compress:
+    dependency: "direct main"
+    description:
+      name: flutter_image_compress
+      sha256: f159d2e8c4ed04b8e36994124fd4a5017a0f01e831ae3358c74095c340e9ae5e
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
+  flutter_image_compress_common:
+    dependency: transitive
+    description:
+      name: flutter_image_compress_common
+      sha256: "0756440ddc647696ebc56f393be8c1055e81ef1c1f58986fb1f078af393637d8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
+  flutter_image_compress_macos:
+    dependency: transitive
+    description:
+      name: flutter_image_compress_macos
+      sha256: fea1e3d71150d03373916b832c49b5c2f56c3e7e13da82a929274a2c6f88251e
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
+  flutter_image_compress_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_image_compress_platform_interface
+      sha256: "87d0964ae72ccab1cdfbc32f825ce6b57bf87fd3576a2842bf38189d392163b8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
+  flutter_image_compress_web:
+    dependency: transitive
+    description:
+      name: flutter_image_compress_web
+      sha256: "1c8cd505be95cb2e0573cdd9d236ac0ba39c166b8df06ef1823f2a17b60e1253"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.4"
   flutter_launcher_icons:
     dependency: "direct main"
     description:

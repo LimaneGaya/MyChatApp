@@ -1,3 +1,4 @@
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mychatapp/services/pocketbase_web.dart'
     if (dart.library.io) 'package:mychatapp/services/pocketbase_none_web.dart'
@@ -113,14 +114,20 @@ class PB {
   }
 
   static Future<void> uploadReport(String content, Uint8List image) async {
+    var result = await FlutterImageCompress.compressWithList(
+      image,
+      format: CompressFormat.webp,
+      minHeight: 1024,
+      minWidth: 1024,
+      quality: 15,
+    );
     List<MultipartFile> file = [];
 
-    file.add(MultipartFile.fromBytes(
-      'image',
-      image,
-      filename: '${DateTime.now().toUtc().microsecondsSinceEpoch}.png',
-      contentType: MediaType('image', 'png'),
-    ));
+    file.add(
+      MultipartFile.fromBytes('image', result,
+          filename: '${DateTime.now().toUtc().microsecondsSinceEpoch}.webp',
+          contentType: MediaType('image', 'webp')),
+    );
 
     try {
       await pb.collection('reports').create(

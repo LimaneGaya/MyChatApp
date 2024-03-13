@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 import 'dart:math' show Random;
+import 'dart:ui';
 import 'package:feedback/feedback.dart' show BetterFeedback, UserFeedback;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'
@@ -95,8 +96,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final useRail = MediaQuery.of(context).size.aspectRatio > 1;
     return Scaffold(
       backgroundColor: color,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: color,
+        backgroundColor: color.withOpacity(0.7),
+        flexibleSpace: ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+            child: Container(color: Colors.transparent),
+          ),
+        ),
         centerTitle: true,
         title: Text(
           'Chatly',

@@ -17,7 +17,7 @@ class UsersScreen extends ConsumerWidget {
           if (isDoneFetching) return null;
           ref
               .read(userStateProvider.notifier)
-              .getNextUsers(page: index ~/ PB.fetchCount);
+              .getNextUsers(page: index ~/ PB.fetchCount + 1);
           return const Center(child: CircularProgressIndicator());
         }
         if (index > users.length) return null;

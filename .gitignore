@@ -48,3 +48,5 @@ flutterfire_dev.exe
 .firebaserc
 commands.exe
 lib/services/env.dart
+flutterbuildpipeline/
+flutterbuildpipeline.exe

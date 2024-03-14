@@ -94,89 +94,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme.onSecondary;
     final useRail = MediaQuery.of(context).size.aspectRatio > 1;
+    final isTransparent = [0, 1].contains(index);
     return Scaffold(
       backgroundColor: color,
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: color.withOpacity(0.7),
-        flexibleSpace: ClipRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-            child: Container(color: Colors.transparent),
-          ),
-        ),
-        centerTitle: true,
-        title: Text(
-          'Chatly',
-          style: GoogleFonts.tangerine(
-            textStyle: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 40,
-              color: Colors.purple,
+      extendBodyBehindAppBar: isTransparent,
+      appBar: useRail
+          ? null
+          : AppBar(
+              backgroundColor: isTransparent ? color.withOpacity(0.7) : color,
+              flexibleSpace: isTransparent
+                  ? ClipRect(
+                      child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                          child: Container(color: Colors.transparent)))
+                  : null,
+              centerTitle: true,
+              title: Text(
+                'Chatly',
+                style: GoogleFonts.tangerine(
+                  textStyle: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 40,
+                    color: Colors.purple,
+                  ),
+                ),
+              ),
+              actions: [settings],
             ),
-          ),
-        ),
-        actions: [
-          PopupMenuButton(
-            icon: const Icon(Icons.settings),
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                onTap: setRandomColor,
-                child: const Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(Icons.color_lens_rounded),
-                    SizedBox(width: 10),
-                    Text('Change color'),
-                  ],
-                ),
-              ),
-              PopupMenuItem(
-                  onTap: changeTheme,
-                  child: ref.watch(brightness) == Brightness.dark
-                      ? const Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(Icons.nightlight),
-                            SizedBox(width: 10),
-                            Text('Dark mode'),
-                          ],
-                        )
-                      : const Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(Icons.sunny),
-                            SizedBox(width: 10),
-                            Text('Light mode'),
-                          ],
-                        )),
-              PopupMenuItem(
-                onTap: showFeedBack,
-                child: const Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(Icons.bug_report),
-                    SizedBox(width: 10),
-                    Text('Report a bug / Request a feature'),
-                  ],
-                ),
-              ),
-              PopupMenuItem(
-                onTap: () async {
-                  ref.read(authStateProvider.notifier).logout(context);
-                },
-                child: const Row(
-                  children: [
-                    Icon(Icons.logout),
-                    SizedBox(width: 10),
-                    Text('Logout'),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ],
-      ),
       body: useRail
           ? Row(
               children: [
@@ -190,6 +134,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.ease);
                   }),
+                  leading: RotatedBox(
+                    quarterTurns: 3,
+                    child: Text(
+                      'Chatly',
+                      style: GoogleFonts.tangerine(
+                        textStyle: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 40,
+                          color: Colors.purple,
+                        ),
+                      ),
+                    ),
+                  ),
+                  trailing: settings,
                   destinations: const [
                     NavigationRailDestination(
                       icon: Icon(Icons.person_outline),
@@ -294,4 +252,63 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
     );
   }
+
+  late final settings = PopupMenuButton(
+    icon: const Icon(Icons.settings),
+    itemBuilder: (context) => [
+      PopupMenuItem(
+        onTap: setRandomColor,
+        child: const Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(Icons.color_lens_rounded),
+            SizedBox(width: 10),
+            Text('Change color'),
+          ],
+        ),
+      ),
+      PopupMenuItem(
+          onTap: changeTheme,
+          child: ref.watch(brightness) == Brightness.dark
+              ? const Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(Icons.nightlight),
+                    SizedBox(width: 10),
+                    Text('Dark mode'),
+                  ],
+                )
+              : const Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(Icons.sunny),
+                    SizedBox(width: 10),
+                    Text('Light mode'),
+                  ],
+                )),
+      PopupMenuItem(
+        onTap: showFeedBack,
+        child: const Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(Icons.bug_report),
+            SizedBox(width: 10),
+            Text('Report a bug / Request a feature'),
+          ],
+        ),
+      ),
+      PopupMenuItem(
+        onTap: () async {
+          ref.read(authStateProvider.notifier).logout(context);
+        },
+        child: const Row(
+          children: [
+            Icon(Icons.logout),
+            SizedBox(width: 10),
+            Text('Logout'),
+          ],
+        ),
+      )
+    ],
+  );
 }

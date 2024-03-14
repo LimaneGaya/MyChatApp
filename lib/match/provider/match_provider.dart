@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mychatapp/models/models.dart';
 import 'package:mychatapp/services/pocketbase.dart';
@@ -35,12 +36,12 @@ class MatchStateNotifier extends StateNotifier<UserModel?> {
 
   void like() async {
     PB.setMatch(matches[index].id);
-    print('like ${matches[index].name}');
+    debugPrint('like ${matches[index].name}');
     next();
   }
 
   void dislike() {
-    print('dislike ${matches[index].name}');
+    debugPrint('dislike ${matches[index].name}');
     next();
   }
 

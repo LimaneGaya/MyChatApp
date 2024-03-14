@@ -13,9 +13,9 @@ class ConversationNotifier extends StateNotifier<List<Conversation>> {
   final pb = PB.pb;
   ConversationNotifier() : super([]) {
     getConversations();
+    subscribe();
   }
-
-  void getConversations() async {
+  void subscribe() {
     PB.subscribe(
       'converstion',
       (e) {
@@ -38,6 +38,9 @@ class ConversationNotifier extends StateNotifier<List<Conversation>> {
         }
       },
     );
+  }
+
+  void getConversations() async {
     final convs = await PB.getConversation();
     state = convs.map((e) => Conversation.fromMap(e.toJson())).toList();
   }
@@ -53,6 +56,7 @@ class ConversationNotifier extends StateNotifier<List<Conversation>> {
           "participants": [pb.authStore.model.id, userId]
         },
       );
+      getConversations();
       if (context.mounted) goToConversation(context, con.id);
     } else {
       final String id = state[idx].id;

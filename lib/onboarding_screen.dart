@@ -43,6 +43,14 @@ class OnboadringScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const Spacer(),
+                IconButton(
+                  onPressed: () {
+                    pageCont.nextPage(
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut);
+                  },
+                  icon: const Icon(Icons.chevron_right),
+                ),
                 Builder(
                   builder: (context) {
                     final List<Widget> wdgts = [];
@@ -94,6 +102,14 @@ class OnboadringScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const Spacer(),
+                IconButton(
+                  onPressed: () {
+                    pageCont.nextPage(
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut);
+                  },
+                  icon: const Icon(Icons.chevron_right),
+                ),
                 Builder(
                   builder: (context) {
                     final List<Widget> wdgts = [];
@@ -143,6 +159,14 @@ class OnboadringScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 const Spacer(),
+                IconButton(
+                  onPressed: () {
+                    pageCont.nextPage(
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut);
+                  },
+                  icon: const Icon(Icons.chevron_right),
+                ),
                 Builder(
                   builder: (context) {
                     final List<Widget> wdgts = [];

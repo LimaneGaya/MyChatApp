@@ -1,5 +1,4 @@
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:mychatapp/services/pocketbase_web.dart'
     if (dart.library.io) 'package:mychatapp/services/pocketbase_none_web.dart'
     as pocket;
@@ -72,7 +71,7 @@ class PB {
           perPage: fetchCount,
           filter: 'participants ~ "${pb.authStore.model.id}"',
           expand: 'participants',
-          sort: 'created',
+          sort: '-created',
         );
     return res.items;
   }

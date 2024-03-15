@@ -122,79 +122,81 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               actions: [settings],
             ),
       body: useRail
-          ? Row(
-              children: [
-                NavigationRail(
-                  labelType: NavigationRailLabelType.all,
-                  backgroundColor: color,
-                  selectedIndex: index,
-                  onDestinationSelected: (value) => setState(() {
-                    index = value;
-                    pageCont.animateToPage(value,
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.ease);
-                  }),
-                  leading: RotatedBox(
-                    quarterTurns: 3,
-                    child: Text(
-                      'Chatly',
-                      style: GoogleFonts.tangerine(
-                        textStyle: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 40,
-                          color: Colors.purple,
+          ? SingleChildScrollView(
+              child: Row(
+                children: [
+                  NavigationRail(
+                    labelType: NavigationRailLabelType.all,
+                    backgroundColor: color,
+                    selectedIndex: index,
+                    onDestinationSelected: (value) => setState(() {
+                      index = value;
+                      pageCont.animateToPage(value,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.ease);
+                    }),
+                    leading: RotatedBox(
+                      quarterTurns: 3,
+                      child: Text(
+                        'Chatly',
+                        style: GoogleFonts.tangerine(
+                          textStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 40,
+                            color: Colors.purple,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  trailing: settings,
-                  destinations: const [
-                    NavigationRailDestination(
-                      icon: Icon(Icons.person_outline),
-                      selectedIcon: Icon(Icons.person),
-                      label: Text('People'),
-                    ),
-                    NavigationRailDestination(
-                      icon: Icon(Icons.message_outlined),
-                      selectedIcon: Icon(Icons.message),
-                      label: Text('Chats'),
-                    ),
-                    NavigationRailDestination(
-                      icon: Icon(Icons.person_search_outlined),
-                      selectedIcon: Icon(Icons.person_search),
-                      label: Text('Match'),
-                    ),
-                    NavigationRailDestination(
-                      icon: Icon(Icons.favorite_outline),
-                      selectedIcon: Icon(Icons.favorite),
-                      label: Text('Likes'),
-                    ),
-                    NavigationRailDestination(
-                      icon: Text('AI',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.normal)),
-                      selectedIcon: Text('AI',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
-                      label: Text('Advices'),
-                    ),
-                  ],
-                ),
-                const VerticalDivider(width: 2),
-                Expanded(
-                  child: PageView(
-                    controller: pageCont,
-                    onPageChanged: (value) => setState(() => index = value),
-                    children: const [
-                      UsersScreen(),
-                      ConversationsScreen(),
-                      MatchScreen(),
-                      MatchedScreen(),
-                      GeminiScreen(),
+                    trailing: settings,
+                    destinations: const [
+                      NavigationRailDestination(
+                        icon: Icon(Icons.person_outline),
+                        selectedIcon: Icon(Icons.person),
+                        label: Text('People'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.message_outlined),
+                        selectedIcon: Icon(Icons.message),
+                        label: Text('Chats'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.person_search_outlined),
+                        selectedIcon: Icon(Icons.person_search),
+                        label: Text('Match'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.favorite_outline),
+                        selectedIcon: Icon(Icons.favorite),
+                        label: Text('Likes'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Text('AI',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.normal)),
+                        selectedIcon: Text('AI',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold)),
+                        label: Text('Advices'),
+                      ),
                     ],
                   ),
-                )
-              ],
+                  const VerticalDivider(width: 2),
+                  Expanded(
+                    child: PageView(
+                      controller: pageCont,
+                      onPageChanged: (value) => setState(() => index = value),
+                      children: const [
+                        UsersScreen(),
+                        ConversationsScreen(),
+                        MatchScreen(),
+                        MatchedScreen(),
+                        GeminiScreen(),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             )
           : PageView(
               controller: pageCont,

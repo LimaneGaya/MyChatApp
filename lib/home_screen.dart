@@ -94,7 +94,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme.onSecondary;
     final useRail = MediaQuery.of(context).size.aspectRatio > 1;
-    final isTransparent = [0, 1].contains(index);
+    final isTransparent = [0, 1, 3].contains(index);
     return Scaffold(
       backgroundColor: color,
       extendBodyBehindAppBar: isTransparent,

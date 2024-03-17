@@ -16,6 +16,7 @@ class GeminiNotifier extends StateNotifier<bool> {
       SafetySetting(HarmCategory.harassment, HarmBlockThreshold.high),
       SafetySetting(HarmCategory.sexuallyExplicit, HarmBlockThreshold.none),
     ],
+    generationConfig: GenerationConfig(maxOutputTokens: 200),
     apiKey: Env.ia,
   );
 
@@ -29,6 +30,7 @@ class GeminiNotifier extends StateNotifier<bool> {
         SafetySetting(HarmCategory.harassment, HarmBlockThreshold.high),
         SafetySetting(HarmCategory.sexuallyExplicit, HarmBlockThreshold.none),
       ],
+      generationConfig: GenerationConfig(maxOutputTokens: 200),
     );
     state = false;
   }

@@ -19,6 +19,7 @@ class MatchScreen extends ConsumerWidget {
       children: [
         Container(
           clipBehavior: Clip.antiAlias,
+          margin: const EdgeInsets.all(5.0),
           height: MediaQuery.of(context).size.height / 2,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),

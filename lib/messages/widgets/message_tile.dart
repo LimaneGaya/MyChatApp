@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:mychatapp/messages/widgets/interactive_image_view.dart';
 
 class MessageTile extends StatelessWidget {
@@ -48,7 +49,11 @@ class MessageTile extends StatelessWidget {
                         horizontal: 10,
                         vertical: 4,
                       ),
-                      child: Text(content),
+                      child: MarkdownBody(
+                        data: content,
+                        selectable: true,
+                        shrinkWrap: true,
+                      ),
                     ),
                   ),
                 ),

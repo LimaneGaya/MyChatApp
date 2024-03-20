@@ -134,16 +134,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.ease);
                   }),
-                  leading: Text(
-                    'Chatly',
-                    style: GoogleFonts.tangerine(
-                      textStyle: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
-                        color: Colors.purple,
-                      ),
-                    ),
-                  ),
+                  leading: MediaQuery.of(context).size.height <= 450
+                      ? null
+                      : RotatedBox(
+                          quarterTurns: 3,
+                          child: Text(
+                            'Chatly',
+                            style: GoogleFonts.tangerine(
+                              textStyle: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 40,
+                                color: Colors.purple,
+                              ),
+                            ),
+                          ),
+                        ),
                   trailing: settings,
                   destinations: const [
                     NavigationRailDestination(

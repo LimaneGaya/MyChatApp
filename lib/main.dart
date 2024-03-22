@@ -56,7 +56,8 @@ class InitialScreen extends ConsumerWidget {
               loading: () => const Scaffold(
                   body: Center(child: CircularProgressIndicator())));
         },
-        error: (error, stackTrace) => Text(error.toString()),
+        error: (error, stackTrace) => const Text(
+            'There was an error please check connection or try again later'),
         loading: () =>
             const Scaffold(body: Center(child: CircularProgressIndicator())));
   }

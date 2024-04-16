@@ -78,7 +78,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void showFeedBack() {
-    BetterFeedback.of(context).show((UserFeedback feedback) {
+    BetterFeedback.of(context).show((UserFeedback feedback) async {
       if (feedback.text != '') {
         PB.uploadReport(feedback.text, feedback.screenshot);
       } else {

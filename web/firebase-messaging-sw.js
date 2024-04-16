@@ -10,10 +10,7 @@ firebase.initializeApp({
     storageBucket: 'mychatapp-lg.appspot.com',
     measurementId: 'G-KFZ03MM9R9',
 });
-// Necessary to receive background messages:
 const messaging = firebase.messaging();
-
-// Optional:
 messaging.onBackgroundMessage((m) => {
   console.log("onBackgroundMessage", m);
 });

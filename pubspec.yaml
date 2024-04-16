@@ -29,16 +29,16 @@ dependencies:
   fetch_client: ^1.1.0-wasm
   timeago: ^3.6.1
   locale_emoji: ^0.2.1
-  google_generative_ai: ^0.2.2
+  google_generative_ai: ^0.3.0
   flutter_markdown: any
-  flutter_launcher_icons: ^0.13.1
-  flutter_image_compress: ^2.1.0
+  image: ^4.1.7
   
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.1
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true

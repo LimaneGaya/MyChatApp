@@ -1,4 +1,5 @@
-import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image/image.dart' as img;
+import 'package:image_picker/image_picker.dart';
 import 'package:mychatapp/services/pocketbase_web.dart'
     if (dart.library.io) 'package:mychatapp/services/pocketbase_none_web.dart'
     as pocket;
@@ -6,6 +7,7 @@ import 'package:flutter/foundation.dart' show Uint8List, debugPrint;
 import 'package:http/http.dart' show MultipartFile;
 import 'package:http_parser/http_parser.dart' show MediaType;
 import 'package:pocketbase/pocketbase.dart';
+import 'dart:math' as math;
 
 class PB {
   static PocketBase pb = pocket.pb;
@@ -112,20 +114,26 @@ class PB {
     return result;
   }
 
-  static Future<void> uploadReport(String content, Uint8List image) async {
-    var result = await FlutterImageCompress.compressWithList(
+  static Future<void> uploadReport(String content, Uint8List uImage) async {
+    img.Image? image = img.decodeImage(uImage);
+    img.quantize(image!);
+    image.exif.clear();
+    var scaleW = image.width / 1024;
+    var scaleH = image.height / 1024;
+    var scale = math.max(1.0, math.min(scaleW, scaleH));
+    image = img.copyResize(
       image,
-      format: CompressFormat.webp,
-      minHeight: 1024,
-      minWidth: 1024,
-      quality: 15,
+      width: image.width ~/ scale,
+      height: image.height ~/ scale,
     );
+    List<int> pngData = img.encodeJpg(image, quality: 25);
+
     List<MultipartFile> file = [];
 
     file.add(
-      MultipartFile.fromBytes('image', result,
-          filename: '${DateTime.now().toUtc().microsecondsSinceEpoch}.webp',
-          contentType: MediaType('image', 'webp')),
+      MultipartFile.fromBytes('image', pngData,
+          filename: '${DateTime.now().toUtc().microsecondsSinceEpoch}.jpg',
+          contentType: MediaType('image', 'jpg')),
     );
 
     try {

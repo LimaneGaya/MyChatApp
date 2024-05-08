@@ -25,7 +25,7 @@ dependencies:
   firebase_crashlytics: ^3.4.17
   firebase_performance: ^0.9.3+16
   firebase_remote_config: ^4.3.16
-  google_mlkit_smart_reply: ^0.9.0
+  google_mlkit_smart_reply: ^0.11.0
   fetch_client: ^1.1.0-wasm
   timeago: ^3.6.1
   locale_emoji: ^0.2.1

@@ -25,10 +25,8 @@
 
 <body>
   <script src="https://unpkg.com/pica/dist/pica.min.js"></script>
-  <script>
-    {{flutter_build_config}}
-    _flutter.loader.load();
-  </script>
+  <script src="flutter_bootstrap.js" async></script>
+
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", function () {

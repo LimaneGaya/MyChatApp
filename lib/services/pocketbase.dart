@@ -1,4 +1,5 @@
-import 'package:image/image.dart' as img;
+import 'package:image/image.dart'
+    show Image, decodeImage, encodeJpg, copyResize, quantize;
 import 'package:image_picker/image_picker.dart';
 import 'package:mychatapp/services/pocketbase_web.dart'
     if (dart.library.io) 'package:mychatapp/services/pocketbase_none_web.dart'
@@ -115,18 +116,18 @@ class PB {
   }
 
   static Future<void> uploadReport(String content, Uint8List uImage) async {
-    img.Image? image = img.decodeImage(uImage);
-    img.quantize(image!);
+    Image? image = decodeImage(uImage);
+    quantize(image!);
     image.exif.clear();
     var scaleW = image.width / 1024;
     var scaleH = image.height / 1024;
     var scale = math.max(1.0, math.min(scaleW, scaleH));
-    image = img.copyResize(
+    image = copyResize(
       image,
       width: image.width ~/ scale,
       height: image.height ~/ scale,
     );
-    List<int> pngData = img.encodeJpg(image, quality: 25);
+    List<int> pngData = encodeJpg(image, quality: 25);
 
     List<MultipartFile> file = [];
 

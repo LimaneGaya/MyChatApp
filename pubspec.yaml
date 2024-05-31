@@ -14,7 +14,6 @@ dependencies:
   image_picker: ^1.0.7
   pocketbase: ^0.18.1
   flutter_riverpod: ^2.4.9
-  google_mobile_ads: ^5.0.0
   shared_preferences: ^2.2.2
   feedback: ^3.0.0
   cached_network_image: ^3.3.1
@@ -32,6 +31,7 @@ dependencies:
   google_generative_ai: ^0.4.0
   flutter_markdown: any
   image: ^4.1.7
+  google_mobile_ads: ^5.1.0
   
 
 dev_dependencies:

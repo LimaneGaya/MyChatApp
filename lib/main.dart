@@ -3,12 +3,14 @@ import 'package:firebase_analytics/firebase_analytics.dart'
     show FirebaseAnalytics, FirebaseAnalyticsObserver;
 import 'package:firebase_core/firebase_core.dart' show Firebase;
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mychatapp/auth/screens/auth_screen.dart';
 import 'package:mychatapp/firebase_options.dart';
 import 'package:mychatapp/home_screen.dart';
 import 'package:mychatapp/auth/provider/auth_provider.dart';
 import 'package:mychatapp/onboarding_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +28,18 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-      title: 'My chat App',
+      title: 'MyChatApp',
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('fr'),
+        Locale('en'),
+        Locale('ar'),
+      ],
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(

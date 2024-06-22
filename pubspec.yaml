@@ -32,6 +32,9 @@ dependencies:
   flutter_markdown: any
   image: ^4.1.7
   google_mobile_ads: ^5.1.0
+  flutter_localizations:
+    sdk: flutter
+  intl: any
   
 
 dev_dependencies:
@@ -41,4 +44,5 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
 
 flutter:
+  generate: true
   uses-material-design: true

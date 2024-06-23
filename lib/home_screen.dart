@@ -23,8 +23,11 @@ import 'package:google_mobile_ads/google_mobile_ads.dart' show MobileAds;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+final themeColor = StateProvider<Color>((ref) => Colors.blue);
 
-final themeColor = StateProvider<Color>((ref) => Colors.pink);
+final localProvider = StateProvider<Locale>((ref) {
+  return const Locale('ar');
+});
 
 final brightness = StateProvider<Brightness>((ref) => Brightness.dark);
 
@@ -86,8 +89,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       } else {
         showDialog(
             context: context,
-            builder: (context) =>
-                const AlertDialog(content: Text('Please enter feedback')));
+            builder: (context) => AlertDialog(
+                content: Text(AppLocalizations.of(context)!.enter_feedback)));
       }
     });
   }
@@ -121,7 +124,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 ),
               ),
-              actions: [settings],
+              actions: [...settings],
             ),
       body: useRail
           ? Row(
@@ -151,36 +154,37 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             ),
                           ),
                         ),
-                  trailing: settings,
-                  destinations: const [
+                  trailing: Column(
+                      mainAxisSize: MainAxisSize.min, children: settings),
+                  destinations: [
                     NavigationRailDestination(
-                      icon: Icon(Icons.person_outline),
-                      selectedIcon: Icon(Icons.person),
-                      label: Text('People'),
+                      icon: const Icon(Icons.person_outline),
+                      selectedIcon: const Icon(Icons.person),
+                      label: Text(AppLocalizations.of(context)!.people),
                     ),
                     NavigationRailDestination(
-                      icon: Icon(Icons.message_outlined),
-                      selectedIcon: Icon(Icons.message),
-                      label: Text('Chats'),
+                      icon: const Icon(Icons.message_outlined),
+                      selectedIcon: const Icon(Icons.message),
+                      label: Text(AppLocalizations.of(context)!.chats),
                     ),
                     NavigationRailDestination(
-                      icon: Icon(Icons.person_search_outlined),
-                      selectedIcon: Icon(Icons.person_search),
-                      label: Text('Match'),
+                      icon: const Icon(Icons.person_search_outlined),
+                      selectedIcon: const Icon(Icons.person_search),
+                      label: Text(AppLocalizations.of(context)!.match),
                     ),
                     NavigationRailDestination(
-                      icon: Icon(Icons.favorite_outline),
-                      selectedIcon: Icon(Icons.favorite),
-                      label: Text('Likes'),
+                      icon: const Icon(Icons.favorite_outline),
+                      selectedIcon: const Icon(Icons.favorite),
+                      label: Text(AppLocalizations.of(context)!.likes),
                     ),
                     NavigationRailDestination(
-                      icon: Text('AI',
+                      icon: const Text('AI',
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.normal)),
-                      selectedIcon: Text('AI',
+                      selectedIcon: const Text('AI',
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold)),
-                      label: Text('Advices'),
+                      label: Text(AppLocalizations.of(context)!.advices),
                     ),
                   ],
                 ),
@@ -222,97 +226,110 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.ease);
               }),
-              destinations: const [
+              destinations: [
                 NavigationDestination(
-                  icon: Icon(Icons.person_outline),
-                  selectedIcon: Icon(Icons.person),
-                  label: 'People',
+                  icon: const Icon(Icons.person_outline),
+                  selectedIcon: const Icon(Icons.person),
+                  label: AppLocalizations.of(context)!.people,
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.message_outlined),
-                  selectedIcon: Icon(Icons.message),
-                  label: 'Chats',
+                  icon: const Icon(Icons.message_outlined),
+                  selectedIcon: const Icon(Icons.message),
+                  label: AppLocalizations.of(context)!.chats,
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.person_search_outlined),
-                  selectedIcon: Icon(Icons.person_search),
-                  label: 'Match',
+                  icon: const Icon(Icons.person_search_outlined),
+                  selectedIcon: const Icon(Icons.person_search),
+                  label: AppLocalizations.of(context)!.match,
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.favorite_outline),
-                  selectedIcon: Icon(Icons.favorite),
-                  label: 'Likes',
+                  icon: const Icon(Icons.favorite_outline),
+                  selectedIcon: const Icon(Icons.favorite),
+                  label: AppLocalizations.of(context)!.likes,
                 ),
                 NavigationDestination(
-                  icon: Text('AI',
+                  icon: const Text('AI',
                       style: TextStyle(
                           fontSize: 18, fontWeight: FontWeight.normal)),
-                  selectedIcon: Text('AI',
+                  selectedIcon: const Text('AI',
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  label: 'Advices',
+                  label: AppLocalizations.of(context)!.advices,
                 ),
               ],
             ),
     );
   }
 
-  late final settings = PopupMenuButton(
-    icon: const Icon(Icons.settings),
-    itemBuilder: (context) => [
-      PopupMenuItem(
-        onTap: setRandomColor,
-        child: const Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(Icons.color_lens_rounded),
-            SizedBox(width: 10),
-            Text('Change color'),
-          ],
+  late final settings = [
+    PopupMenuButton(
+      icon: const Icon(Icons.settings),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          onTap: setRandomColor,
+          child: const Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(Icons.color_lens_rounded),
+              SizedBox(width: 10),
+              Text('Change color'),
+            ],
+          ),
         ),
-      ),
-      PopupMenuItem(
-          onTap: changeTheme,
-          child: ref.watch(brightness) == Brightness.dark
-              ? const Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(Icons.nightlight),
-                    SizedBox(width: 10),
-                    Text('Dark mode'),
-                  ],
-                )
-              : const Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(Icons.sunny),
-                    SizedBox(width: 10),
-                    Text('Light mode'),
-                  ],
-                )),
-      PopupMenuItem(
-        onTap: showFeedBack,
-        child: const Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(Icons.bug_report),
-            SizedBox(width: 10),
-            Text('Report a bug / Request a feature'),
-          ],
+        PopupMenuItem(
+            onTap: changeTheme,
+            child: ref.watch(brightness) == Brightness.dark
+                ? const Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(Icons.nightlight),
+                      SizedBox(width: 10),
+                      Text('Dark mode'),
+                    ],
+                  )
+                : const Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(Icons.sunny),
+                      SizedBox(width: 10),
+                      Text('Light mode'),
+                    ],
+                  )),
+        PopupMenuItem(
+          onTap: showFeedBack,
+          child: const Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(Icons.bug_report),
+              SizedBox(width: 10),
+              Text('Report a bug / Request a feature'),
+            ],
+          ),
         ),
-      ),
-      PopupMenuItem(
-        onTap: () async {
-          ref.read(authStateProvider.notifier).logout(context);
-        },
-        child: const Row(
-          children: [
-            Icon(Icons.logout),
-            SizedBox(width: 10),
-            Text('Logout'),
-          ],
-        ),
-      )
-    ],
-  );
+        PopupMenuItem(
+          onTap: () async {
+            ref.read(authStateProvider.notifier).logout(context);
+          },
+          child: const Row(
+            children: [
+              Icon(Icons.logout),
+              SizedBox(width: 10),
+              Text('Logout'),
+            ],
+          ),
+        )
+      ],
+    ),
+    PopupMenuButton(
+      child: const Icon(Icons.language),
+      onSelected: (value) {
+        ref.read(localProvider.notifier).state = Locale(value);
+      },
+      itemBuilder: (context) => const [
+        PopupMenuItem(value: 'en', child: Text('English')),
+        PopupMenuItem(value: 'fr', child: Text('French')),
+        PopupMenuItem(value: 'ar', child: Text('Arabic')),
+      ],
+    )
+  ];
 }

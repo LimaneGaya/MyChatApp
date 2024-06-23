@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mychatapp/conversations/providers/conversation_provider.dart';
 import 'package:mychatapp/conversations/widgets/conversation_tile.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class ConversationsScreen extends ConsumerWidget {
   const ConversationsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
     final conversations = ref.watch(conversationStateProvider);
     return ListView.builder(
       itemCount: conversations.length,
@@ -22,7 +25,7 @@ class ConversationsScreen extends ConsumerWidget {
           onLongPress: () => showDialog(
               context: context,
               builder: (context) => AlertDialog(
-                      title: Text('Delete conversation?',
+                      title: Text(AppLocalizations.of(context)!.delete_conver,
                           style: TextStyle(color: Colors.red[400])),
                       actions: [
                         TextButton(
@@ -32,7 +35,7 @@ class ConversationsScreen extends ConsumerWidget {
                                   .deleteConversation(con.id);
                               Navigator.pop(context);
                             },
-                            child: const Text('Delete'))
+                            child: Text(AppLocalizations.of(context)!.delete))
                       ])),
           child: ConversationTile(names: names, con: con),
         );

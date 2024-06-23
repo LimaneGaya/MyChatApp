@@ -1,6 +1,67 @@
 {
-  "helloWorld": "Hello World!",
-  "@helloWorld": {
-    "description": "The conventional newborn programmer greeting"
-  }
+  "username": "Username",
+  "enter_username": "Please enter username",
+  "username_3to25": "Username must be between 3 and 25 characters",
+  "username_special": "Username must not contain special characters",
+  "password": "Password",
+  "enter_password": "Please enter password",
+  "password_6to25": "Password must be between 6 and 25 characters",
+  "login":"LogIn",
+  "donthaveaccount": "Don't have an account? ",
+  "register":"Register",
+  "name": "Name",
+  "enter_name":"Please enter name",
+  "name_3to25":"Name must be between 3 and 25 characters",
+  "name_special": "Name must not contain special characters",
+  "female": "Female",
+  "male":"Male",
+  "age":"Age",
+  "enter_age":"Please enter age",
+  "age_2character":"Age must be 2 characters",
+  "enter_valid_num":"Please enter a valid number",
+  "must18older": "You have to be 18 or older to register",
+  "already_have_account":"Already have an account? ",
+  "delete_conver": "Delete conversation?",
+  "delete":"Delete",
+  "no_match": "No matches yet",
+  "refresh": "Please refresh the page",
+  "like": "Like",
+  "dislike":"Dislike",
+  "info": "Info",
+  "photos": "Photos",
+  "lastseen":"Last seen: ",
+  "nothingtoshow":"Nothing to show here",
+  "enter_feedback": "Please enter feedback",
+  "people":"People",
+  "chats":"Chats",
+  "match":"Match",
+  "likes":"Likes",
+  "advices":"Advices",
+  "meetpeople":"Get to meet interesting people all around the world",
+  "gettoknow":"Get to know people from all around the world",
+  "matchwithpeople":"Match with people from all around the world",
+  "tryluck":"Try your luck, match with people from all around the world, maybe it's the start of something beautiful",
+  "gotissue":"Got issue? Ask AI for help",
+  "aiwillhelp":"In App AI will help you with all sort of issues",
+  "readytostart":"Ready to get started?",
+  "getstartednow":"Get started now!",
+  "getstarted":"Get Started"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

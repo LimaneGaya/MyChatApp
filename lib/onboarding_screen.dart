@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mychatapp/auth/provider/auth_provider.dart';
 import 'package:mychatapp/auth/screens/auth_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mychatapp/home_screen.dart';
 
 class OnboadringScreen extends StatelessWidget {
   OnboadringScreen({super.key});
@@ -12,259 +14,270 @@ class OnboadringScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
-        controller: pageCont,
-        children: [
-          Center(
-              child: Padding(
-            padding: const EdgeInsets.all(40.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Spacer(),
-                Center(
-                  child: GradientText(
-                    'Get to meet interesting people all around the world',
-                    textAlign: TextAlign.center,
-                    gradient: const LinearGradient(
-                        colors: [Colors.purple, Colors.pink],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight),
-                    style: GoogleFonts.montserrat(
-                        textStyle: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 25,
-                            color: Colors.purple)),
+        body: PageView(
+          controller: pageCont,
+          children: [
+            Center(
+                child: Padding(
+              padding: const EdgeInsets.all(40.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Spacer(),
+                  Center(
+                    child: GradientText(
+                      AppLocalizations.of(context)!.meetpeople,
+                      textAlign: TextAlign.center,
+                      gradient: const LinearGradient(
+                          colors: [Colors.purple, Colors.pink],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight),
+                      style: GoogleFonts.montserrat(
+                          textStyle: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25,
+                              color: Colors.purple)),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 70),
-                const Text(
-                  'Get to know people from all around the world',
-                  textAlign: TextAlign.center,
-                ),
-                const Spacer(),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: IconButton(
-                    onPressed: () {
-                      pageCont.nextPage(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInOut);
+                  const SizedBox(height: 70),
+                  Text(
+                    AppLocalizations.of(context)!.gettoknow,
+                    textAlign: TextAlign.center,
+                  ),
+                  const Spacer(),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: IconButton(
+                      onPressed: () {
+                        pageCont.nextPage(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeInOut);
+                      },
+                      icon: const Icon(Icons.chevron_right),
+                    ),
+                  ),
+                  Builder(
+                    builder: (context) {
+                      final List<Widget> wdgts = [];
+                      for (int i = 0; i <= pageCount; i++) {
+                        wdgts.add(Container(
+                            width: 4,
+                            height: 4,
+                            margin: const EdgeInsets.symmetric(horizontal: 4),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white
+                                    .withOpacity(0 == i ? 0.9 : 0.4))));
+                      }
+                      return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: wdgts);
                     },
-                    icon: const Icon(Icons.chevron_right),
                   ),
-                ),
-                Builder(
-                  builder: (context) {
-                    final List<Widget> wdgts = [];
-                    for (int i = 0; i <= pageCount; i++) {
-                      wdgts.add(Container(
-                          width: 4,
-                          height: 4,
-                          margin: const EdgeInsets.symmetric(horizontal: 4),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white
-                                  .withOpacity(0 == i ? 0.9 : 0.4))));
-                    }
-                    return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: wdgts);
-                  },
-                ),
-              ],
-            ),
-          )),
-          Center(
-              child: Padding(
-            padding: const EdgeInsets.all(40.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Spacer(),
-                Center(
-                  child: GradientText(
-                    'Match with people from all around the world',
+                ],
+              ),
+            )),
+            Center(
+                child: Padding(
+              padding: const EdgeInsets.all(40.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Spacer(),
+                  Center(
+                    child: GradientText(
+                      AppLocalizations.of(context)!.matchwithpeople,
+                      textAlign: TextAlign.center,
+                      gradient: const LinearGradient(
+                          colors: [Colors.purple, Colors.pink],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight),
+                      style: GoogleFonts.montserrat(
+                          textStyle: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25,
+                              color: Colors.purple)),
+                    ),
+                  ),
+                  const SizedBox(height: 70),
+                  Text(
+                    AppLocalizations.of(context)!.tryluck,
                     textAlign: TextAlign.center,
-                    gradient: const LinearGradient(
-                        colors: [Colors.purple, Colors.pink],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight),
-                    style: GoogleFonts.montserrat(
-                        textStyle: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 25,
-                            color: Colors.purple)),
                   ),
-                ),
-                const SizedBox(height: 70),
-                const Text(
-                  'Try your luck, match with people from all'
-                  ' around the world, maybe it\'s the start '
-                  'of something beautiful',
-                  textAlign: TextAlign.center,
-                ),
-                const Spacer(),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: IconButton(
-                    onPressed: () {
-                      pageCont.nextPage(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInOut);
+                  const Spacer(),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: IconButton(
+                      onPressed: () {
+                        pageCont.nextPage(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeInOut);
+                      },
+                      icon: const Icon(Icons.chevron_right),
+                    ),
+                  ),
+                  Builder(
+                    builder: (context) {
+                      final List<Widget> wdgts = [];
+                      for (int i = 0; i <= pageCount; i++) {
+                        wdgts.add(Container(
+                            width: 4,
+                            height: 4,
+                            margin: const EdgeInsets.symmetric(horizontal: 4),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white
+                                    .withOpacity(1 == i ? 0.9 : 0.4))));
+                      }
+                      return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: wdgts);
                     },
-                    icon: const Icon(Icons.chevron_right),
                   ),
-                ),
-                Builder(
-                  builder: (context) {
-                    final List<Widget> wdgts = [];
-                    for (int i = 0; i <= pageCount; i++) {
-                      wdgts.add(Container(
-                          width: 4,
-                          height: 4,
-                          margin: const EdgeInsets.symmetric(horizontal: 4),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white
-                                  .withOpacity(1 == i ? 0.9 : 0.4))));
-                    }
-                    return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: wdgts);
-                  },
-                ),
-              ],
-            ),
-          )),
-          Center(
-              child: Padding(
-            padding: const EdgeInsets.all(40.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Spacer(),
-                Center(
-                  child: GradientText(
-                    'Got issue? Ask AI for help',
+                ],
+              ),
+            )),
+            Center(
+                child: Padding(
+              padding: const EdgeInsets.all(40.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Spacer(),
+                  Center(
+                    child: GradientText(
+                      AppLocalizations.of(context)!.gotissue,
+                      textAlign: TextAlign.center,
+                      gradient: const LinearGradient(
+                          colors: [Colors.purple, Colors.pink],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight),
+                      style: GoogleFonts.montserrat(
+                          textStyle: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25,
+                              color: Colors.purple)),
+                    ),
+                  ),
+                  const SizedBox(height: 70),
+                  Text(
+                    AppLocalizations.of(context)!.aiwillhelp,
                     textAlign: TextAlign.center,
-                    gradient: const LinearGradient(
-                        colors: [Colors.purple, Colors.pink],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight),
-                    style: GoogleFonts.montserrat(
-                        textStyle: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 25,
-                            color: Colors.purple)),
                   ),
-                ),
-                const SizedBox(height: 70),
-                const Text(
-                  'In App AI will help you with all sort of issues',
-                  textAlign: TextAlign.center,
-                ),
-                const Spacer(),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: IconButton(
-                    onPressed: () {
-                      pageCont.nextPage(
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInOut);
+                  const Spacer(),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: IconButton(
+                      onPressed: () {
+                        pageCont.nextPage(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.easeInOut);
+                      },
+                      icon: const Icon(Icons.chevron_right),
+                    ),
+                  ),
+                  Builder(
+                    builder: (context) {
+                      final List<Widget> wdgts = [];
+                      for (int i = 0; i <= pageCount; i++) {
+                        wdgts.add(Container(
+                            width: 4,
+                            height: 4,
+                            margin: const EdgeInsets.symmetric(horizontal: 4),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white
+                                    .withOpacity(2 == i ? 0.9 : 0.4))));
+                      }
+                      return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: wdgts);
                     },
-                    icon: const Icon(Icons.chevron_right),
                   ),
-                ),
-                Builder(
-                  builder: (context) {
-                    final List<Widget> wdgts = [];
-                    for (int i = 0; i <= pageCount; i++) {
-                      wdgts.add(Container(
-                          width: 4,
-                          height: 4,
-                          margin: const EdgeInsets.symmetric(horizontal: 4),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white
-                                  .withOpacity(2 == i ? 0.9 : 0.4))));
-                    }
-                    return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: wdgts);
-                  },
-                ),
-              ],
-            ),
-          )),
-          Center(
-              child: Padding(
-            padding: const EdgeInsets.all(40.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Spacer(),
-                Center(
-                  child: GradientText(
-                    'Ready to get started?',
+                ],
+              ),
+            )),
+            Center(
+                child: Padding(
+              padding: const EdgeInsets.all(40.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Spacer(),
+                  Center(
+                    child: GradientText(
+                      AppLocalizations.of(context)!.readytostart,
+                      textAlign: TextAlign.center,
+                      gradient: const LinearGradient(
+                          colors: [Colors.purple, Colors.pink],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight),
+                      style: GoogleFonts.montserrat(
+                          textStyle: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25,
+                              color: Colors.purple)),
+                    ),
+                  ),
+                  const SizedBox(height: 70),
+                  Text(
+                    AppLocalizations.of(context)!.getstartednow,
                     textAlign: TextAlign.center,
-                    gradient: const LinearGradient(
-                        colors: [Colors.purple, Colors.pink],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight),
-                    style: GoogleFonts.montserrat(
-                        textStyle: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 25,
-                            color: Colors.purple)),
                   ),
-                ),
-                const SizedBox(height: 70),
-                const Text(
-                  'Get started now!',
-                  textAlign: TextAlign.center,
-                ),
-                const Spacer(),
-                Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  Consumer(
-                    builder: (context, ref, child) => ElevatedButton(
-                        onPressed: () {
-                          ref
-                              .read(sharedPrefProvider)
-                              .value!
-                              .setBool('onboarding', false);
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const AuthScreen()));
-                        },
-                        child: const Text('Get Started')),
-                  )
-                ]),
-                Builder(
-                  builder: (context) {
-                    final List<Widget> wdgts = [];
-                    for (int i = 0; i <= pageCount; i++) {
-                      wdgts.add(Container(
-                          width: 4,
-                          height: 4,
-                          margin: const EdgeInsets.symmetric(horizontal: 4),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white
-                                  .withOpacity(3 == i ? 0.9 : 0.4))));
-                    }
-                    return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: wdgts);
-                  },
-                ),
-              ],
-            ),
-          ))
-        ],
-      ),
-    );
+                  const Spacer(),
+                  Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                    Consumer(
+                      builder: (context, ref, child) => ElevatedButton(
+                          onPressed: () {
+                            ref
+                                .read(sharedPrefProvider)
+                                .value!
+                                .setBool('onboarding', false);
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const AuthScreen()));
+                          },
+                          child:
+                              Text(AppLocalizations.of(context)!.getstarted)),
+                    )
+                  ]),
+                  Builder(
+                    builder: (context) {
+                      final List<Widget> wdgts = [];
+                      for (int i = 0; i <= pageCount; i++) {
+                        wdgts.add(Container(
+                            width: 4,
+                            height: 4,
+                            margin: const EdgeInsets.symmetric(horizontal: 4),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white
+                                    .withOpacity(3 == i ? 0.9 : 0.4))));
+                      }
+                      return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: wdgts);
+                    },
+                  ),
+                ],
+              ),
+            ))
+          ],
+        ),
+        floatingActionButton: Consumer(
+          builder: (context, ref, child) => PopupMenuButton(
+            child: const Icon(Icons.language),
+            onSelected: (value) {
+              ref.read(localProvider.notifier).state = Locale(value);
+            },
+            itemBuilder: (context) => const [
+              PopupMenuItem(value: 'en', child: Text('English')),
+              PopupMenuItem(value: 'fr', child: Text('French')),
+              PopupMenuItem(value: 'ar', child: Text('Arabic')),
+            ],
+          ),
+        ));
   }
 }
 

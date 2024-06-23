@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mychatapp/match/provider/match_provider.dart';
 import 'package:mychatapp/services/pocketbase.dart';
 import 'package:locale_emoji/locale_emoji.dart' as le;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class MatchScreen extends ConsumerWidget {
   const MatchScreen({super.key});
@@ -66,13 +68,13 @@ class MatchScreen extends ConsumerWidget {
             ElevatedButton.icon(
               onPressed: ref.read(matchProvider.notifier).dislike,
               icon: const Icon(Icons.close),
-              label: const Text('Dislike'),
+              label: Text(AppLocalizations.of(context)!.dislike),
               iconAlignment: IconAlignment.end,
             ),
             ElevatedButton.icon(
               onPressed: ref.read(matchProvider.notifier).like,
               icon: const Icon(Icons.check),
-              label: const Text('Like  '),
+              label: Text(AppLocalizations.of(context)!.like),
             ),
           ],
         ),

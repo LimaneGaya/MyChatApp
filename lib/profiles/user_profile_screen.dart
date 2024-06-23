@@ -8,6 +8,8 @@ import 'package:mychatapp/models/models.dart';
 import 'package:mychatapp/services/pocketbase.dart';
 import 'package:mychatapp/users/providers/user_provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class UserProfile extends StatelessWidget {
   final UserModel user;
@@ -50,8 +52,9 @@ class UserProfile extends StatelessWidget {
                               end: Alignment.center))),
                 ],
               ),
-              bottom: const TabBar(
-                tabs: [Tab(child: Text('Info')), Tab(child: Text('Photos'))],
+              bottom: TabBar(
+                tabs: [Tab(child: Text(AppLocalizations.of(context)!.info)), 
+                Tab(child: Text(AppLocalizations.of(context)!.photos)),],
               ),
             )
           ],
@@ -76,7 +79,7 @@ class UserProfile extends StatelessWidget {
                             decoration: decoration,
                             child: RichText(
                               text: TextSpan(
-                                  text: 'Last seen: ',
+                                  text: AppLocalizations.of(context)!.lastseen,
                                   style: TextStyle(
                                       color: Theme.of(context)
                                           .colorScheme
@@ -143,9 +146,9 @@ class UserProfile extends StatelessWidget {
                   );
                 },
                 error: (error, stackTrace) {
-                  return const TabBarView(children: [
-                    Center(child: Text("Nothing to show here")),
-                    Center(child: Text("Nothing to show here")),
+                  return  TabBarView(children: [
+                    Center(child: Text(AppLocalizations.of(context)!.nothingtoshow)),
+                    Center(child: Text(AppLocalizations.of(context)!.nothingtoshow)),
                   ]);
                 },
                 loading: () {

@@ -9,7 +9,7 @@ final geminiChatProvider = StateNotifierProvider<GeminiNotifier, bool>((ref) {
 
 class GeminiNotifier extends StateNotifier<bool> {
   final GenerativeModel model = GenerativeModel(
-    model: 'gemini-pro',
+    model: 'gemini-1.5-flash-latest',
     safetySettings: [
       SafetySetting(HarmCategory.hateSpeech, HarmBlockThreshold.high),
       SafetySetting(HarmCategory.dangerousContent, HarmBlockThreshold.high),

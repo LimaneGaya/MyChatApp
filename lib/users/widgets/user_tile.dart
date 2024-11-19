@@ -49,7 +49,7 @@ class UserTile extends StatelessWidget {
                         color: Theme.of(context)
                             .colorScheme
                             .onTertiary
-                            .withOpacity(0.75),
+                            .withValues(alpha: 0.75),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,

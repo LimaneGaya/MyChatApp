@@ -67,7 +67,7 @@ class OnboadringScreen extends StatelessWidget {
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: Colors.white
-                                    .withOpacity(0 == i ? 0.9 : 0.4))));
+                                    .withValues(alpha: 0 == i ? 0.9 : 0.4))));
                       }
                       return Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -127,7 +127,7 @@ class OnboadringScreen extends StatelessWidget {
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: Colors.white
-                                    .withOpacity(1 == i ? 0.9 : 0.4))));
+                                    .withValues(alpha: 1 == i ? 0.9 : 0.4))));
                       }
                       return Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -187,7 +187,7 @@ class OnboadringScreen extends StatelessWidget {
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: Colors.white
-                                    .withOpacity(2 == i ? 0.9 : 0.4))));
+                                    .withValues(alpha: 2 == i ? 0.9 : 0.4))));
                       }
                       return Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -253,7 +253,7 @@ class OnboadringScreen extends StatelessWidget {
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: Colors.white
-                                    .withOpacity(3 == i ? 0.9 : 0.4))));
+                                    .withValues(alpha: 3 == i ? 0.9 : 0.4))));
                       }
                       return Row(
                           mainAxisAlignment: MainAxisAlignment.center,

@@ -106,7 +106,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       appBar: useRail
           ? null
           : AppBar(
-              backgroundColor: isTransparent ? color.withOpacity(0.7) : color,
+              backgroundColor: isTransparent ? color.withValues(alpha: 0.7) : color,
               flexibleSpace: isTransparent
                   ? ClipRect(
                       child: BackdropFilter(

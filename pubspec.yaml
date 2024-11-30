@@ -12,7 +12,7 @@ dependencies:
   http: ^1.2.0
   http_parser:
   image_picker: ^1.0.7
-  pocketbase: ^0.18.1
+  pocketbase: ^0.19.1
   flutter_riverpod: ^2.4.9
   shared_preferences: ^2.2.2
   feedback: ^3.0.0
@@ -44,5 +44,4 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.1
 
 flutter:
-  generate: true
   uses-material-design: true

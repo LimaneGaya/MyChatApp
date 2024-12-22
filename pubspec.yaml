@@ -12,7 +12,7 @@ dependencies:
   http: ^1.2.0
   http_parser:
   image_picker: ^1.0.7
-  pocketbase: ^0.19.1
+  pocketbase: ^0.20.0
   flutter_riverpod: ^2.4.9
   shared_preferences: ^2.2.2
   feedback: ^3.0.0
@@ -27,7 +27,7 @@ dependencies:
   google_mlkit_smart_reply: ^0.12.0
   fetch_client: ^1.1.0-wasm
   timeago: ^3.6.1
-  locale_emoji: ^0.2.1
+  locale_emoji: ^1.0.0
   google_generative_ai: ^0.4.0
   flutter_markdown: any
   image: ^4.1.7

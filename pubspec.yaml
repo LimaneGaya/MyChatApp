@@ -12,7 +12,7 @@ dependencies:
   http: ^1.2.0
   http_parser:
   image_picker: ^1.0.7
-  pocketbase: ^0.20.0
+  pocketbase: ^0.21.0
   flutter_riverpod: ^2.4.9
   shared_preferences: ^2.2.2
   feedback: ^3.0.0

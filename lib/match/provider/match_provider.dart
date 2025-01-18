@@ -12,7 +12,7 @@ final userImagesProvider = FutureProvider.family
 final matchedListProvide = FutureProvider((ref) async {
   final m = await PB.getMatchedList();
   return m
-      .map((e) => UserModel.fromMap(e.expand['user']![0].toJson()))
+      .map((e) => UserModel.fromMap(e.get('expand.user')![0].toJson()))
       .toList();
 });
 

@@ -19,7 +19,7 @@ class SmartReplyNotifier extends StateNotifier<List<String>> {
 
   void smartMessageReply(Message ms) async {
     if (kIsWeb || !isAndroid) return;
-    if (ms.sender == pb.authStore.model.id) {
+    if (ms.sender == pb.authStore.record!.id) {
       smartReply.addMessageToConversationFromLocalUser(
           ms.content, DateTime.now().millisecondsSinceEpoch);
     } else {

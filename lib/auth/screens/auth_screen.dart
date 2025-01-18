@@ -123,7 +123,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                                           AppLocalizations.of(context)!.login),
                                       onPressed: () async {
                                         if (!formKeyLogin.currentState!
-                                            .validate()) return;
+                                            .validate()) {
+                                          return;
+                                        }
                                         final isLoggedin = await ref
                                             .read(authStateProvider.notifier)
                                             .login(
@@ -294,7 +296,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                                         AppLocalizations.of(context)!.register),
                                     onPressed: () async {
                                       if (!formKeyRegister.currentState!
-                                          .validate()) return;
+                                          .validate()) {
+                                        return;
+                                      }
                                       final isLoggedin = await ref
                                           .read(authStateProvider.notifier)
                                           .register(

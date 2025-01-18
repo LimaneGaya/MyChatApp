@@ -25,12 +25,15 @@ final authCheckifLoginIsValid = FutureProvider<bool>((ref) async {
   final record =
       RecordModel.fromJson(decoded['record'] as Map<String, dynamic>);
   pb.authStore.save(token, record);
-  final newRecord = await pb.collection('users').authRefresh();
-  if (newRecord.record == null) return false;
-  final data =
-      jsonEncode({'token': newRecord.token, 'record': newRecord.record});
-  await sharedPref.setString('auth', data);
-  return true;
+  try {
+    final newRecord = await pb.collection('users').authRefresh();
+    final data =
+        jsonEncode({'token': newRecord.token, 'record': newRecord.record});
+    await sharedPref.setString('auth', data);
+    return true;
+  } catch (e) {
+    return false;
+  }
 });
 
 class AuthStateNotifier extends StateNotifier<bool> {
@@ -43,7 +46,7 @@ class AuthStateNotifier extends StateNotifier<bool> {
 
   void authchanged(BuildContext context) {
     _pb.authStore.onChange.listen((event) {
-      if (event.model?.id == null) {
+      if (event.record == null) {
         logout(context);
       } else {
         Navigator.pushAndRemoveUntil(
@@ -60,19 +63,12 @@ class AuthStateNotifier extends StateNotifier<bool> {
     try {
       final authData =
           await _pb.collection('users').authWithPassword(userName, password);
-      if (authData.record != null) {
         final data = jsonEncode({
           'token': authData.token,
           'record': authData.record,
         });
         await _sharedPref.setString('auth', data);
-      } else {
-        showDialog(
-            // ignore: use_build_context_synchronously
-            context: context,
-            builder: (context) =>
-                const AlertDialog(content: Text('Wrong username or password')));
-      }
+      
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

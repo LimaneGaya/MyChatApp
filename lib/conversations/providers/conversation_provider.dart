@@ -53,7 +53,7 @@ class ConversationNotifier extends StateNotifier<List<Conversation>> {
       final con = await pb.collection('converstion').create(
         body: {
           "isTrusted": false,
-          "participants": [pb.authStore.model.id, userId]
+          "participants": [pb.authStore.record!.id, userId]
         },
       );
       getConversations();

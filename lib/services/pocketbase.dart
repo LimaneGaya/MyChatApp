@@ -26,7 +26,7 @@ class PB {
     return pb.collection('messages').create(
       body: {
         "conversation": conversationId,
-        "sender": pb.authStore.model.id,
+        "sender": pb.authStore.record!.id,
         "content": content,
       },
       files: filesAsBytes
@@ -62,7 +62,7 @@ class PB {
     final result = await pb.collection('users').getList(
           page: page,
           perPage: fetchCount,
-          filter: 'id != "${pb.authStore.model.id}"',
+          filter: 'id != "${pb.authStore.record!.id}"',
           sort: '-lastSeen',
         );
     return result.items;
@@ -72,7 +72,7 @@ class PB {
     final res = await pb.collection('converstion').getList(
           page: page,
           perPage: fetchCount,
-          filter: 'participants ~ "${pb.authStore.model.id}"',
+          filter: 'participants ~ "${pb.authStore.record!.id}"',
           expand: 'participants',
           sort: '-created',
         );
@@ -87,15 +87,17 @@ class PB {
       String id, String colId, String colNam, String name) {
     return pb.files
         .getUrl(
-          RecordModel(id: id, collectionId: colId, collectionName: colNam),
+          RecordModel(
+              {"id": id, "collectionId": colId, "collectionName": colNam}),
           name,
         )
         .toString();
   }
 
   static Future<void> updateUserLastSeen() async {
+    if (pb.authStore.record == null) return;
     await pb.collection('users').update(
-      pb.authStore.model.id,
+      pb.authStore.record!.id,
       body: {
         "lastSeen": DateTime.now().toUtc().toString(),
       },
@@ -139,7 +141,7 @@ class PB {
 
     try {
       await pb.collection('reports').create(
-          body: {"content": content, "user": pb.authStore.model.id},
+          body: {"content": content, "user": pb.authStore.record!.id},
           files: file);
     } catch (e) {
       debugPrint(e.toString());
@@ -148,7 +150,7 @@ class PB {
 
   static Future<void> updateToken(String token) async {
     await pb.collection('users').update(
-      pb.authStore.model.id,
+      pb.authStore.record!.id,
       body: {
         "token": token,
       },
@@ -168,7 +170,7 @@ class PB {
   static Future<RecordModel> setMatch(String id) async {
     return await pb.collection('matches').create(
       body: {
-        "user": pb.authStore.model.id,
+        "user": pb.authStore.record!.id,
         "match": id,
       },
     );
@@ -179,7 +181,7 @@ class PB {
     final result = await pb.collection('matches').getList(
           perPage: fetchCount,
           sort: '-created',
-          filter: 'match = "${pb.authStore.model.id}"',
+          filter: 'match = "${pb.authStore.record!.id}"',
           expand: 'user',
         );
     return result.items;

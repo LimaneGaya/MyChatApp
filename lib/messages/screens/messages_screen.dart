@@ -95,7 +95,7 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
                       if (index > msgs.length) return null;
 
                       final ms = msgs[index];
-                      final isMe = ms.sender == pb.authStore.model.id;
+                      final isMe = ms.sender == pb.authStore.record!.id;
 
                       return MessageTile(
                         isMe: isMe,
@@ -103,7 +103,7 @@ class _MessengerScreenState extends ConsumerState<MessengerScreen> {
                         fileUrl: ms.file,
                         leadingText: isMe ? null : ms.sender[0],
                         trailingText: isMe
-                            ? pb.authStore.model.data['username'][0]
+                            ? pb.authStore.record!.data['username'][0]
                             : null,
                       );
                     },

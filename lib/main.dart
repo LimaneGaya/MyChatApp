@@ -10,8 +10,7 @@ import 'package:mychatapp/firebase_options.dart';
 import 'package:mychatapp/home_screen.dart';
 import 'package:mychatapp/auth/provider/auth_provider.dart';
 import 'package:mychatapp/onboarding_screen.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:mychatapp/l10n/app_localizations.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);

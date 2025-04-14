@@ -8,8 +8,7 @@ import 'package:mychatapp/models/models.dart';
 import 'package:mychatapp/services/pocketbase.dart';
 import 'package:mychatapp/users/providers/user_provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:mychatapp/l10n/app_localizations.dart';
 
 class UserProfile extends StatelessWidget {
   final UserModel user;

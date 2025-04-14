@@ -21,7 +21,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart'
     show FirebaseRemoteConfig, RemoteConfigSettings;
 import 'package:google_mobile_ads/google_mobile_ads.dart' show MobileAds;
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mychatapp/l10n/app_localizations.dart';
 
 final themeColor = StateProvider<Color>((ref) => Colors.blue);
 

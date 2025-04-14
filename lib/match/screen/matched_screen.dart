@@ -4,8 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mychatapp/match/provider/match_provider.dart';
 import 'package:locale_emoji/locale_emoji.dart' as le;
 import 'package:mychatapp/profiles/user_profile_screen.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:mychatapp/l10n/app_localizations.dart';
 
 class MatchedScreen extends ConsumerWidget {
   const MatchedScreen({super.key});

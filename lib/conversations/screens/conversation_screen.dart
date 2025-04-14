@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mychatapp/conversations/providers/conversation_provider.dart';
 import 'package:mychatapp/conversations/widgets/conversation_tile.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:mychatapp/l10n/app_localizations.dart';
 
 class ConversationsScreen extends ConsumerWidget {
   const ConversationsScreen({super.key});

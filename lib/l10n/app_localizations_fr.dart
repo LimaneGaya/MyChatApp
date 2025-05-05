@@ -15,10 +15,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get enter_username => 'Veuillez saisir votre nom d\'utilisateur';
 
   @override
-  String get username_3to25 => 'Le nom d\'utilisateur doit comporter entre 3 et 25 caractères';
+  String get username_3to25 =>
+      'Le nom d\'utilisateur doit comporter entre 3 et 25 caractères';
 
   @override
-  String get username_special => 'Le nom d\'utilisateur ne doit pas contenir de caractères spéciaux';
+  String get username_special =>
+      'Le nom d\'utilisateur ne doit pas contenir de caractères spéciaux';
 
   @override
   String get password => 'Mot de passe';
@@ -27,7 +29,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get enter_password => 'Veuillez saisir votre mot de passe';
 
   @override
-  String get password_6to25 => 'Le mot de passe doit comporter entre 6 et 25 caractères';
+  String get password_6to25 =>
+      'Le mot de passe doit comporter entre 6 et 25 caractères';
 
   @override
   String get login => 'Connexion';
@@ -48,7 +51,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get name_3to25 => 'Le nom doit comporter entre 3 et 25 caractères';
 
   @override
-  String get name_special => 'Le nom ne doit pas contenir de caractères spéciaux';
+  String get name_special =>
+      'Le nom ne doit pas contenir de caractères spéciaux';
 
   @override
   String get female => 'Femme';
@@ -69,7 +73,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get enter_valid_num => 'Veuillez saisir un numéro valide';
 
   @override
-  String get must18older => 'Vous devez avoir 18 ans ou plus pour vous inscrire';
+  String get must18older =>
+      'Vous devez avoir 18 ans ou plus pour vous inscrire';
 
   @override
   String get already_have_account => 'Vous avez déjà un compte? ';
@@ -123,22 +128,27 @@ class AppLocalizationsFr extends AppLocalizations {
   String get advices => 'Conseils';
 
   @override
-  String get meetpeople => 'Rencontrez des personnes intéressantes du monde entier';
+  String get meetpeople =>
+      'Rencontrez des personnes intéressantes du monde entier';
 
   @override
-  String get gettoknow => 'Faites connaissance avec des personnes du monde entier';
+  String get gettoknow =>
+      'Faites connaissance avec des personnes du monde entier';
 
   @override
-  String get matchwithpeople => 'Correspondre avec des personnes du monde entier';
+  String get matchwithpeople =>
+      'Correspondre avec des personnes du monde entier';
 
   @override
-  String get tryluck => 'Tentez votre chance, rencontrez des personnes du monde entier, peut-être que c\'est le début de quelque chose de beau';
+  String get tryluck =>
+      'Tentez votre chance, rencontrez des personnes du monde entier, peut-être que c\'est le début de quelque chose de beau';
 
   @override
   String get gotissue => 'Un problème? Demandez de l\'aide à l\'IA';
 
   @override
-  String get aiwillhelp => 'L\'IA de l\'application vous aidera avec toutes sortes de problèmes';
+  String get aiwillhelp =>
+      'L\'IA de l\'application vous aidera avec toutes sortes de problèmes';
 
   @override
   String get readytostart => 'Prêt à commencer?';

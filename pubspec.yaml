@@ -26,12 +26,13 @@ dependencies:
   firebase_remote_config: ^5.0.1
   google_mlkit_smart_reply: ^0.13.0
   fetch_client: ^1.1.0-wasm
-  timeago: ^3.7.0
+  get_time_ago: ^2.3.0
   locale_emoji: ^1.0.0
   google_generative_ai: ^0.4.0
   flutter_markdown: any
   image: ^4.1.7
   google_mobile_ads: ^6.0.0
+  flutter_bloc: ^9.1.1
   flutter_localizations:
     sdk: flutter
   intl: any

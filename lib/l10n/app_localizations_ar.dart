@@ -123,7 +123,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get advices => 'نصائح';
 
   @override
-  String get meetpeople => 'تعرف على أشخاص مثيرين للاهتمام من جميع أنحاء العالم';
+  String get meetpeople =>
+      'تعرف على أشخاص مثيرين للاهتمام من جميع أنحاء العالم';
 
   @override
   String get gettoknow => 'تعرف على أشخاص من جميع أنحاء العالم';
@@ -132,13 +133,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get matchwithpeople => 'تطابق مع أشخاص من جميع أنحاء العالم';
 
   @override
-  String get tryluck => 'حاول حظك، تطابق مع أشخاص من جميع أنحاء العالم، ربما يكون هذا هو بداية شيء جميل';
+  String get tryluck =>
+      'حاول حظك، تطابق مع أشخاص من جميع أنحاء العالم، ربما يكون هذا هو بداية شيء جميل';
 
   @override
   String get gotissue => 'لديك مشكلة؟ اسأل الذكاء الاصطناعي للمساعدة';
 
   @override
-  String get aiwillhelp => 'الذكاء الاصطناعي في التطبيق سيساعدك في جميع أنواع المشاكل';
+  String get aiwillhelp =>
+      'الذكاء الاصطناعي في التطبيق سيساعدك في جميع أنواع المشاكل';
 
   @override
   String get readytostart => 'هل أنت مستعد للبدء؟';

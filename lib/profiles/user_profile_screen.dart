@@ -6,8 +6,8 @@ import 'package:mychatapp/conversations/providers/conversation_provider.dart';
 import 'package:mychatapp/messages/widgets/interactive_image_view.dart';
 import 'package:mychatapp/models/models.dart';
 import 'package:mychatapp/services/pocketbase.dart';
+import 'package:get_time_ago/get_time_ago.dart';
 import 'package:mychatapp/users/providers/user_provider.dart';
-import 'package:timeago/timeago.dart' as timeago;
 import 'package:mychatapp/l10n/app_localizations.dart';
 
 class UserProfile extends StatelessWidget {
@@ -87,9 +87,7 @@ class UserProfile extends StatelessWidget {
                                       fontWeight: FontWeight.bold),
                                   children: [
                                     TextSpan(
-                                        text: timeago
-                                            .format(user.lastSeen.toLocal())
-                                            .toString(),
+                                        text: GetTimeAgo.parse(user.lastSeen.toLocal()),
                                         style: TextStyle(
                                             color: Theme.of(context)
                                                 .colorScheme

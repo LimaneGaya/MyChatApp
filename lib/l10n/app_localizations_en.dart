@@ -123,7 +123,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get advices => 'Advices';
 
   @override
-  String get meetpeople => 'Get to meet interesting people all around the world';
+  String get meetpeople =>
+      'Get to meet interesting people all around the world';
 
   @override
   String get gettoknow => 'Get to know people from all around the world';
@@ -132,7 +133,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get matchwithpeople => 'Match with people from all around the world';
 
   @override
-  String get tryluck => 'Try your luck, match with people from all around the world, maybe it\'s the start of something beautiful';
+  String get tryluck =>
+      'Try your luck, match with people from all around the world, maybe it\'s the start of something beautiful';
 
   @override
   String get gotissue => 'Got issue? Ask AI for help';
